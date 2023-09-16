@@ -14,14 +14,15 @@ CREATE TABLE Staff (
   PRIMARY KEY (Staff_ID)
 );
 INSERT INTO Staff VALUES 
-('1','Jon','Tiong','CEO','Singapore','jon.t@xyz.com', "2")
+(1,'Jon','Tiong','CEO','Singapore','jon.t@xyz.com', "2"),
+(2,'Matthew','Chang','IT','Singapore','matthew.c@xyz.com', '3')
 ;
 
 CREATE TABLE Role_Skill (
 Role_Name varchar(50) NOT NULL,
 Skill_Name varchar(50) NOT NULL, 
 PRIMARY KEY (Role_Name,Skill_Name)
-);
+); -- take from skills future
 
 CREATE TABLE Role_Listing ( -- seems like it is taken from skills future so HR dont need to input their own skill??
   Role_Listing_ID int NOT NULL,
@@ -29,11 +30,16 @@ CREATE TABLE Role_Listing ( -- seems like it is taken from skills future so HR d
   Role_Desc varchar(1000) NOT NULL,
   Role_Department varchar(50) NOT NULL, -- is this a foreign key. nah idts
   Role_Function varchar(50) NOT NULL, -- function is new and need to input
+  Role_Country varchar(50) NOT NULL, 
   Available BOOLEAN NOT NULL, -- 0 if not available ? Or juyst expiry_date enough and dunnid available as a field
   Expiry_Date DATE, -- expiry date can be null i think. Or should it be a new table cos it can change
   PRIMARY KEY (Role_Listing_ID),
   CONSTRAINT Role_Listing_fk1 FOREIGN KEY (Role_Name) REFERENCES Role_Skill(Role_Name)
-);
+); 
+INSERT INTO Role_Listing VALUES 
+(1,'Marketing Executive','The marketing executive will be tasked to do xxxxx','Marketing','Business','Malaysia', "1", "2023-12-31"),
+(2,'Comms Executive','The comms executive will be tasked to do xxxxx','Comms','Business','Singapore', "1", "2023-11-31")
+;
 
 CREATE TABLE Role_Skill_Proficiency ( -- HR will input a proficiency level for the skill for the role
 Role_Listing_ID int NOT NULL,
