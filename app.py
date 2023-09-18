@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 # Configure MySQL database connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost:3306/sbrp'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost:3306/sbrp'
 db = SQLAlchemy(app)
 CORS(app)
 
@@ -17,6 +17,13 @@ class Staff(db.Model):
     Country = db.Column(db.String(50), nullable=False)
     Email = db.Column(db.String(50), nullable=False)
     Access_Rights = db.Column(db.Integer, nullable=False)  # Updated column name
+
+class Skills(db.Model): # testing skills table
+    Skill_Name = db.Column(db.String(50), primary_key=True)
+
+class Roles(db.Model): # testing skills table
+    Role_Name = db.Column(db.String(50), primary_key=True)
+   
 
 #To check whether it can connect
 @app.route('/')
