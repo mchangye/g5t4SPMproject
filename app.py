@@ -23,7 +23,11 @@ class Skills(db.Model): # testing skills table
 
 class Roles(db.Model): # testing skills table
     Role_Name = db.Column(db.String(50), primary_key=True)
-   
+
+class Role_Skill(db.Model): #test role skill table
+    Role_Name = db.Column(db.String(50), primary_key=True)
+    Skill_Name = db.Column(db.String(50), primary_key=True) #how to account for foreign keys?
+
 
 #To check whether it can connect
 @app.route('/')
@@ -45,6 +49,19 @@ def index():
         return render_template('index.html', staff=staff_data)
     else:
         return render_template('index.html', staff=None)
+
+def index(): #why it dun work :<
+    # Query the Roles table, assuming you want to fetch a specific role record
+    roles_record = Roles.query.get(1)  # You can change the ID as needed
+
+    if roles_record:
+        roles_data = {
+            'Role_Name': roles_record.Role_Name
+          
+        }
+        return render_template('index.html', role=roles_data)
+    else:
+        return render_template('index.html', role=None)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
