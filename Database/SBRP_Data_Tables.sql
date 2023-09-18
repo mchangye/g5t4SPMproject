@@ -33,13 +33,13 @@ INSERT INTO Skills VALUES
 CREATE TABLE Roles (
  -- Role_ID int NOT NULL, 
 Role_Name varchar(50) NOT NULL, 
-Role_desc varchar(50) NOT NULL,
+-- Role_desc varchar(1000) NOT NULL, (put it as optional for now because the role desc may change depending on the role-listing)
 PRIMARY KEY (Role_Name)
 );
 
 INSERT INTO Roles VALUES 
-('Marketing Executive', 'The marketing executive does this....'),
-('Comms Executive', 'The comms executive does this....')
+('Marketing Executive'),
+('Comms Executive')
 ;
 
 
@@ -61,13 +61,14 @@ CREATE TABLE Role_Listing ( -- seems like it is taken from skills future so HR d
   Role_Listing_ID int NOT NULL,
   Role_Name varchar(50) NOT NULL,
   Role_Desc varchar(1000) NOT NULL, -- this will have to update the existing role table??
-  Role_Department varchar(50) NOT NULL, -- is this a foreign key. nah idts
+  Role_Department varchar(50) NOT NULL, 
   Role_Function varchar(50) NOT NULL, -- function is new and need to input is equivalent to the track for the skills future framework
   Role_Country varchar(50) NOT NULL, 
   Available BOOLEAN NOT NULL, -- 0 if not available ? Or juyst expiry_date enough and dunnid available as a field
   Expiry_Date DATE, -- expiry date can be null i think. Or should it be a new table cos it can change
   PRIMARY KEY (Role_Listing_ID),
-  CONSTRAINT Role_Listing_fk1 FOREIGN KEY (Role_Name) REFERENCES Role_Skill(Role_Name)
+  CONSTRAINT Role_Listing_fk2 FOREIGN KEY (Role_Name) REFERENCES Roles(Role_Name)
+  
 ); 
 INSERT INTO Role_Listing VALUES 
 (1,'Marketing Executive','The marketing executive will be tasked to do xxxxx','Marketing','Business','Malaysia', "1", 2023-12-31),
