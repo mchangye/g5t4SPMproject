@@ -20,6 +20,14 @@
             <li><strong>Email:</strong> {{ staff.Email }} </li>
             <li><strong>Access Rights:</strong> {{ staff.Access_Rights }} </li>
         </ul>
+        <h1>
+            Roles Information
+        </h1>
+        <ul>
+            {% for role in roles %}
+            <li>{{ role }}</li>
+            {% endfor %}
+        </ul>
     </div>
 
     <!-- Include Vue.js library -->

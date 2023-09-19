@@ -4,6 +4,8 @@ create schema SBRP;
 use SBRP;
 -- not creating any log tables yet...
 -- should i have a table just for skills and a table just for roles?? single column table?? 
+
+-- ###### STAFF ######
 CREATE TABLE Staff (
   Staff_ID int NOT NULL,
   Staff_FName varchar(50) NOT NULL,
@@ -19,24 +21,24 @@ INSERT INTO Staff VALUES
 (2,'Matthew','Chang','IT','Singapore','matthew.c@xyz.com', '3')
 ;
 
+-- ###### SKILLS ######
 CREATE TABLE Skills (
 -- Skill_ID int NOT NULL, 
 Skill_Name varchar(50) NOT NULL, 
 PRIMARY KEY (Skill_Name)
 );
-
 INSERT INTO Skills VALUES 
 ('Brand Management'),
 ('Business Negotiation')
 ;
 
+-- ###### ROLES ######
 CREATE TABLE Roles (
- -- Role_ID int NOT NULL, 
+-- Role_ID int NOT NULL, 
 Role_Name varchar(50) NOT NULL, 
 -- Role_desc varchar(1000) NOT NULL, (put it as optional for now because the role desc may change depending on the role-listing)
 PRIMARY KEY (Role_Name)
 );
-
 INSERT INTO Roles VALUES 
 ('Marketing Executive'),
 ('Comms Executive')

@@ -36,32 +36,20 @@ class Role_Skill(db.Model): #test role skill table
 def index():
     # Query the Staff table, assuming you want to fetch a specific staff record by ID (e.g., ID=1)
     staff_record = Staff.query.get(1)  # You can change the ID as needed
+    roles_record = Roles.query.all()
 
-    if staff_record:
-        staff_data = {
-            'Staff_FName': staff_record.Staff_FName,
-            'Staff_LName': staff_record.Staff_LName,
-            'Dept': staff_record.Dept,
-            'Country': staff_record.Country,
-            'Email': staff_record.Email,
-            'Access_Rights': staff_record.Access_Rights
-        }
-        return render_template('index.html', staff=staff_data)
-    else:
-        return render_template('index.html', staff=None)
+    staff_data = {
+        'Staff_FName': staff_record.Staff_FName if staff_record else None,
+        'Staff_LName': staff_record.Staff_LName if staff_record else None,
+        'Dept': staff_record.Dept if staff_record else None,
+        'Country': staff_record.Country if staff_record else None,
+        'Email': staff_record.Email if staff_record else None,
+        'Access_Rights': staff_record.Access_Rights if staff_record else None
+    }
 
-def index(): #why it dun work :<
-    # Query the Roles table, assuming you want to fetch a specific role record
-    roles_record = Roles.query.get(1)  # You can change the ID as needed
+    roles_names = [record.Role_Name for record in roles_record]
 
-    if roles_record:
-        roles_data = {
-            'Role_Name': roles_record.Role_Name
-          
-        }
-        return render_template('index.html', role=roles_data)
-    else:
-        return render_template('index.html', role=None)
+    return render_template('index.html', staff=staff_data, roles=roles_names)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
