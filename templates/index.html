@@ -3,37 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SBRP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Skill-Based Role Portal</title>
 </head>
 
 
 <body>
-    <div id="app">
-        <h1>
-            Staff Information
-        </h1>
-        <ul>
-            <li><strong>Staff First Name:</strong> {{ staff.Staff_FName }} </li>
-            <li><strong>Staff Last Name:</strong> {{ staff.Staff_LName }} </li>
-            <li><strong>Department:</strong> {{ staff.Dept }} </li>
-            <li><strong>Country:</strong> {{ staff.Country }} </li>
-            <li><strong>Email:</strong> {{ staff.Email }} </li>
-            <li><strong>Access Rights:</strong> {{ staff.Access_Rights }} </li>
-        </ul>
-        <h1>
-            Roles Information
-        </h1>
-        <ul>
-            {% for role in roles %}
-            <li>{{ role }}</li>
-            {% endfor %}
-        </ul>
+    <div id="app" class="container text-centre p-5">
+        <div class="row">
+
+            <div class="col">
+                <h1>Staff Information</h1>
+                <ul>
+                    <li><strong>Staff First Name:</strong> {{ staff.Staff_FName }} </li>
+                    <li><strong>Staff Last Name:</strong> {{ staff.Staff_LName }} </li>
+                    <li><strong>Department:</strong> {{ staff.Dept }} </li>
+                    <li><strong>Country:</strong> {{ staff.Country }} </li>
+                    <li><strong>Email:</strong> {{ staff.Email }} </li>
+                    <li><strong>Access Rights:</strong> {{ staff.Access_Rights }} </li>
+                </ul>
+            </div>
+
+            <div class="col">
+                <h1>Roles Information</h1>
+                <ul>
+                    {% for role in roles %}
+                    <li>{{ role }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
     </div>
 
-    <!-- Include Vue.js library -->
+    <!-- ###### LIBS AND SCRIPTS ###### -->
+    <!-- Vue.js library -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 
-    <!-- Include your Vue.js script -->
+    <!-- Vue.js script -->
     <script src="app.js"></script>
+
+    <!-- Bootstrap script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>
