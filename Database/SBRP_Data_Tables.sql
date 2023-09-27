@@ -6,7 +6,7 @@ use SBRP;
 -- ###### Department ######
 
 CREATE TABLE Department (
-  Department_ID int NOT NULL,
+  Department_ID int AUTO_INCREMENT,
   Department_Name varchar(50) NOT NULL,
 PRIMARY KEY (Department_ID)
  );
@@ -22,7 +22,7 @@ INSERT INTO Department VALUES
 
   -- ###### Job Function ######
  CREATE TABLE Job_Function (
-  Job_Function_ID int NOT NULL,
+  Job_Function_ID int AUTO_INCREMENT,
   Job_Function_Name varchar(50) NOT NULL,
  PRIMARY KEY (Job_Function_ID)
  );
@@ -37,7 +37,7 @@ INSERT INTO Job_Function VALUES
 
  -- ###### Country ######
  CREATE TABLE Country (
-  Country_ID int NOT NULL,
+  Country_ID int AUTO_INCREMENT,
   Country_Name varchar(50) NOT NULL,
  PRIMARY KEY (Country_ID)
  );
@@ -53,7 +53,7 @@ INSERT INTO Country VALUES
 
 -- ###### STAFF ######
 CREATE TABLE Staff (
-  Staff_ID int NOT NULL,
+  Staff_ID int AUTO_INCREMENT,
   Staff_FName varchar(50) NOT NULL,
   Staff_LName varchar(50) NOT NULL,
   Department_ID int NOT NULL,
@@ -99,7 +99,7 @@ INSERT INTO Staff_Manager VALUES
 
 -- ###### SKILLS ######
 CREATE TABLE Skills (
-Skill_ID int NOT NULL, 
+Skill_ID int AUTO_INCREMENT, 
 Skill_Name varchar(50) NOT NULL, 
 PRIMARY KEY (Skill_ID)
 );
@@ -114,7 +114,7 @@ INSERT INTO Skills VALUES -- separate into technical vs critical core skills? Fo
 
 -- ###### ROLES ######
 CREATE TABLE Roles (
-Role_ID int NOT NULL, 
+Role_ID int AUTO_INCREMENT, 
 Role_Name varchar(50) NOT NULL, 
 -- Role_desc varchar(1000) NOT NULL, (put it as optional for now because the role desc may change depending on the role-listing)
 PRIMARY KEY (Role_ID)
@@ -149,7 +149,7 @@ INSERT INTO Role_Skill VALUES
 
 -- ###### ROLE Listing######
 CREATE TABLE Role_Listing ( -- seems like it is taken from skills future so HR dont need to input their own skill??
-  Role_Listing_ID int NOT NULL,
+  Role_Listing_ID int AUTO_INCREMENT,
   Role_ID int NOT NULL,
   Role_Desc varchar(1000) NOT NULL, -- desc depends on the listing
   Role_Department_ID int NOT NULL, 
@@ -214,7 +214,7 @@ INSERT INTO Role_Listing_Skill_Proficiency VALUES
 
 -- ###### APPLICATION ######
 CREATE TABLE Application ( -- how do we make it so that you can unapply or just update apply field to 0 when unapply
-Application_ID int NOT NULL,
+Application_ID int AUTO_INCREMENT,
 Staff_ID int NOT NULL,
 Role_Listing_ID int NOT NULL,
 Apply BOOLEAN NOT NULL, -- not null? whether u apply or if u withdraw then status become 0. Each time you apply/ unapply it is a new value
