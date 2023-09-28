@@ -21,8 +21,16 @@ class Staff(db.Model):
     Email = db.Column(db.String(50), nullable=False)
     Access_Rights = db.Column(db.Integer, nullable=False)  # Updated column name
 
+
 # class Skills(db.Model): # testing skills table
-#     Skill_Name = db.Column(db.String(50), primary_key=True)
+#     Skill_ID = db.Column(db.Integer, primary_key=True)
+#     Skill_Name = db.Column(db.String(50), nullable=False)
+
+class Staff_Skill(db.Model):
+    __tablename__ = 'staff_skill'
+    Staff_ID = db.Column(db.Integer, db.ForeignKey('Staff.Staff_ID'), primary_key=True)
+    Skill_ID = db.Column(db.Integer, db.ForeignKey('Skills.Skill_ID'), primary_key=True)
+    Proficiency = db.Column(db.Integer, nullable=False)
 
 class Roles(db.Model): # testing skills table
     Role_ID = db.Column(db.Integer, primary_key=True)
@@ -126,7 +134,7 @@ def get_all():
         ), 404
 
 
-# READ SPECIFC ROLE
+# READ SPECIFIC ROLE
 @app.route("/api/roles/<int:listingID>")
 def find_by_listingID(listingID):
 
@@ -175,20 +183,6 @@ def get_landing_message():
 def staff_info_landing():
     return 'This is the landing page for Get Staff Info'
 
-#testing if it can fetch
-# @app.route('/api/get-staff-info/1')
-# def get_staff_data1():
-#     staff_record = Staff.query.get(1)
-#     staff_data = {
-#         'Staff_FName': staff_record.Staff_FName if staff_record else None,
-#         'Staff_LName': staff_record.Staff_LName if staff_record else None,
-#         'Department_ID': staff_record.Department_ID if staff_record else None,
-#         'Country_ID': staff_record.Country_ID if staff_record else None,
-#         'Email': staff_record.Email if staff_record else None,
-#         'Access_Rights': staff_record.Access_Rights if staff_record else None
-#     }
-#     return jsonify(staff_data)
-
 @app.route('/api/get-staff-info/<staff_id>')
 def get_staff_data(staff_id):
     staff_record = Staff.query.get(staff_id)
@@ -202,7 +196,27 @@ def get_staff_data(staff_id):
     }
     return jsonify(staff_data)
 
+#This app.route is to fetch the Staff ID and display all the skills that the staff has
+@app.route('/api/get-staff-all-skill-id/<staff_id>')
+def get_staff_skill_id(staff_id):
+    staff_skills = Staff_Skill.query.filter_by(Staff_ID=staff_id).all()
+    skill_data = []
+    for record in staff_skills:
+        skill_data.append({
+            'Skill_ID': record.Skill_ID,
+            'Proficiency': record.Proficiency
+        })
+    return jsonify(skill_data)
 
+#This app.route can work alone but is intended to work with the above /get-staff-all-skill-id to then fetch the names of the skills that the staff has
+@app.route('/api/get-skill-info/<skill_id>')
+def get_skill_info(skill_id):
+    skill_info = Skills.query.get(skill_id)
+    skill_data = {
+        'Skill_ID': skill_info.Skill_ID if skill_info else None,
+        'Skill_Name': skill_info.Skill_Name if skill_info else None
+    }
+    return jsonify(skill_data)
 
 @app.route('/api/get-roles-info/')
 def get_roles_all():
