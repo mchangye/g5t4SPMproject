@@ -33,6 +33,114 @@ class Role_Skill(db.Model): #test role skill table
     Skill_Name = db.Column(db.String(50), primary_key=True) #how to account for foreign keys?
 
 
+
+class RoleListing(db.Model):
+    __tablename__ = 'role_listing'
+
+    Role_Listing_ID = db.Column(db.Integer, primary_key=True)
+    #Role_Name = db.Column(db.Integer, db.ForeignKey('skill.Skill_Name'), nullable=False, index=True)
+    Role_ID = db.Column(db.Integer, nullable=False)
+    Role_Desc = db.Column(db.String(1000), nullable=False)
+    Role_department_ID = db.Column(db.Integer, nullable=False)
+    Role_Function_ID = db.Column(db.Integer, nullable=False)
+    Role_Country_ID = db.Column(db.Integer, nullable=False)
+    Available = db.Column(db.SmallInteger(), nullable=False)
+    Expiry_Date = db.Column(db.Date(), nullable=False)
+
+    #customer = db.relationship('Customer', primaryjoin='Order.customerID == Customer.customerID', backref='orders')
+
+    def json(self):
+        dto = {
+            'Role_Listing_ID': self.Role_Listing_ID,
+            'Role_ID': self.Role_ID,
+            'Role_Desc': self.Role_Desc,
+            'Role_department_ID': self.Role_department_ID,
+            'Role_Function_ID': self.Role_Function_ID,
+            'Role_Country_ID': self.Role_Country_ID,
+            'Available': self.Available,
+            'Expiry_Date': self.Expiry_Date
+        }
+
+        return dto
+
+
+class RoleSkills(db.Model):
+    __tablename__ = 'role_skill'
+
+    Role_ID = db.Column(db.Integer, primary_key=True)
+    Skill_ID = db.Column(db.Integer, primary_key=True)
+
+
+    def json(self):
+        dto = {
+            'Role_ID': self.Role_ID,
+            'Skill_ID': self.Skill_ID,
+        }
+
+        return dto
+
+
+# READ ALL ROLES
+@app.route("/api/roles")
+def get_all():
+    roleList = RoleListing.query.all()
+    if len(roleList):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "roles": [roles.json() for roles in roleList]
+                }
+            }
+        )
+    else:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "There are no roles."
+            }
+        ), 404
+
+
+# READ SPECIFC ROLE
+@app.route("/api/roles/<int:listingID>")
+def find_by_listingID(listingID):
+
+    role = RoleListing.query.filter_by(Role_Listing_ID=listingID).first()
+    skills = RoleSkills.query.filter_by(Role_ID=role.Role_ID).with_entities(RoleSkills.Skill_ID).all()
+
+    if role:
+
+        response_data = {
+            'Role_ID': role.Role_ID,
+            'Role_Listing_ID': role.Role_Listing_ID,
+            'Role_Desc': role.Role_Desc,
+            'Role_department_ID': role.Role_department_ID,
+            'Role_Function_ID': role.Role_Function_ID,
+            'Role_Country_ID': role.Role_Country_ID,
+            'Available': role.Available,
+            'Expiry_Date': role.Expiry_Date,
+            'role_skills': [skill.Skill_ID for skill in skills]
+            # "role_skills": [skill.json() for skill in skills]
+        }
+
+        return jsonify(
+            {
+                "code": 200,
+                "data": response_data
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "data": {
+                "Role_Listing_ID": listingID
+            },
+            "message": "Role not found."
+        }
+    ), 404
+
+
 #To check whether it can connect
 @app.route('/api/landing')
 def get_landing_message():

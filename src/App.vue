@@ -14,7 +14,11 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/">Landing</RouterLink>
         <RouterLink to="/about">About (Default)</RouterLink>
         <RouterLink to="/staffinfo">Staff Info</RouterLink>
+<<<<<<< Updated upstream
         <RouterLink to="/rolesinfo">Roles Info</RouterLink>
+=======
+        <RouterLink to="/browseroles">Browse Roles</RouterLink>
+>>>>>>> Stashed changes
       </nav>
     <!-- </div> -->
   </header>

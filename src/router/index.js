@@ -23,9 +23,9 @@ const router = createRouter({
       component: () => import('../views/StaffInfoView.vue')
     },
     {
-      path: '/rolesinfo',
-      name: 'rolesinfo',
-      component: () => import('../views/RolesInfoView.vue')
+      path: '/browseroles',
+      name: 'browseroles',
+      component: () => import('../views/BrowseRolesView.vue')
     }
   ]
 })
