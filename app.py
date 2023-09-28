@@ -70,9 +70,19 @@ def get_staff_data(staff_id):
     }
     return jsonify(staff_data)
 
-@app.route('/api/get-roles-info')
-def roles_info_landing():
-    return 'This is the landing page for Get Roles Info'
+
+
+@app.route('/api/get-roles-info/')
+def get_roles_all():
+    role_record = Roles.query.all()
+    role_data = []
+    for role in role_record:
+        role_data.append({
+            'Role_ID': role.Role_ID,
+            'Role_Name': role.Role_Name,
+        })
+
+    return jsonify(role_data)
 
 @app.route('/api/get-roles-info/<role_id>')
 def get_roles_data(role_id):
