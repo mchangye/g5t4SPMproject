@@ -75,14 +75,14 @@ class RoleListing(db.Model):
 class Skills(db.Model):
     __tablename__ = 'skills'
 
-    Role_ID = db.Column(db.Integer, primary_key=True)
-    Role_Name = db.Column(db.String(50))
+    Skill_ID = db.Column(db.Integer, primary_key=True)
+    Skill_Name = db.Column(db.String(50))
 
 
     def json(self):
         dto = {
-            'Role_ID': self.Role_ID,
-            'Role_Name': self.Role_Name
+            'Skill_ID': self.Skill_ID,
+            'Skill_Name': self.Skill_Name
         }
 
         return dto
