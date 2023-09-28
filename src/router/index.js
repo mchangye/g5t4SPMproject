@@ -31,6 +31,11 @@ const router = createRouter({
       path: '/browseroles',
       name: 'browseroles',
       component: () => import('../views/BrowseRolesView.vue')
+    },
+    {
+      path: '/rolesinfo',
+      name: 'rolesinfo',
+      component: () => import('../views/RolesInfoView.vue')
     }
   ]
 })
