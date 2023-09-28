@@ -21,16 +21,16 @@ class Staff(db.Model):
     Email = db.Column(db.String(50), nullable=False)
     Access_Rights = db.Column(db.Integer, nullable=False)  # Updated column name
 
-class Skills(db.Model): # testing skills table
-    Skill_Name = db.Column(db.String(50), primary_key=True)
+# class Skills(db.Model): # testing skills table
+#     Skill_Name = db.Column(db.String(50), primary_key=True)
 
 class Roles(db.Model): # testing skills table
     Role_ID = db.Column(db.Integer, primary_key=True)
     Role_Name = db.Column(db.String(50), nullable=False)
 
-class Role_Skill(db.Model): #test role skill table
-    Role_Name = db.Column(db.String(50), primary_key=True)
-    Skill_Name = db.Column(db.String(50), primary_key=True) #how to account for foreign keys?
+# class Role_Skill(db.Model): #test role skill table
+#     Role_Name = db.Column(db.String(50), primary_key=True)
+#     Skill_Name = db.Column(db.String(50), primary_key=True) #how to account for foreign keys?
 
 
 
@@ -64,6 +64,22 @@ class RoleListing(db.Model):
         return dto
 
 
+class Skills(db.Model):
+    __tablename__ = 'skills'
+
+    Role_ID = db.Column(db.Integer, primary_key=True)
+    Role_Name = db.Column(db.String(50))
+
+
+    def json(self):
+        dto = {
+            'Role_ID': self.Role_ID,
+            'Role_Name': self.Role_Name
+        }
+
+        return dto
+
+
 class RoleSkills(db.Model):
     __tablename__ = 'role_skill'
 
@@ -84,12 +100,20 @@ class RoleSkills(db.Model):
 @app.route("/api/roles")
 def get_all():
     roleList = RoleListing.query.all()
-    if len(roleList):
+    roles_with_skills = []
+
+    for role in roleList:
+        skills = RoleSkills.query.filter_by(Role_ID=role.Role_ID).with_entities(RoleSkills.Skill_ID).all()
+        role_data = role.json()
+        role_data['role_skills'] = [skill.Skill_ID for skill in skills]
+        roles_with_skills.append(role_data)
+
+    if len(roles_with_skills):
         return jsonify(
             {
                 "code": 200,
                 "data": {
-                    "roles": [roles.json() for roles in roleList]
+                    "roles": roles_with_skills
                 }
             }
         )
