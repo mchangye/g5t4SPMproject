@@ -1,6 +1,7 @@
 ##### WHAT IS THE PURPOSE OF THIS FILE? #####
 # This file is to declare the database variables from your MySQL and for all the Flask functions.
 
+from datetime import datetime
 from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -8,7 +9,10 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 # Configure MySQL database connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost:3306/sbrp'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost:3306/sbrp' 
+# ^ For Windows
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@localhost:3306/sbrp'
+# ^ For Mac
 db = SQLAlchemy(app)
 CORS(app)
 
@@ -127,6 +131,25 @@ class RoleSkills(db.Model):
 
         return dto
 
+class Application(db.Model):
+    __tablename__ = 'application'
+
+    Application_ID = db.Column(db.Integer, primary_key=True)
+    Staff_ID = db.Column(db.Integer, db.ForeignKey('Staff.Staff_ID'), nullable=False)
+    Role_Listing_ID = db.Column(db.Integer, db.ForeignKey('RoleListing.Role_Listing_ID'), nullable=False)
+    Apply = db.Column(db.SmallInteger(), nullable=False)
+    Time_Stamp = db.Column(db.DateTime(), nullable=False)
+    # created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+
+    def json(self):
+        dto = {
+            'Application_ID': self.Application_ID,
+            'Staff_ID': self.Staff_ID,
+            'Role_Listing_ID': self.Role_Listing_ID,
+            'Apply': self.Apply,
+            'Time_Stamp': self.Time_Stamp
+        }
+        return dto
 
 # READ ALL ROLES
 @app.route("/api/roles")
@@ -281,6 +304,62 @@ def get_roles_data(role_id):
         'Role_Name': role_record.Role_Name if role_record else None,
     }
     return jsonify(role_data)
+
+@app.route("/api/application/")
+def get_all_applications():
+    applicationList = Application.query.all()
+
+    if len(applicationList):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "applications": [application.json() for application in applicationList]
+                }
+            }
+        )
+    else:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "You have no applications."
+            }
+        ), 404
+
+@app.route("/api/application/<staff_id>/")
+def get_staff_applications(staff_id):
+    applicationList = Application.query.all()
+    outlist = []
+    for application in applicationList:
+        if application.Staff_ID == int(staff_id):
+            outlist.append(application)
+
+    if len(outlist):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "applications": [application.json() for application in outlist]
+                }
+            }
+        )
+    else:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "You have no applications."
+            }
+        ), 404
+
+# @app.route("/api/application/<staff_id>/<role_listing_id>/")
+# def apply(staff_id, role_listing_id):
+#       TO FIX -> FK ERROR in the RoleListingId of Application object, NOT SURE IF NEED TO USE RELATIONSHIPs thingy
+#     newApplication = Application(Staff_ID=staff_id, Role_Listing_ID=role_listing_id, Apply=1, Time_Stamp=datetime.now())
+#     db.session.add(newApplication)
+#     db.session.commit()
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
