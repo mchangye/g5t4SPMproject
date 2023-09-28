@@ -111,9 +111,17 @@ def get_all():
     roles_with_skills = []
 
     for role in roleList:
-        skills = RoleSkills.query.filter_by(Role_ID=role.Role_ID).with_entities(RoleSkills.Skill_ID).all()
+        skills_data = RoleSkills.query.filter_by(Role_ID=role.Role_ID).with_entities(RoleSkills.Skill_ID).all()
+        skills = [skill.Skill_ID for skill in skills_data]
+        skill_names = []  # List to store skill names
+
+        for skill_id in skills:
+            skill = Skills.query.get(skill_id)  # Query the Skills table to get skill names
+            if skill:
+                skill_names.append(skill.Skill_Name)
+
         role_data = role.json()
-        role_data['role_skills'] = [skill.Skill_ID for skill in skills]
+        role_data['role_skills'] = skill_names
         roles_with_skills.append(role_data)
 
     if len(roles_with_skills):
