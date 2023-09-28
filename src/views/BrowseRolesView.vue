@@ -1,22 +1,36 @@
 <template>
-<div>
-                <h1>All Roles</h1>
-                <ul>
-                  <li v-for="role in roles" :key="role.Role_Listing_ID">
-                    <p>Role Listing ID: {{ role.Role_Listing_ID }}</p>
-                    <p>Department: {{ role.Role_department_ID }}</p>
-                    <p>Description: {{ role.Role_Desc }}</p>
-                    <p>Skills: 
-                      <ul>
-                        <li v-for="skill in role.role_skills">{{ skill }}</li>
-                      </ul>
-                    </p>
-                    <p>Applicants: TO BE DONE</p>
-                    <p>Expiry: {{ role.Expiry_Date }}</p>
-                  </li>
-                </ul>
-            </div>
-  </template>
+  <div>
+    <h1>Role Listings</h1>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Role Listing ID</th>
+          <th>Role Name</th>
+          <th>Department</th>
+          <th>Description</th>
+          <th>Skills</th>
+          <th>Applicants</th>
+          <th>Expiry Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="role in roles" :key="role.Role_Listing_ID">
+          <td>{{ role.Role_Listing_ID }}</td>
+          <td>{{ role.Role_Name }}</td>
+          <td>{{ role.Role_department_ID }}</td>
+          <td>{{ role.Role_Desc }}</td>
+          <td>
+            <ul>
+              <li v-for="skill in role.role_skills">{{ skill }}</li>
+            </ul>
+          </td>
+          <td>TBC NEXT SPRINT</td>
+          <td>{{ role.Expiry_Date }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
   
   <script>
   export default {

@@ -33,13 +33,37 @@ class Staff_Skill(db.Model):
     Proficiency = db.Column(db.Integer, nullable=False)
 
 class Roles(db.Model): # testing skills table
+    __tablename__ = 'roles'
+
     Role_ID = db.Column(db.Integer, primary_key=True)
     Role_Name = db.Column(db.String(50), nullable=False)
+
+    def json(self):
+        dto = {
+            'Role_ID': self.Role_ID,
+            'Role_Name': self.Role_Name
+        }
+
+        return dto
 
 # class Role_Skill(db.Model): #test role skill table
 #     Role_Name = db.Column(db.String(50), primary_key=True)
 #     Skill_Name = db.Column(db.String(50), primary_key=True) #how to account for foreign keys?
 
+
+class Department(db.Model):
+    __tablename__ = 'department'
+
+    Department_ID = db.Column(db.Integer, primary_key=True)
+    Department_Name = db.Column(db.String(50), nullable=False)
+
+    def json(self):
+        dto = {
+            'Department_ID': self.Department_ID,
+            'Department_Name': self.Department_Name
+        }
+
+        return dto
 
 
 class RoleListing(db.Model):
@@ -121,6 +145,17 @@ def get_all():
                 skill_names.append(skill.Skill_Name)
 
         role_data = role.json()
+
+        # Add Role_Name to role_data
+        role = Roles.query.filter_by(Role_ID=role.Role_ID).first()
+        if role:
+            role_data['Role_Name'] = role.Role_Name
+
+        # # Add Department_Name to role_data
+        # department = Department.query.filter_by(Department_ID=role.Department_ID).first()
+        # if department:
+        #     role_data['Department_Name'] = department.Department_Name
+
         role_data['role_skills'] = skill_names
         roles_with_skills.append(role_data)
 
