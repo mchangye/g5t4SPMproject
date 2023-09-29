@@ -205,7 +205,19 @@ def get_all():
 def find_by_listingID(listingID):
 
     role = RoleListing.query.filter_by(Role_Listing_ID=listingID).first()
-    skills = RoleSkills.query.filter_by(Role_ID=role.Role_ID).with_entities(RoleSkills.Skill_ID).all()
+    skills_data = RoleSkills.query.filter_by(Role_ID=role.Role_ID).with_entities(RoleSkills.Skill_ID).all()
+
+    skills = [skill.Skill_ID for skill in skills_data]
+    skill_names = []  # List to store skill names
+
+    for skill_id in skills:
+        skill = Skills.query.get(skill_id)  # Query the Skills table to get skill names
+        if skill:
+            skill_names.append(skill.Skill_Name)
+    
+
+    role_data = role.json()
+    role_data['role_skills'] = skill_names
 
     if role:
 
@@ -218,8 +230,7 @@ def find_by_listingID(listingID):
             'Role_Country_ID': role.Role_Country_ID,
             'Available': role.Available,
             'Expiry_Date': role.Expiry_Date,
-            'role_skills': [skill.Skill_ID for skill in skills]
-            # "role_skills": [skill.json() for skill in skills]
+            'role_skills': skill_names
         }
 
         return jsonify(
