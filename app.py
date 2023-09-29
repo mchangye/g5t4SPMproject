@@ -151,19 +151,19 @@ class Application(db.Model):
         }
         return dto
     
-    class Staff_HR(db.Model):
-        __table__ = 'staff_hr'
+class Staff_HR(db.Model):
+    __tablename__ = 'staff_hr'
 
-        Staff_ID = db.Column(db.Integer, primary_key=True)
-        Access_Key = db.Column(db.String(20), nullable=False)
+    Staff_ID = db.Column(db.Integer, primary_key=True)
+    Access_Key = db.Column(db.String(20), nullable=False)
 
-        def json(self):
-            dto = {
+    def json(self):
+        dto = {
 
-                'Staff_ID': self.Staff_ID,
-                'Access_Key': self.Access_Key
-            }
-            return dto
+            'Staff_ID': self.Staff_ID,
+            'Access_Key': self.Access_Key
+        }
+        return dto
 
 # READ ALL ROLES
 @app.route("/api/roles")
