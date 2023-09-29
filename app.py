@@ -230,8 +230,13 @@ def find_by_listingID(listingID):
             skill_names.append(skill.Skill_Name)
     
 
+    department = Department.query.get(role.Role_department_ID)
+    department_name = department.Department_Name if department else None
+
+
     role_data = role.json()
     role_data['role_skills'] = skill_names
+    role_data['Department_Name'] = department_name
 
     if role:
 
@@ -244,7 +249,8 @@ def find_by_listingID(listingID):
             'Role_Country_ID': role.Role_Country_ID,
             'Available': role.Available,
             'Expiry_Date': role.Expiry_Date,
-            'role_skills': skill_names
+            'role_skills': skill_names,
+            'department_name': department_name
         }
 
         return jsonify(
@@ -329,6 +335,16 @@ def get_roles_data(role_id):
     role_data = {
         'Role_ID': role_record.Role_ID if role_record else None,
         'Role_Name': role_record.Role_Name if role_record else None,
+    }
+    return jsonify(role_data)
+
+#GET Specific Department Name
+@app.route('/api/get-dept-info/<dept_id>')
+def get_dept_data(dept_id):
+    dept_record = Department.query.get(dept_id)
+    role_data = {
+        'Department_ID': dept_record.Role_ID if dept_record else None,
+        'Role_Name': dept_record.Role_Name if dept_record else None,
     }
     return jsonify(role_data)
 
