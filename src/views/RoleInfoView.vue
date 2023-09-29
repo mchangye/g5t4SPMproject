@@ -1,11 +1,10 @@
 <template>
   <div>
-    <h1>Role</h1>
+    <h1>{{ info.Role_Name }}</h1>
     <table class="table table-bordered">
       <thead>
         <tr>
           <th>Role Listing ID</th>
-          <th>Role Name</th>
           <th>Department</th>
           <th>Description</th>
           <th>Skills</th>
@@ -16,7 +15,6 @@
       <tbody>
         <tr v-if="role">
           <td>{{ role.Role_Listing_ID }}</td>
-          <td>{{ role.Role_Name }}</td>
           <td>{{ role.Role_department_ID }}</td>
           <td>{{ role.Role_Desc }}</td>
           <td>
@@ -37,6 +35,7 @@
     data() {
       return {
         role: null,
+        info: []
       };
     },
     props: ['Role_Listing_ID'],
@@ -59,12 +58,12 @@
           });
       },
       getRoleName(){
-        fetch('http://localhost:5000/api/get-roles-info/1' ) // Use the Flask route you defined
+        fetch('http://localhost:5000/api/get-roles-info/' + this.Role_Listing_ID) // should be using Role_ID instead
           .then((response) => {
-            return response.text();
+            return response.json();
           })
           .then((data) => {
-            this.role = data.data;
+            this.info = data;
             console.log(data)
           })
           .catch((error) => {
