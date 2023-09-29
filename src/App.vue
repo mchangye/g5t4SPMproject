@@ -4,19 +4,25 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header>
+  <header class="header">
+    <div class="logocontainer">
     <img alt="Vue logo" class="logo" src="@/assets/sbrplogo.png" width="125" height="125" />
-
+    </div>
+    <div class="websitetitle"><h2>Job Search</h2></div>
     <!-- <div class="wrapper"> -->
       <!-- <HelloWorld msg="You did it!" /> -->
-
+      <div class="navigation bar">
       <nav>
-        <RouterLink to="/">Landing</RouterLink>
-        <RouterLink to="/about">About (Default)</RouterLink>
-        <RouterLink to="/staffinfo">Staff Info</RouterLink>
-        <RouterLink to="/rolesinfo">Roles Info</RouterLink>
-        <RouterLink to="/browseroles">Browse Roles</RouterLink>
+        <ul>
+        <li><RouterLink to="/">Landing</RouterLink></li>
+
+        <li><RouterLink to="/about">About (Default)</RouterLink></li>
+        <li><RouterLink to="/staffinfo">Staff Info</RouterLink></li>
+        <li><RouterLink to="/rolesinfo">Roles Info</RouterLink></li>
+        <li><RouterLink to="/browseroles">Browse Roles</RouterLink></li>
+      </ul>
       </nav>
+      </div>
     <!-- </div> -->
   </header>
 
@@ -25,8 +31,12 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style scoped>
 header {
+  display : flex;
+  flex-direction: column;
+  width: 100%;
   line-height: 1.5;
   max-height: 100vh;
+  float: left;
 }
 
 .logo {
@@ -59,7 +69,7 @@ nav a:first-of-type {
   border: 0;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 200px) {
   header {
     display: flex;
     place-items: center;
@@ -81,7 +91,7 @@ nav a:first-of-type {
     margin-left: -1rem;
     font-size: 1rem;
 
-    padding: 1rem 0;
+    padding: 3rem 0;
     margin-top: 1rem;
   }
 }

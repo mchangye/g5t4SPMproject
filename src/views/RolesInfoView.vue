@@ -42,4 +42,15 @@
   };
   </script>
 
+<style scoped>
+  div {
+    margin: auto auto;
+    min-height: 100vh;
+    align-items: top;
+    
+  }
+
+
+  
+</style>
   

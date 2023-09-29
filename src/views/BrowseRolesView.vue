@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="browseroles">
                 <h1>All Roles</h1>
                 <ul>
                   <li v-for="role in roles" :key="role.Role_Listing_ID">
@@ -46,4 +46,11 @@
   };
   </script>
 
+<style scoped>
+  div {
+    margin: auto auto;
+    
+  }
+
+</style>
   

@@ -13,7 +13,8 @@
         <li><strong>Country ID:</strong> {{ staff.Country_ID }}</li>
         <li><strong>Email:</strong> {{ staff.Email }}</li>
         <li><strong>Access Rights:</strong> {{ staff.Access_Rights }}</li>
-      </ul></div>
+      </ul>
+</div>
     
 </template>
 
@@ -68,3 +69,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@media (min-width: 1024px) {
+  .staffinfo {
+    min-height: 100vh;
+    align-items: top;
+  }
+}
+</style>
