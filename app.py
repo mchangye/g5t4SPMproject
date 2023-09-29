@@ -284,6 +284,7 @@ def get_skill_info(skill_id):
     }
     return jsonify(skill_data)
 
+#GET ALL ROLE NAMES
 @app.route('/api/get-roles-info/')
 def get_roles_all():
     role_record = Roles.query.all()
@@ -296,6 +297,7 @@ def get_roles_all():
 
     return jsonify(role_data)
 
+#GET specific role name
 @app.route('/api/get-roles-info/<role_id>')
 def get_roles_data(role_id):
     role_record = Roles.query.get(role_id)
@@ -304,6 +306,7 @@ def get_roles_data(role_id):
         'Role_Name': role_record.Role_Name if role_record else None,
     }
     return jsonify(role_data)
+
 
 @app.route("/api/application/")
 def get_all_applications():

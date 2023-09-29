@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Role Listings</h1>
+    <h1>Role</h1>
     <table class="table table-bordered">
       <thead>
         <tr>
@@ -14,11 +14,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="role in roles" :key="role.Role_Listing_ID">
+        <tr v-if="role">
           <td>{{ role.Role_Listing_ID }}</td>
-          <td>
-            <router-link :to="'/role/' + role.Role_Listing_ID">{{ role.Role_Name }}</router-link>
-          </td>
+          <td>{{ role.Role_Name }}</td>
           <td>{{ role.Role_department_ID }}</td>
           <td>{{ role.Role_Desc }}</td>
           <td>
@@ -38,20 +36,35 @@
   export default {
     data() {
       return {
-        roles: [],
+        role: null,
       };
     },
+    props: ['Role_Listing_ID'],
     mounted() {
-      this.fetchRolesData();
+      this.fetchRoleData();
+      this.getRoleName();
     },
     methods: {
-      fetchRolesData() {
-        fetch('http://localhost:5000/api/roles') // Use the Flask route you defined
+      fetchRoleData() {
+        fetch('http://localhost:5000/api/roles/' + this.Role_Listing_ID ) // Use the Flask route you defined
           .then((response) => {
             return response.json();
           })
           .then((data) => {
-            this.roles = data.data.roles;
+            this.role = data.data;
+            console.log(data)
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      },
+      getRoleName(){
+        fetch('http://localhost:5000/api/get-roles-info/1' ) // Use the Flask route you defined
+          .then((response) => {
+            return response.text();
+          })
+          .then((data) => {
+            this.role = data.data;
             console.log(data)
           })
           .catch((error) => {
