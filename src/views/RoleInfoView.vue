@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>{{ info.Role_Name }}</h1>
+    <button type="button" class="btn btn-info">Apply Job</button>
     <table class="table table-bordered">
       <thead>
         <tr>
@@ -58,7 +59,7 @@
           });
       },
       getRoleName(){
-        fetch('http://localhost:5000/api/get-roles-info/' + this.Role_Listing_ID) // should be using Role_ID instead
+        fetch('http://localhost:5000/api/get-roles-info/' + this.Role_Listing_ID) // should be using corresponding Role_ID instead
           .then((response) => {
             return response.json();
           })
