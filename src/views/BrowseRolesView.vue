@@ -62,4 +62,11 @@
   };
   </script>
 
+<style scoped>
+  div {
+    margin: auto auto;
+    
+  }
+
+</style>
   
