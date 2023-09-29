@@ -15,7 +15,7 @@
       <tbody>
         <tr v-if="role">
           <td>{{ role.Role_Listing_ID }}</td>
-          <td>{{ role.Role_department_ID }}</td>
+          <td>{{ role.department_name }}</td>
           <td>{{ role.Role_Desc }}</td>
           <td>
             <ul>
