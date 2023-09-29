@@ -1,6 +1,7 @@
 ##### WHAT IS THE PURPOSE OF THIS FILE? #####
 # This file is to declare the database variables from your MySQL and for all the Flask functions.
 
+from datetime import datetime
 from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -8,7 +9,10 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 # Configure MySQL database connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost:3306/sbrp'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost:3306/sbrp' 
+# ^ For Windows
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@localhost:3306/sbrp'
+# ^ For Mac
 db = SQLAlchemy(app)
 CORS(app)
 
@@ -33,13 +37,37 @@ class Staff_Skill(db.Model):
     Proficiency = db.Column(db.Integer, nullable=False)
 
 class Roles(db.Model): # testing skills table
+    __tablename__ = 'roles'
+
     Role_ID = db.Column(db.Integer, primary_key=True)
     Role_Name = db.Column(db.String(50), nullable=False)
+
+    def json(self):
+        dto = {
+            'Role_ID': self.Role_ID,
+            'Role_Name': self.Role_Name
+        }
+
+        return dto
 
 # class Role_Skill(db.Model): #test role skill table
 #     Role_Name = db.Column(db.String(50), primary_key=True)
 #     Skill_Name = db.Column(db.String(50), primary_key=True) #how to account for foreign keys?
 
+
+class Department(db.Model):
+    __tablename__ = 'department'
+
+    Department_ID = db.Column(db.Integer, primary_key=True)
+    Department_Name = db.Column(db.String(50), nullable=False)
+
+    def json(self):
+        dto = {
+            'Department_ID': self.Department_ID,
+            'Department_Name': self.Department_Name
+        }
+
+        return dto
 
 
 class RoleListing(db.Model):
@@ -103,6 +131,25 @@ class RoleSkills(db.Model):
 
         return dto
 
+class Application(db.Model):
+    __tablename__ = 'application'
+
+    Application_ID = db.Column(db.Integer, primary_key=True)
+    Staff_ID = db.Column(db.Integer, db.ForeignKey('Staff.Staff_ID'), nullable=False)
+    Role_Listing_ID = db.Column(db.Integer, db.ForeignKey('RoleListing.Role_Listing_ID'), nullable=False)
+    Apply = db.Column(db.SmallInteger(), nullable=False)
+    Time_Stamp = db.Column(db.DateTime(), nullable=False)
+    # created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+
+    def json(self):
+        dto = {
+            'Application_ID': self.Application_ID,
+            'Staff_ID': self.Staff_ID,
+            'Role_Listing_ID': self.Role_Listing_ID,
+            'Apply': self.Apply,
+            'Time_Stamp': self.Time_Stamp
+        }
+        return dto
 
 # READ ALL ROLES
 @app.route("/api/roles")
@@ -121,6 +168,17 @@ def get_all():
                 skill_names.append(skill.Skill_Name)
 
         role_data = role.json()
+
+        # Add Role_Name to role_data
+        role = Roles.query.filter_by(Role_ID=role.Role_ID).first()
+        if role:
+            role_data['Role_Name'] = role.Role_Name
+
+        # # Add Department_Name to role_data
+        # department = Department.query.filter_by(Department_ID=role.Department_ID).first()
+        # if department:
+        #     role_data['Department_Name'] = department.Department_Name
+
         role_data['role_skills'] = skill_names
         roles_with_skills.append(role_data)
 
@@ -147,7 +205,19 @@ def get_all():
 def find_by_listingID(listingID):
 
     role = RoleListing.query.filter_by(Role_Listing_ID=listingID).first()
-    skills = RoleSkills.query.filter_by(Role_ID=role.Role_ID).with_entities(RoleSkills.Skill_ID).all()
+    skills_data = RoleSkills.query.filter_by(Role_ID=role.Role_ID).with_entities(RoleSkills.Skill_ID).all()
+
+    skills = [skill.Skill_ID for skill in skills_data]
+    skill_names = []  # List to store skill names
+
+    for skill_id in skills:
+        skill = Skills.query.get(skill_id)  # Query the Skills table to get skill names
+        if skill:
+            skill_names.append(skill.Skill_Name)
+    
+
+    role_data = role.json()
+    role_data['role_skills'] = skill_names
 
     if role:
 
@@ -160,8 +230,7 @@ def find_by_listingID(listingID):
             'Role_Country_ID': role.Role_Country_ID,
             'Available': role.Available,
             'Expiry_Date': role.Expiry_Date,
-            'role_skills': [skill.Skill_ID for skill in skills]
-            # "role_skills": [skill.json() for skill in skills]
+            'role_skills': skill_names
         }
 
         return jsonify(
@@ -226,6 +295,7 @@ def get_skill_info(skill_id):
     }
     return jsonify(skill_data)
 
+#GET ALL ROLE NAMES
 @app.route('/api/get-roles-info/')
 def get_roles_all():
     role_record = Roles.query.all()
@@ -238,6 +308,7 @@ def get_roles_all():
 
     return jsonify(role_data)
 
+#GET specific role name
 @app.route('/api/get-roles-info/<role_id>')
 def get_roles_data(role_id):
     role_record = Roles.query.get(role_id)
@@ -246,6 +317,63 @@ def get_roles_data(role_id):
         'Role_Name': role_record.Role_Name if role_record else None,
     }
     return jsonify(role_data)
+
+
+@app.route("/api/application/")
+def get_all_applications():
+    applicationList = Application.query.all()
+
+    if len(applicationList):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "applications": [application.json() for application in applicationList]
+                }
+            }
+        )
+    else:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "You have no applications."
+            }
+        ), 404
+
+@app.route("/api/application/<staff_id>/")
+def get_staff_applications(staff_id):
+    applicationList = Application.query.all()
+    outlist = []
+    for application in applicationList:
+        if application.Staff_ID == int(staff_id):
+            outlist.append(application)
+
+    if len(outlist):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "applications": [application.json() for application in outlist]
+                }
+            }
+        )
+    else:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "You have no applications."
+            }
+        ), 404
+
+# @app.route("/api/application/<staff_id>/<role_listing_id>/")
+# def apply(staff_id, role_listing_id):
+#       TO FIX -> FK ERROR in the RoleListingId of Application object, NOT SURE IF NEED TO USE RELATIONSHIPs thingy
+#     newApplication = Application(Staff_ID=staff_id, Role_Listing_ID=role_listing_id, Apply=1, Time_Stamp=datetime.now())
+#     db.session.add(newApplication)
+#     db.session.commit()
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

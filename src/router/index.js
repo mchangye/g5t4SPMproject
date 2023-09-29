@@ -31,6 +31,12 @@ const router = createRouter({
       path: '/rolesinfo',
       name: 'rolesinfo',
       component: () => import('../views/RolesInfoView.vue')
+    },
+    {
+      path: '/role/:Role_Listing_ID',
+      name: 'roleinfo',
+      component: () => import('../views/RoleInfoView.vue'),
+      props: true
     }
   ]
 })
