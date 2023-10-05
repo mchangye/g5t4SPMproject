@@ -164,6 +164,33 @@ class Staff_HR(db.Model):
             'Access_Key': self.Access_Key
         }
         return dto
+    
+class Country(db.Model):
+    __tablename__ = 'country'
+
+    Country_ID = db.Column(db.Integer, primary_key=True)
+    Country_Name = db.Column(db.String(50), nullable=False)
+
+    def json(self):
+        dto = { 
+            'Country_ID': self.Country_ID,
+            'Country_Name': self.Country_Name
+        }
+        return dto
+    
+class Access_Rights(db.Model):
+    __tablename__ = 'access_rights'
+
+    Access_Rights_ID = db.Column(db.Integer, primary_key=True)
+    Access_Rights_Name = db.Column(db.String(50), nullable=False)
+
+    def json(self):
+        dto = {
+            'Access_Rights_ID': self.Access_Rights_ID,
+            'Access_Rights_Name': self.Access_Rights_Name
+        }
+        return dto
+    
 
 # READ ALL ROLES
 @app.route("/api/roles")
@@ -285,13 +312,16 @@ def staff_info_landing():
 @app.route('/api/get-staff-info/<staff_id>')
 def get_staff_data(staff_id):
     staff_record = Staff.query.get(staff_id)
+    department_record=Department.query.get(staff_record.Department_ID)
+    country_record=Country.query.get(staff_record.Country_ID)
+    access_right_record=Access_Rights.query.get(staff_record.Access_Rights)
     staff_data = {
         'Staff_FName': staff_record.Staff_FName if staff_record else None,
         'Staff_LName': staff_record.Staff_LName if staff_record else None,
-        'Department_ID': staff_record.Department_ID if staff_record else None,
-        'Country_ID': staff_record.Country_ID if staff_record else None,
+        'Department_ID': department_record.Department_Name if department_record else None,
+        'Country_ID': country_record.Country_Name if country_record else None,
         'Email': staff_record.Email if staff_record else None,
-        'Access_Rights': staff_record.Access_Rights if staff_record else None
+        'Access_Rights': access_right_record.Access_Rights_Name if staff_record else None
     }
     return jsonify(staff_data)
 

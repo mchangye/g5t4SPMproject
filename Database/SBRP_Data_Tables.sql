@@ -62,7 +62,8 @@ CREATE TABLE Staff (
   Access_Rights int NOT NULL, -- 1 for HR, 2 for manager, 3 for staff?
   PRIMARY KEY (Staff_ID),
   CONSTRAINT Staff_fk1 FOREIGN KEY (Department_ID) REFERENCES Department(Department_ID),
-  CONSTRAINT Staff_fk2 FOREIGN KEY (Country_ID) REFERENCES Country(Country_ID)
+  CONSTRAINT Staff_fk2 FOREIGN KEY (Country_ID) REFERENCES Country(Country_ID),
+  CONSTRAINT Staff_fk3 FOREIGN KEY (Access_Rights) references Access_Rights(Access_Rights_ID)
 );
 
 INSERT INTO Staff VALUES 
@@ -260,12 +261,26 @@ PRIMARY KEY (Staff_ID,Role_Listing_ID),
 CONSTRAINT Role_Status_fk1 FOREIGN KEY (Staff_ID) REFERENCES Application(Staff_ID),
 CONSTRAINT Role_Status_fk2 FOREIGN KEY (Role_Listing_ID) REFERENCES Application(Role_Listing_ID)
 );
+
+CREATE TABLE Access_Rights (
+Access_Rights_ID int NOT NULL,
+Access_Rights_Name varchar(50) NOT NULL,
+PRIMARY KEY (Access_Rights_ID)
+);
+
+insert into Access_Rights values
+(1, 'Human Resources'),
+(2, 'Manager'),
+(3, 'Staff')
+;
 -- testing
 select * from Staff;
 select * from Role_Listing;
 select * from Staff_Skill;
 select * from Role_Listing_Skill_Proficiency;
 select * from Application;
+
+
 
 -- test jira link to github
 -- test again demo
