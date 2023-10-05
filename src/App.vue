@@ -6,7 +6,7 @@ import Navbar from './components/Navbar.vue'
 
 <template>
   <div>
-    <!-- Include Sidebar Component -->
+    <!-- Include Navbar Component -->
     <Navbar />
     
     <div class="content">

@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       role: null,
-      info: []
+      info: {}
     };
   },
   props: ['Role_Listing_ID'],
@@ -48,33 +48,39 @@ export default {
     this.getRoleName();
   },
   methods: {
-    fetchRoleData() {
-      fetch('http://localhost:5000/api/roles/' + this.Role_Listing_ID) // Use the Flask route you defined
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          this.role = data.data;
-          console.log(data)
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-    },
-    getRoleName() {
-      fetch('http://localhost:5000/api/get-roles-info/' + this.Role_Listing_ID) // should be using corresponding Role_ID instead
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          this.info = data;
-          console.log(data)
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-    },
+  fetchRoleData() {
+    fetch('http://localhost:5000/api/roles/' + this.Role_Listing_ID)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        this.role = data.data;
+        
+        // Set Role_ID to a data property for later use
+        this.Role_ID = data.data.Role_ID;
+        console.log("role id for current role listing id:" + this.Role_ID)
+        console.log(data);
+        this.getRoleName(); // Call getRoleName after setting Role_ID
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   },
+  getRoleName() {
+    fetch('http://localhost:5000/api/get-roles-info/' + this.Role_ID) // use the Role_ID of current Role_Listing_ID
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        this.info = data;
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  },
+},
+
 };
 </script>
 
