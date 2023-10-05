@@ -190,7 +190,7 @@ def get_all():
 
         # Add Role_Name to role_data
         role_info = Roles.query.filter_by(Role_ID=role.Role_ID).first()
-        if role:
+        if role_info:
             role_data['Role_Name'] = role_info.Role_Name
 
         
