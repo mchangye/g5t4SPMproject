@@ -21,7 +21,7 @@
             <td>
               <router-link :to="'/role/' + role.Role_Listing_ID">{{ role.Role_Name }}</router-link>
             </td>
-            <td>{{ role.Role_department_ID }}</td>
+            <td>{{ role.Department_Name }}</td>
             <td>{{ role.Role_Desc }}</td>
             <td>
               <ul>

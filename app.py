@@ -183,15 +183,17 @@ def get_all():
 
         role_data = role.json()
 
-        # Add Role_Name to role_data
-        role = Roles.query.filter_by(Role_ID=role.Role_ID).first()
-        if role:
-            role_data['Role_Name'] = role.Role_Name
-
         # # Add Department_Name to role_data
-        # department = Department.query.filter_by(Department_ID=role.Department_ID).first()
-        # if department:
-        #     role_data['Department_Name'] = department.Department_Name
+        department = Department.query.filter_by(Department_ID=role.Role_department_ID).first()
+        if department:
+            role_data['Department_Name'] = department.Department_Name
+
+        # Add Role_Name to role_data
+        role_info = Roles.query.filter_by(Role_ID=role.Role_ID).first()
+        if role:
+            role_data['Role_Name'] = role_info.Role_Name
+
+        
 
         role_data['role_skills'] = skill_names
         roles_with_skills.append(role_data)
