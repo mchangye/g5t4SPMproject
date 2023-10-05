@@ -8,6 +8,11 @@ import { RouterLink, RouterView } from 'vue-router'
     <div class="logocontainer">
     <img alt="Vue logo" class="logo" src="@/assets/sbrplogo.png" width="125" height="125" />
     </div>
+    <div class="icons">
+    <RouterLink to="/profile"><button class="btn btn-primary">Profile</button></RouterLink>
+  
+    <button class="btn btn-primary">Notifications</button>
+    </div>
     <div class="websitetitle"><h2>Job Search</h2></div>
     <!-- <div class="wrapper"> -->
       <!-- <HelloWorld msg="You did it!" /> -->
@@ -15,7 +20,6 @@ import { RouterLink, RouterView } from 'vue-router'
       <nav>
         <ul>
         <li><RouterLink to="/">Landing</RouterLink></li>
-
         <li><RouterLink to="/about">About (Default)</RouterLink></li>
         <li><RouterLink to="/staffinfo">Staff Info</RouterLink></li>
         <li><RouterLink to="/rolesinfo">Roles Info</RouterLink></li>
@@ -25,6 +29,8 @@ import { RouterLink, RouterView } from 'vue-router'
       </div>
     <!-- </div> -->
   </header>
+  
+
 
   <RouterView />
 </template>
@@ -69,6 +75,11 @@ nav a:first-of-type {
   border: 0;
 }
 
+.icons {
+  margin-top: 20px;
+
+}
+
 @media (min-width: 200px) {
   header {
     display: flex;
@@ -94,5 +105,7 @@ nav a:first-of-type {
     padding: 3rem 0;
     margin-top: 1rem;
   }
+
 }
+
 </style>

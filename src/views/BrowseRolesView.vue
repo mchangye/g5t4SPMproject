@@ -4,13 +4,13 @@
     <table class="table table-bordered">
       <thead>
         <tr>
-          <th>Role Listing ID</th>
-          <th>Role Name</th>
-          <th>Department</th>
-          <th>Description</th>
-          <th>Skills</th>
-          <th>Applicants</th>
-          <th>Expiry Date</th>
+          <th><b>Role Listing ID</b></th>
+          <th><b>Role Name</b></th>
+          <th><b>Department</b></th>
+          <th><b>Description</b></th>
+          <th><b>Skills</b></th>
+          <th><b>Applicants</b></th>
+          <th><b>Expiry Date</b></th>
         </tr>
       </thead>
       <tbody>
