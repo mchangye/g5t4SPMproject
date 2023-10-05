@@ -58,8 +58,10 @@ export default {
         
         // Set Role_ID to a data property for later use
         this.Role_ID = data.data.Role_ID;
+
         console.log("role id for current role listing id:" + this.Role_ID)
         console.log(data);
+        
         this.getRoleName(); // Call getRoleName after setting Role_ID
       })
       .catch((error) => {
@@ -73,7 +75,6 @@ export default {
       })
       .then((data) => {
         this.info = data;
-        console.log(data);
       })
       .catch((error) => {
         console.error('Error:', error);
