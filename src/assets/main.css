@@ -1,11 +1,7 @@
 @import './base.css';
 
 #app {
-  margin-top: 5%;
-  margin-bottom: 5%;
-  margin-left: 15%;
   padding: 2rem;
-
   font-weight: normal;
 }
 
@@ -16,6 +12,7 @@ a,
   transition: 0.4s;
 }
 
+
 /*
 @media (hover: hover) {
   a:hover {
@@ -23,6 +20,16 @@ a,
   }
 }
 */
+
+
+@media (min-width: 900px) {
+  #app {
+    margin-top: 100px;
+    margin-bottom: 5px;
+    margin-left: 250px;
+    padding: 2rem;
+  }
+}
 
 @media (min-width: 600px) {
   
