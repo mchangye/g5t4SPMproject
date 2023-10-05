@@ -14,6 +14,11 @@ import Navbar from './components/Navbar.vue'
       
       <router-view />
     </div>
+    <div class="icons">
+    <RouterLink to="/profile"><button class="btn btn-primary">Profile</button></RouterLink>
+  
+    <button class="btn btn-primary">Notifications</button>
+    </div>
   </div>
 </template>
 
