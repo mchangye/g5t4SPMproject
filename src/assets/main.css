@@ -1,8 +1,9 @@
 @import './base.css';
 
 #app {
-  width: 1280px;
-  margin: 5% 10%;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  margin-left: 15%;
   padding: 2rem;
 
   font-weight: normal;
@@ -15,18 +16,16 @@ a,
   transition: 0.4s;
 }
 
+/*
 @media (hover: hover) {
   a:hover {
     background-color: hsla(198, 100%, 37%, 0.2);
   }
 }
+*/
 
 @media (min-width: 600px) {
-  body {
-    display: flex;
-    place-items: center;
-    justify-content: center;;
-  }
+  
 
   #app {
     display: grid;
