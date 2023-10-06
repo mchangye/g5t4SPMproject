@@ -355,6 +355,55 @@ def create_order():
         }
     ), 201
 
+#Update role listing
+@app.route("/api/roles/<string:Role_Listing_ID>", methods=['PUT'])
+def update_order(Role_Listing_ID):
+    try:
+        rolelisting = RoleListing.query.filter_by(Role_Listing_ID=Role_Listing_ID).first()
+        if not rolelisting:
+            return jsonify(
+                {
+                    "code": 404,
+                    "data": {
+                        "Role_Listing_ID": Role_Listing_ID
+                    },
+                    "message": "Role listing not found."
+                }
+            ), 404
+
+        # update status
+        data = request.get_json()
+        if "Available" in data:
+            rolelisting.Available = data['Available']
+        if "Expiry_Date" in data:
+            rolelisting.Expiry_Date = data['Expiry_Date']
+        if "Role_Country_ID" in data:
+            rolelisting.Role_Country_ID = data['Role_Country_ID']
+        if "Role_Desc" in data:
+            rolelisting.Role_Desc = data['Role_Desc']
+        if "Role_Function_ID" in data:
+            rolelisting.Role_Function_ID = data['Role_Function_ID']
+        if "Role_ID" in data:
+            rolelisting.Role_ID = data['Role_ID']
+        if "Role_department_ID" in data:
+            rolelisting.Role_department_ID = data['Role_department_ID']
+        db.session.commit()
+        return jsonify(
+            {
+                "code": 200,
+                "data": rolelisting.json()
+            }
+        ), 200
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "Role_Listing_ID": Role_Listing_ID
+                },
+                "message": "An error occurred while updating the role listing. " + str(e)
+            }
+        ), 500
 
 #To check whether it can connect
 @app.route('/api/landing')
