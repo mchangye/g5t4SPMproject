@@ -2,9 +2,10 @@
 # This file is to declare the database variables from your MySQL and for all the Flask functions.
 
 from datetime import datetime
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+import json
 
 app = Flask(__name__)
 
@@ -35,6 +36,7 @@ class Staff_Skill(db.Model):
     Staff_ID = db.Column(db.Integer, db.ForeignKey('Staff.Staff_ID'), primary_key=True)
     Skill_ID = db.Column(db.Integer, db.ForeignKey('Skills.Skill_ID'), primary_key=True)
     Proficiency = db.Column(db.Integer, nullable=False)
+    
 
 class Roles(db.Model): # testing skills table
     __tablename__ = 'roles'
@@ -68,22 +70,42 @@ class Department(db.Model):
         }
 
         return dto
+    
+class Function(db.Model):
+    __tablename__ = 'job_function'
+
+    Job_Function_ID = db.Column(db.Integer, primary_key=True)
+    Job_Function_Name = db.Column(db.String(50), nullable=False)
+
+    def json(self):
+        dto = {
+            'Job_Function_ID': self.Job_Function_ID,
+            'Job_Function_Name': self.Job_Function_Name
+        }
+
+        return dto
 
 
 class RoleListing(db.Model):
     __tablename__ = 'role_listing'
 
     Role_Listing_ID = db.Column(db.Integer, primary_key=True)
-    #Role_Name = db.Column(db.Integer, db.ForeignKey('skill.Skill_Name'), nullable=False, index=True)
-    Role_ID = db.Column(db.Integer, nullable=False)
+    Role_ID = db.Column(db.Integer, db.ForeignKey('roles.Role_ID'), nullable=False, index=True)
+    #Role_ID = db.Column(db.Integer, nullable=False)
     Role_Desc = db.Column(db.String(1000), nullable=False)
-    Role_department_ID = db.Column(db.Integer, nullable=False)
-    Role_Function_ID = db.Column(db.Integer, nullable=False)
-    Role_Country_ID = db.Column(db.Integer, nullable=False)
+    Role_department_ID = db.Column(db.Integer, db.ForeignKey('department.Department_ID'), nullable=False, index=True)
+    #Role_department_ID = db.Column(db.Integer, nullable=False)
+    Role_Function_ID = db.Column(db.Integer, db.ForeignKey('job_function.Job_Function_ID'), nullable=False, index=True)
+    #Role_Function_ID = db.Column(db.Integer, nullable=False)
+    Role_Country_ID = db.Column(db.Integer, db.ForeignKey('country.Country_ID'), nullable=False, index=True)
+    #Role_Country_ID = db.Column(db.Integer, nullable=False)
     Available = db.Column(db.SmallInteger(), nullable=False)
     Expiry_Date = db.Column(db.Date(), nullable=False)
 
-    #customer = db.relationship('Customer', primaryjoin='Order.customerID == Customer.customerID', backref='orders')
+    role = db.relationship('Roles', primaryjoin='RoleListing.Role_ID == Roles.Role_ID', backref='role_listing')
+    department = db.relationship('Department', primaryjoin='RoleListing.Role_department_ID == Department.Department_ID', backref='role_listing')
+    Function = db.relationship('Function', primaryjoin='RoleListing.Role_Function_ID == Function.Job_Function_ID', backref='role_listing')
+    Country = db.relationship('Country', primaryjoin='RoleListing.Role_Country_ID == Country.Country_ID', backref='role_listing')
 
     def json(self):
         dto = {
@@ -297,6 +319,41 @@ def find_by_listingID(listingID):
             "message": "Role not found."
         }
     ), 404
+
+#Create role listing
+@app.route("/api/createrole", methods=['POST'])
+def create_order():
+    Role_Listing_ID = request.json.get('Role_Listing_ID', None)
+    Role_ID = request.json.get('Role_ID', None)
+    Role_Desc = request.json.get('Role_Desc', None)
+    Role_department_ID = request.json.get('Role_department_ID', None)
+    Role_Function_ID = request.json.get('Role_Function_ID', None)
+    Role_Country_ID = request.json.get('Role_Country_ID', None)
+    Available = request.json.get('Available', None)
+    Expiry_Date = request.json.get('Expiry_Date', None)
+    RoleList = RoleListing(Role_Listing_ID=Role_Listing_ID, Role_ID=Role_ID, Role_Desc=Role_Desc, Role_department_ID=Role_department_ID, Role_Function_ID=Role_Function_ID, Role_Country_ID=Role_Country_ID, Available=Available, Expiry_Date=Expiry_Date)
+
+    try:
+        db.session.add(RoleList)
+        db.session.commit()
+
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating the role listing. " + str(e)
+            }
+        ), 500
+    
+    print(json.dumps(RoleList.json(), default=str)) # convert a JSON object to a string and print
+    print()
+
+    return jsonify(
+        {
+            "code": 201,
+            "data": RoleList.json()
+        }
+    ), 201
 
 
 #To check whether it can connect
