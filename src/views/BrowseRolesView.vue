@@ -74,7 +74,9 @@ export default {
   data() {
     return {
       roles: [],
-      dt: null
+      dt: null,
+      deptfilter: null,
+      skillsfilter: null
     };
   },
   mounted() {
@@ -82,59 +84,56 @@ export default {
     this.fetchRolesData();
 
     //Department Filter Multiselect Dropdown
-    $(document).ready(function () {
-      $('#department-filter').multiselect({
-        buttonText: function (options, select) {
-          if (options.length == 0) {
-            return 'Select Department(s)';
-          } else if (options.length > 3) {
-            return 'More than 3 departments selected!';
-          }
-          else {
-            var labels = [];
-            options.each(function () {
-              if ($(this).attr('label') !== undefined) {
-                labels.push($(this).attr('label'));
-              }
-              else {
-                labels.push($(this).html());
-              }
-            });
-            return labels.join(', ') + '';
-          }
-        },
-        includeSelectAllOption: true,
-        enableFiltering: true,
-        buttonWidth: '400px'
-      });
+    this.deptfilter = $('#department-filter').multiselect({
+      buttonText: function (options, select) {
+        if (options.length == 0) {
+          return 'Select Department(s)';
+        } else if (options.length > 3) {
+          return 'More than 3 departments selected!';
+        }
+        else {
+          var labels = [];
+          options.each(function () {
+            if ($(this).attr('label') !== undefined) {
+              labels.push($(this).attr('label'));
+            }
+            else {
+              labels.push($(this).html());
+            }
+          });
+          return labels.join(', ') + '';
+        }
+      },
+      includeSelectAllOption: true,
+      enableFiltering: true,
+      buttonWidth: '400px'
     });
 
+
     //Skills Multiselect Dropdown
-    $(document).ready(function () {
-      $('#skill-filter').multiselect({
-        buttonText: function (options, select) {
-          if (options.length == 0) {
-            return 'Select Skill(s)';
-          } else if (options.length > 3) {
-            return 'More than 3 skills selected!';
-          }
-          else {
-            var labels = [];
-            options.each(function () {
-              if ($(this).attr('label') !== undefined) {
-                labels.push($(this).attr('label'));
-              }
-              else {
-                labels.push($(this).html());
-              }
-            });
-            return labels.join(', ') + '';
-          }
-        },
-        includeSelectAllOption: true,
-        enableFiltering: true,
-        buttonWidth: '400px'
-      });
+    this.skillsfilter = $('#skill-filter').multiselect({
+      buttonText: function (options, select) {
+        if (options.length == 0) {
+          return 'Select Skill(s)';
+        } else if (options.length > 3) {
+          return 'More than 3 skills selected!';
+        }
+        else {
+          var labels = [];
+          options.each(function () {
+            if ($(this).attr('label') !== undefined) {
+              labels.push($(this).attr('label'));
+            }
+            else {
+              labels.push($(this).html());
+            }
+          });
+          return labels.join(', ') + '';
+        }
+      },
+      includeSelectAllOption: true,
+      enableFiltering: true,
+      buttonWidth: '400px'
     });
 
 
@@ -147,6 +146,11 @@ export default {
       this.$nextTick(() => {
         new DataTable('#rolesTable')
       });
+    },
+    // Add a watch on the route object and the "key" attribute.
+    '$route'() {
+      // Handle route changes or key changes here.
+      this.reloadComponent();
     }
   },
   methods: {
@@ -162,6 +166,18 @@ export default {
         .catch((error) => {
           console.error('Error:', error);
         });
+    },
+    reloadComponent() {
+      // This method will be called when the route changes.
+      // Reset component state or perform any necessary actions.
+      this.dt.destroy();
+
+      if (this.skillsfilter) {
+        this.skillsfilter.multiselect('destroy');
+      }
+      if (this.deptfilter) {
+        this.deptfilter.multiselect('destroy');
+      }
     },
   },
 };
@@ -180,6 +196,5 @@ div {
   padding: 10px;
   /* Optional: Add padding for spacing */
 }
-
 </style>
   
