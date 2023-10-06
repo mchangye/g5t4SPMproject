@@ -12,6 +12,10 @@ a,
   transition: 0.4s;
 }
 
+/* Main Content */
+div.content {
+  width: max-content;
+}
 
 /*
 @media (hover: hover) {

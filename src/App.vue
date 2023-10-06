@@ -20,6 +20,7 @@ import Navbar from './components/Navbar.vue'
 
 
 <script>
+
   export default {
     components: {
       Navbar, // Register Sidebar component
