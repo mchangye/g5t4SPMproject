@@ -8,12 +8,10 @@
         <section class="box">
           <p class="fw-bold">Department</p>
           <select id="department-filter" multiple="multiple">
-            <option value="skill1">Skill 1</option>
-            <option value="skill2">Skill 2</option>
-            <option value="cleaning">Cleaning</option>
-            <option value="stakeholder management">Stakeholder Management</option>
-            <option value="business management">Business Management</option>
-            <option value="brand management">Brand Management</option>
+            <option value="department1">Department 1</option>
+            <option value="department2">Department 2</option>
+            <option value="marketing">Marketing</option>
+            <option value="operations">Operations</option>
           </select>
         </section>
 
@@ -31,18 +29,8 @@
 
         <section class="box">
           <p class="fw-bold">Expiry Date</p>
-          <form class="row">
-              <div class="input-group date" id="datepicker">
-                <input type="text" class="form-control" id="date" />
-                <span class="input-group-append">
-                  <span class="input-group-text bg-light d-block">
-                    <i class="fa fa-calendar"></i>
-                  </span>
-                </span>
-              </div>
-          </form>
+          <input type="date" class="form-control" id="datepick">
         </section>
-
 
       </div>
 
@@ -149,9 +137,6 @@ export default {
       });
     });
 
-    $(function () {
-      $('#datepicker').datepicker();
-    });
 
   },
   watch: {
@@ -196,8 +181,5 @@ div {
   /* Optional: Add padding for spacing */
 }
 
-.input-group-append {
-  cursor: pointer;
-}
 </style>
   
