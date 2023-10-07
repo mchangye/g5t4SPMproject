@@ -32,6 +32,10 @@
           <input type="date" class="form-control" id="datepick">
         </section>
 
+        <section class="box">
+          <button type="button" class="btn btn-primary">Filter</button>
+        </section>
+
       </div>
 
       <table id="rolesTable" class="table table-striped" style="width:100%">
