@@ -41,6 +41,7 @@ export default {
   mounted() {
     this.fetchRoleData();
     this.getRoleName();
+    this.getApplicants();
   },
   methods: {
     fetchRoleData() {
@@ -75,6 +76,22 @@ export default {
           console.error('Error:', error);
         });
     },
+    getApplicants(){
+      fetch('http://localhost:5000/api/applications/rolelisting/' + this.Role_Listing_ID)
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          this.applicants = data.data;
+
+          console.log("All Applicants for this role")
+          console.log(data);
+
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
   },
 
 };

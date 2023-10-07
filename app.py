@@ -487,7 +487,8 @@ def get_dept_data(dept_id):
     return jsonify(role_data)
 
 
-@app.route("/api/application/")
+# GET all applications
+@app.route("/api/applications/")
 def get_all_applications():
     applicationList = Application.query.all()
 
@@ -507,8 +508,46 @@ def get_all_applications():
                 "message": "You have no applications."
             }
         ), 404
+    
 
-@app.route("/api/application/<staff_id>/")
+# GET Applications by Role Listing 
+@app.route("/api/applications/rolelisting/<int:Role_Listing_ID>")
+def get_applications_by_role(Role_Listing_ID):
+    applicationList = Application.query.filter_by(Role_Listing_ID=Role_Listing_ID).all()
+    application_with_staff = []
+
+    for application in applicationList:
+
+        application_data = application.json()
+
+        # # Add Staff_Name to application_data
+        staff = Staff.query.filter_by(Staff_ID=application.Staff_ID).first()
+        if staff:
+            application_data['Staff_Name'] = staff.Staff_FName
+            application_data['Email'] = staff.Email
+
+        application_with_staff.append(application_data)
+
+    if len(application_with_staff):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "applications": application_with_staff
+                }
+            }
+        )
+    else:
+        return jsonify(
+            {
+                "code": 404,
+                "message": f"No applications found for Role_Listing_ID {Role_Listing_ID}."
+            }
+        ), 404
+    
+
+# GET Applications for each staff
+@app.route("/api/applications/staff/<int:staff_id>/")
 def get_staff_applications(staff_id):
     applicationList = Application.query.all()
     outlist = []
@@ -533,12 +572,16 @@ def get_staff_applications(staff_id):
             }
         ), 404
 
+
+
+
 # @app.route("/api/application/<staff_id>/<role_listing_id>/")
 # def apply(staff_id, role_listing_id):
 #       TO FIX -> FK ERROR in the RoleListingId of Application object, NOT SURE IF NEED TO USE RELATIONSHIPs thingy
 #     newApplication = Application(Staff_ID=staff_id, Role_Listing_ID=role_listing_id, Apply=1, Time_Stamp=datetime.now())
 #     db.session.add(newApplication)
 #     db.session.commit()
+
 
 
 
