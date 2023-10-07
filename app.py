@@ -549,18 +549,27 @@ def get_applications_by_role(Role_Listing_ID):
 # GET Applications for each staff
 @app.route("/api/applications/staff/<int:staff_id>/")
 def get_staff_applications(staff_id):
-    applicationList = Application.query.all()
-    outlist = []
-    for application in applicationList:
-        if application.Staff_ID == int(staff_id):
-            outlist.append(application)
+    applicationList = Application.query.filter_by(Staff_ID=staff_id).all()
+    application_with_role = []
 
-    if len(outlist):
+    for application in applicationList:
+
+        application_data = application.json()
+
+        # # Add Staff_Name to application_data
+        role = RoleListing.query.filter_by(Role_Listing_ID=application.Role_Listing_ID).first()
+        if role:
+            application_data['Role_ID'] = role.Role_ID
+            application_data['Description'] = role.Role_Desc
+
+        application_with_role.append(application_data)
+
+    if len(application_with_role):
         return jsonify(
             {
                 "code": 200,
                 "data": {
-                    "applications": [application.json() for application in outlist]
+                    "applications": application_with_role
                 }
             }
         )
@@ -568,7 +577,7 @@ def get_staff_applications(staff_id):
         return jsonify(
             {
                 "code": 404,
-                "message": "You have no applications."
+                "message": f"No applications found for Staff_ID {staff_id}."
             }
         ), 404
 
