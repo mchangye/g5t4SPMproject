@@ -23,11 +23,19 @@ const router = createRouter({
       component: () => import('../views/StaffInfoView.vue')
     },
     {
-      path: '/browseroles',
-      name: 'browseroles',
-      component: () => import('../views/BrowseRolesView.vue'),
+      path: '/browserolesstaff',
+      name: 'browserolesstaff',
+      component: () => import('../views/BrowseRolesStaffView.vue'),
       meta: {
-        key: 'browse-roles'
+        key: 'browse-roles-staff'
+      }
+    },
+    {
+      path: '/browseroleshr',
+      name: 'browseroleshr',
+      component: () => import('../views/BrowseRolesHRView.vue'),
+      meta: {
+        key: 'browse-roles-hr'
       }
     },
     {
@@ -36,9 +44,14 @@ const router = createRouter({
       component: () => import('../views/RolesInfoView.vue')
     },
     {
-      path: '/role/:Role_Listing_ID',
-      name: 'roleinfo',
-      component: () => import('../views/RoleInfoView.vue'),
+      path: '/rolestaff/:Role_Listing_ID',
+      name: 'roleinfostaff',
+      component: () => import('../views/RoleInfoStaffView.vue')
+    },
+    {
+      path: '/rolehr/:Role_Listing_ID',
+      name: 'roleinfohr',
+      component: () => import('../views/RoleInfoHRView.vue'),
       props: true
     },
     {

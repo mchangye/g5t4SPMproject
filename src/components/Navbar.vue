@@ -9,8 +9,13 @@
             </a>
             <div class="position-sticky">
                 <div class="list-group list-group-flush mx-3 mt-4">
-                    <router-link to="/browseroles" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/browseroles' }">
-                        <img src="../assets/browse.png" height="20" class="me-3">Browse Roles
+                    <!-- This Browseroles is for Staff -->
+                    <router-link to="/browserolesstaff" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/browserolesstaff' }">
+                        <img src="../assets/browse.png" height="20" class="me-3">Browse Roles (Staff)
+                    </router-link>
+                    <!-- This Browseroles is for HR -->
+                    <router-link to="/browseroleshr" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/browseroleshr' }">
+                        <img src="../assets/browse.png" height="20" class="me-3">Browse Roles (HR)
                     </router-link>
                     <router-link to="/newrole" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/newrole' }">
                         <i class="fas fa-chart-line fa-fw me-3"></i>Create New Role

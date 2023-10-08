@@ -2,7 +2,7 @@
   <!--Main layout-->
   <main class="pt-3">
     <div class="container-flex">
-      <h2>Browse Roles</h2>
+      <h2>Browse Roles (Staff)</h2>
 
       <div class="filters-container mt-4 mb-4">
         <section class="box">
@@ -46,7 +46,8 @@
             <th>Department</th>
             <th>Description</th>
             <th>Skills</th>
-            <th>Applicants</th>
+            <!-- <th>Applicants</th> -->
+            <th>Role Skill Match Percentage</th>
             <th>Expiry Date</th>
           </tr>
         </thead>
@@ -54,7 +55,7 @@
           <tr v-for="role in roles" :key="role.Role_Listing_ID">
             <td>{{ role.Role_Listing_ID }}</td>
             <td>
-              <router-link :to="'/role/' + role.Role_Listing_ID">{{ role.Role_Name }}</router-link>
+              <router-link :to="'/rolestaff/' + role.Role_Listing_ID">{{ role.Role_Name }}</router-link>
             </td>
             <td>{{ role.Department_Name }}</td>
             <td>{{ role.Role_Desc }}</td>
@@ -63,7 +64,9 @@
                 <li v-for="skill in role.role_skills">{{ skill }}</li>
               </ul>
             </td>
-            <td>TBC NEXT SPRINT</td>
+            <!-- <td>TBC NEXT SPRINT</td> -->
+            <!-- For the percentage (Skill  Match) below, link up with <unassigned> to do SCRUM-29 Role Skill Match Percentage -->
+            <td>Placeholder 69% (need to do! SCRUM-29)</td>
             <td>{{ role.Expiry_Date }}</td>
           </tr>
         </tbody>
