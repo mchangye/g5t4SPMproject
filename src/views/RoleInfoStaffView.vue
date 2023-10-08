@@ -24,6 +24,7 @@
         <ul>
           <li v-for="skill in role.role_skills">{{ skill }}</li>
         </ul>
+        <p><span class="fw-bold">Skills match:</span> Placeholder for which skills match OR skill match percentage.</p>
       </span>
 
     </div>
