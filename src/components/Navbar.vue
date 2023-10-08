@@ -18,6 +18,9 @@
                     <router-link to="/applicants" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/applicants' }">
                         <i class="fas fa-chart-line fa-fw me-3"></i>Applicants
                     </router-link>
+                    <router-link to="/myapplications" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/myapplications' }">
+                        <i class="fas fa-chart-line fa-fw me-3"></i>My Applications
+                    </router-link>
                     <router-link to="/" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/' }">
                         <i class="fas fa-chart-line fa-fw me-3"></i>Test Landing
                     </router-link>
