@@ -520,7 +520,7 @@ def get_applications_by_role(Role_Listing_ID):
 
         application_data = application.json()
 
-        # # Add Staff_Name to application_data
+        # # Add Staff Information to application_data
         staff = Staff.query.filter_by(Staff_ID=application.Staff_ID).first()
         if staff:
             application_data['Staff_Name'] = staff.Staff_FName
@@ -556,11 +556,24 @@ def get_staff_applications(staff_id):
 
         application_data = application.json()
 
-        # # Add Staff_Name to application_data
+        # # Add Role Listing Details to application_data
         role = RoleListing.query.filter_by(Role_Listing_ID=application.Role_Listing_ID).first()
         if role:
-            application_data['Role_ID'] = role.Role_ID
+            #application_data['Role_ID'] = role.Role_ID
             application_data['Description'] = role.Role_Desc
+            #application_data['Department_ID'] = role.Role_department_ID
+
+
+        # # Add Department_Name to application_data
+        department = Department.query.filter_by(Department_ID=role.Role_department_ID).first()
+        if department:
+            application_data['Department_Name'] = department.Department_Name
+
+        # Add Role_Name to application_data
+        role_info = Roles.query.filter_by(Role_ID=role.Role_ID).first()
+        if role_info:
+            application_data['Role_Name'] = role_info.Role_Name
+        
 
         application_with_role.append(application_data)
 
