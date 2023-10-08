@@ -46,7 +46,8 @@ const router = createRouter({
     {
       path: '/rolestaff/:Role_Listing_ID',
       name: 'roleinfostaff',
-      component: () => import('../views/RoleInfoStaffView.vue')
+      component: () => import('../views/RoleInfoStaffView.vue'),
+      props: true
     },
     {
       path: '/rolehr/:Role_Listing_ID',
