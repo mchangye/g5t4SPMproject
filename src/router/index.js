@@ -64,6 +64,11 @@ const router = createRouter({
       path: '/myapplications/',
       name: 'myapplications',
       component: () => import('../views/MyApplicationsView.vue')
+    },
+    {
+      path: '/updateskill/',
+      name: 'updateskill',
+      component: () => import('../views/UpdateSkill.vue')
     }
   ]
 })

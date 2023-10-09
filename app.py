@@ -453,6 +453,42 @@ def get_skill_info(skill_id):
     }
     return jsonify(skill_data)
 
+#Update Skill Proficiency
+@app.route('/api/update-skill-proficiency/<staff_id>', methods=['PUT'])
+def update_skill_proficiency(Staff_ID, Skill_ID):
+    try: 
+        staffskill = Staff_Skill.query.filter_by(Staff_ID=Staff_ID, Skill_ID=Skill_ID).first()
+        if not staffskill:
+            return jsonify(
+                {
+                    "code": 404,
+                    "data": {
+                        "Staff_ID": Staff_ID,
+                        "Skill_ID": Skill_ID
+                    },
+                    "message": "Skill not found."
+                }
+            ), 404
+        data = request.get_json()
+        if "Staff_ID" in data:
+            staffskill.Staff_ID = data['Staff_ID']
+        if "Skill_ID" in data:
+            staffskill.Skill_ID = data['Skill_ID']
+        if "Proficiency" in data:
+            staffskill.Proficiency = data['Proficiency']
+        db.session.commit()
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "Staff_ID": Staff_ID,
+                    "Skill_ID": Skill_ID
+                },
+                "message": "An error occurred while updating your skill. " + str(e)
+            }
+        ), 500
+
 #GET ALL ROLE NAMES
 @app.route('/api/get-roles-info/')
 def get_roles_all():
