@@ -87,7 +87,40 @@ export default {
     this.dt = $(this.$refs.rolesTable).DataTable();
     this.fetchRolesData();
 
-    //Department Filter Multiselect Dropdown
+    this.initializeFilters();
+
+  },
+  watch: {
+    roles() {
+      if (this.dt) {
+        this.dt.destroy();
+      }
+      this.$nextTick(() => {
+        new DataTable('#rolesTable')
+      });
+    },
+    // Add a watch on the route object and the "key" attribute.
+    '$route'() {
+      // Handle route changes or key changes here.
+      this.reloadComponent();
+    }
+  },
+  methods: {
+    fetchRolesData() {
+      fetch('http://localhost:5000/api/roles') // Use the Flask route you defined
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          this.roles = data.data.roles;
+          console.log(data)
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    },
+    initializeFilters() {
+      //Department Filter Multiselect Dropdown
     this.deptfilter = $('#department-filter').multiselect({
       buttonText: function (options, select) {
         if (options.length == 0) {
@@ -139,37 +172,6 @@ export default {
       enableFiltering: true,
       buttonWidth: '400px'
     });
-
-
-  },
-  watch: {
-    roles() {
-      if (this.dt) {
-        this.dt.destroy();
-      }
-      this.$nextTick(() => {
-        new DataTable('#rolesTable')
-      });
-    },
-    // Add a watch on the route object and the "key" attribute.
-    '$route'() {
-      // Handle route changes or key changes here.
-      this.reloadComponent();
-    }
-  },
-  methods: {
-    fetchRolesData() {
-      fetch('http://localhost:5000/api/roles') // Use the Flask route you defined
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          this.roles = data.data.roles;
-          console.log(data)
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
     },
     reloadComponent() {
       // This method will be called when the route changes.
