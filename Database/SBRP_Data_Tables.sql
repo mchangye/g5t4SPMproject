@@ -18,7 +18,7 @@ CREATE TEMPORARY TABLE department_temp (
     Department_Name varchar(50)
 );
 
-LOAD DATA LOCAL INFILE "C:/Users/Jon/Documents/GitHub/g5t4SPMproject/Database/Sample_Data/staff.csv" INTO TABLE department_temp 
+LOAD DATA LOCAL INFILE "C:/Users/mchan/OneDrive/Documents/GitHub/g5t4SPMproject/Database/Sample_Data/staff.csv" INTO TABLE department_temp 
 FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES
 (@dummy,@dummy,@dummy,@dept) set Department_Name = @dept ;
 
@@ -37,7 +37,7 @@ drop table if exists department_temp;
     Country_Name varchar(50)
 );
 
-LOAD DATA LOCAL INFILE "C:/Users/Jon/Documents/GitHub/g5t4SPMproject/Database/Sample_Data/staff.csv" INTO TABLE country_temp 
+LOAD DATA LOCAL INFILE "C:/Users/mchan/OneDrive/Documents/GitHub/g5t4SPMproject/Database/Sample_Data/staff.csv" INTO TABLE country_temp 
 FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES
 (@dummy,@dummy,@dummy,@dummy, @Country) set Country_Name = @Country ;
 
@@ -54,7 +54,7 @@ Access_Control_Name varchar(50) NOT NULL,
 PRIMARY KEY (Access_ID)
 );
 
-LOAD DATA LOCAL INFILE "C:/Users/Jon/Documents/GitHub/g5t4SPMproject/Database/Sample_Data/Access_Control.csv" INTO TABLE Access_Rights 
+LOAD DATA LOCAL INFILE "C:/Users/mchan/OneDrive/Documents/GitHub/g5t4SPMproject/Database/Sample_Data/Access_Control.csv" INTO TABLE Access_Rights 
 FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
 
 -- ###### STAFF ######
@@ -84,7 +84,7 @@ Staff_ID int NOT NULL,
   PRIMARY KEY (Staff_ID)
 );
 
-LOAD DATA LOCAL INFILE "C:/Users/Jon/Documents/GitHub/g5t4SPMproject/Database/Sample_Data/staff.csv" INTO TABLE staff_temp 
+LOAD DATA LOCAL INFILE "C:/Users/mchan/OneDrive/Documents/GitHub/g5t4SPMproject/Database/Sample_Data/staff.csv" INTO TABLE staff_temp 
 FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
 
 select * from staff_temp;
@@ -114,7 +114,7 @@ Skill_Desc varchar(1000) NOT NULL,
 PRIMARY KEY (Skill_ID)
 );
 
-LOAD DATA LOCAL INFILE "C:/Users/Jon/Documents/GitHub/g5t4SPMproject/Database/Sample_Data/skill.csv" INTO TABLE Skills character set latin1
+LOAD DATA LOCAL INFILE "C:/Users/mchan/OneDrive/Documents/GitHub/g5t4SPMproject/Database/Sample_Data/skill.csv" INTO TABLE Skills character set latin1
 FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES
 (@Skill_Name,@Skill_Desc) set Skill_Name = @Skill_Name, Skill_Desc = @Skill_Desc;
 
@@ -128,7 +128,7 @@ Role_Desc varchar(10000) NOT NULL,
 PRIMARY KEY (Role_ID)
 );
 
-LOAD DATA LOCAL INFILE "C:/Users/Jon/Documents/GitHub/g5t4SPMproject/Database/Sample_Data/role.csv" INTO TABLE Roles character set latin1
+LOAD DATA LOCAL INFILE "C:/Users/mchan/OneDrive/Documents/GitHub/g5t4SPMproject/Database/Sample_Data/role.csv" INTO TABLE Roles character set latin1
 FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES
 (@Role_Name,@Role_Desc) set Role_Name = @Role_Name, Role_Desc = @Role_Desc;
 
@@ -150,7 +150,7 @@ skill_name varchar(50) NOT NULL,
 PRIMARY KEY (role_name, skill_name)
 );
 
-LOAD DATA LOCAL INFILE "C:/Users/Jon/Documents/GitHub/g5t4SPMproject/Database/Sample_Data/role_skill.csv" INTO TABLE role_skill_temp
+LOAD DATA LOCAL INFILE "C:/Users/mchan/OneDrive/Documents/GitHub/g5t4SPMproject/Database/Sample_Data/role_skill.csv" INTO TABLE role_skill_temp
 FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
 
 -- select * from role_skill_temp;
@@ -212,7 +212,7 @@ skill_name varchar(50) NOT NULL,
 PRIMARY KEY (staff_id, skill_name)
 );
 
-LOAD DATA LOCAL INFILE "C:/Users/Jon/Documents/GitHub/g5t4SPMproject/Database/Sample_Data/staff_skill.csv" INTO TABLE staff_skill_temp
+LOAD DATA LOCAL INFILE "C:/Users/mchan/OneDrive/Documents/GitHub/g5t4SPMproject/Database/Sample_Data/staff_skill.csv" INTO TABLE staff_skill_temp
 FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;
 
 UPDATE staff_skill_temp
