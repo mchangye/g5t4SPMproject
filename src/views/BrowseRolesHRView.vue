@@ -57,7 +57,7 @@
               <router-link :to="'/rolehr/' + role.Role_Listing_ID">{{ role.Role_Name }}</router-link>
             </td>
             <td>{{ role.Department_Name }}</td>
-            <td>{{ role.Role_Desc }}</td>
+            <td>{{ role.Role_Listing_Desc }}</td>
             <td>
               <ul>
                 <li v-for="skill in role.role_skills">{{ skill }}</li>
