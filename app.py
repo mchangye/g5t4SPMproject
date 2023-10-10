@@ -294,9 +294,9 @@ def find_by_listingID(listingID):
         response_data = {
             'Role_ID': role.Role_ID,
             'Role_Listing_ID': role.Role_Listing_ID,
-            'Role_Desc': role.Role_Desc,
+            'Role_Listing_Desc': role.Role_Listing_Desc,
             'Role_department_ID': role.Role_department_ID,
-            'Role_Function_ID': role.Role_Function_ID,
+            #'Role_Function_ID': role.Role_Function_ID,
             'Role_Country_ID': role.Role_Country_ID,
             'Available': role.Available,
             'Expiry_Date': role.Expiry_Date,
@@ -325,13 +325,13 @@ def find_by_listingID(listingID):
 def create_order():
     Role_Listing_ID = request.json.get('Role_Listing_ID', None)
     Role_ID = request.json.get('Role_ID', None)
-    Role_Desc = request.json.get('Role_Desc', None)
+    Role_Listing_Desc = request.json.get('Role_Listing_Desc', None)
     Role_department_ID = request.json.get('Role_department_ID', None)
-    Role_Function_ID = request.json.get('Role_Function_ID', None)
+    #Role_Function_ID = request.json.get('Role_Function_ID', None)
     Role_Country_ID = request.json.get('Role_Country_ID', None)
     Available = request.json.get('Available', None)
     Expiry_Date = request.json.get('Expiry_Date', None)
-    RoleList = RoleListing(Role_Listing_ID=Role_Listing_ID, Role_ID=Role_ID, Role_Desc=Role_Desc, Role_department_ID=Role_department_ID, Role_Function_ID=Role_Function_ID, Role_Country_ID=Role_Country_ID, Available=Available, Expiry_Date=Expiry_Date)
+    RoleList = RoleListing(Role_Listing_ID=Role_Listing_ID, Role_ID=Role_ID, Role_Listing_Desc=Role_Listing_Desc, Role_department_ID=Role_department_ID, Role_Country_ID=Role_Country_ID, Available=Available, Expiry_Date=Expiry_Date)
 
     try:
         db.session.add(RoleList)
@@ -379,8 +379,8 @@ def update_order(Role_Listing_ID):
             rolelisting.Expiry_Date = data['Expiry_Date']
         if "Role_Country_ID" in data:
             rolelisting.Role_Country_ID = data['Role_Country_ID']
-        if "Role_Desc" in data:
-            rolelisting.Role_Desc = data['Role_Desc']
+        if "Role_Listing_Desc" in data:
+            rolelisting.Role_Listing_Desc = data['Role_Listing_Desc']
         if "Role_Function_ID" in data:
             rolelisting.Role_Function_ID = data['Role_Function_ID']
         if "Role_ID" in data:
