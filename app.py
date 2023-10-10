@@ -43,11 +43,13 @@ class Roles(db.Model): # testing skills table
 
     Role_ID = db.Column(db.Integer, primary_key=True)
     Role_Name = db.Column(db.String(50), nullable=False)
+    Role_Desc = db.Column(db.String(1000), nullable=False)
 
     def json(self):
         dto = {
             'Role_ID': self.Role_ID,
-            'Role_Name': self.Role_Name
+            'Role_Name': self.Role_Name,
+            'Role_Desc': self.Role_Desc
         }
 
         return dto
@@ -71,19 +73,19 @@ class Department(db.Model):
 
         return dto
     
-class Function(db.Model):
-    __tablename__ = 'job_function'
+# class Function(db.Model):
+#     __tablename__ = 'job_function'
 
-    Job_Function_ID = db.Column(db.Integer, primary_key=True)
-    Job_Function_Name = db.Column(db.String(50), nullable=False)
+#     Job_Function_ID = db.Column(db.Integer, primary_key=True)
+#     Job_Function_Name = db.Column(db.String(50), nullable=False)
 
-    def json(self):
-        dto = {
-            'Job_Function_ID': self.Job_Function_ID,
-            'Job_Function_Name': self.Job_Function_Name
-        }
+#     def json(self):
+#         dto = {
+#             'Job_Function_ID': self.Job_Function_ID,
+#             'Job_Function_Name': self.Job_Function_Name
+#         }
 
-        return dto
+#         return dto
 
 
 class RoleListing(db.Model):
@@ -92,11 +94,9 @@ class RoleListing(db.Model):
     Role_Listing_ID = db.Column(db.Integer, primary_key=True)
     Role_ID = db.Column(db.Integer, db.ForeignKey('roles.Role_ID'), nullable=False, index=True)
     #Role_ID = db.Column(db.Integer, nullable=False)
-    Role_Desc = db.Column(db.String(1000), nullable=False)
+    Role_Listing_Desc = db.Column(db.String(1000), nullable=False)
     Role_department_ID = db.Column(db.Integer, db.ForeignKey('department.Department_ID'), nullable=False, index=True)
     #Role_department_ID = db.Column(db.Integer, nullable=False)
-    Role_Function_ID = db.Column(db.Integer, db.ForeignKey('job_function.Job_Function_ID'), nullable=False, index=True)
-    #Role_Function_ID = db.Column(db.Integer, nullable=False)
     Role_Country_ID = db.Column(db.Integer, db.ForeignKey('country.Country_ID'), nullable=False, index=True)
     #Role_Country_ID = db.Column(db.Integer, nullable=False)
     Available = db.Column(db.SmallInteger(), nullable=False)
@@ -104,16 +104,14 @@ class RoleListing(db.Model):
 
     role = db.relationship('Roles', primaryjoin='RoleListing.Role_ID == Roles.Role_ID', backref='role_listing')
     department = db.relationship('Department', primaryjoin='RoleListing.Role_department_ID == Department.Department_ID', backref='role_listing')
-    Function = db.relationship('Function', primaryjoin='RoleListing.Role_Function_ID == Function.Job_Function_ID', backref='role_listing')
     Country = db.relationship('Country', primaryjoin='RoleListing.Role_Country_ID == Country.Country_ID', backref='role_listing')
 
     def json(self):
         dto = {
             'Role_Listing_ID': self.Role_Listing_ID,
             'Role_ID': self.Role_ID,
-            'Role_Desc': self.Role_Desc,
+            'Role_Listing_Desc': self.Role_Listing_Desc,
             'Role_department_ID': self.Role_department_ID,
-            'Role_Function_ID': self.Role_Function_ID,
             'Role_Country_ID': self.Role_Country_ID,
             'Available': self.Available,
             'Expiry_Date': self.Expiry_Date
@@ -127,12 +125,14 @@ class Skills(db.Model):
 
     Skill_ID = db.Column(db.Integer, primary_key=True)
     Skill_Name = db.Column(db.String(50))
+    Skill_Desc = db.Column(db.String(1000))
 
 
     def json(self):
         dto = {
             'Skill_ID': self.Skill_ID,
-            'Skill_Name': self.Skill_Name
+            'Skill_Name': self.Skill_Name,
+            'Skill_Desc': self.Skill_Desc
         }
 
         return dto
@@ -173,19 +173,19 @@ class Application(db.Model):
         }
         return dto
     
-class Staff_HR(db.Model):
-    __tablename__ = 'staff_hr'
+# class Staff_HR(db.Model):
+#     __tablename__ = 'staff_hr'
 
-    Staff_ID = db.Column(db.Integer, primary_key=True)
-    Access_Key = db.Column(db.String(20), nullable=False)
+#     Staff_ID = db.Column(db.Integer, primary_key=True)
+#     Access_Key = db.Column(db.String(20), nullable=False)
 
-    def json(self):
-        dto = {
+#     def json(self):
+#         dto = {
 
-            'Staff_ID': self.Staff_ID,
-            'Access_Key': self.Access_Key
-        }
-        return dto
+#             'Staff_ID': self.Staff_ID,
+#             'Access_Key': self.Access_Key
+#         }
+#         return dto
     
 class Country(db.Model):
     __tablename__ = 'country'
@@ -294,9 +294,9 @@ def find_by_listingID(listingID):
         response_data = {
             'Role_ID': role.Role_ID,
             'Role_Listing_ID': role.Role_Listing_ID,
-            'Role_Desc': role.Role_Desc,
+            'Role_Listing_Desc': role.Role_Listing_Desc,
             'Role_department_ID': role.Role_department_ID,
-            'Role_Function_ID': role.Role_Function_ID,
+            #'Role_Function_ID': role.Role_Function_ID,
             'Role_Country_ID': role.Role_Country_ID,
             'Available': role.Available,
             'Expiry_Date': role.Expiry_Date,
@@ -325,13 +325,13 @@ def find_by_listingID(listingID):
 def create_order():
     Role_Listing_ID = request.json.get('Role_Listing_ID', None)
     Role_ID = request.json.get('Role_ID', None)
-    Role_Desc = request.json.get('Role_Desc', None)
+    Role_Listing_Desc = request.json.get('Role_Listing_Desc', None)
     Role_department_ID = request.json.get('Role_department_ID', None)
-    Role_Function_ID = request.json.get('Role_Function_ID', None)
+    #Role_Function_ID = request.json.get('Role_Function_ID', None)
     Role_Country_ID = request.json.get('Role_Country_ID', None)
     Available = request.json.get('Available', None)
     Expiry_Date = request.json.get('Expiry_Date', None)
-    RoleList = RoleListing(Role_Listing_ID=Role_Listing_ID, Role_ID=Role_ID, Role_Desc=Role_Desc, Role_department_ID=Role_department_ID, Role_Function_ID=Role_Function_ID, Role_Country_ID=Role_Country_ID, Available=Available, Expiry_Date=Expiry_Date)
+    RoleList = RoleListing(Role_Listing_ID=Role_Listing_ID, Role_ID=Role_ID, Role_Listing_Desc=Role_Listing_Desc, Role_department_ID=Role_department_ID, Role_Country_ID=Role_Country_ID, Available=Available, Expiry_Date=Expiry_Date)
 
     try:
         db.session.add(RoleList)
@@ -379,8 +379,8 @@ def update_order(Role_Listing_ID):
             rolelisting.Expiry_Date = data['Expiry_Date']
         if "Role_Country_ID" in data:
             rolelisting.Role_Country_ID = data['Role_Country_ID']
-        if "Role_Desc" in data:
-            rolelisting.Role_Desc = data['Role_Desc']
+        if "Role_Listing_Desc" in data:
+            rolelisting.Role_Listing_Desc = data['Role_Listing_Desc']
         if "Role_Function_ID" in data:
             rolelisting.Role_Function_ID = data['Role_Function_ID']
         if "Role_ID" in data:
