@@ -6,6 +6,7 @@ from flask import Flask, jsonify, render_template, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import json
+from sqlalchemy.orm import aliased
 
 app = Flask(__name__)
 
@@ -321,6 +322,80 @@ def find_by_listingID(listingID):
         }
     ), 404
 
+
+#Filtered Roles
+@app.route("/api/rolesFiltered")
+def get_all_filtered():
+    selected_departments = request.args.getlist('departments')
+    selected_skills = request.args.getlist('skills')
+    selected_expiry_date = request.args.get('expiry_date')
+
+
+    # Create a base query
+    query = RoleListing.query
+
+    # Apply filters if provided
+    if selected_departments:
+        query = query.filter(RoleListing.Role_department_ID.in_(selected_departments))
+    if selected_skills:
+        # Create aliases for RoleListing and RoleSkills
+        rl_alias = aliased(RoleListing)
+        rs_alias = aliased(RoleSkills)
+
+        # Join RoleListing and RoleSkills using aliases and filter by skills
+        query = query.join(rl_alias, RoleListing.Role_ID == rs_alias.Role_ID)
+        query = query.filter(rs_alias.Skill_ID.in_(selected_skills))
+    if selected_expiry_date:
+        query = query.filter(RoleListing.Expiry_Date < selected_expiry_date)
+
+    roleList = query.all()
+
+    roles_with_skills = []
+
+    for role in roleList:
+        skills_data = RoleSkills.query.filter_by(Role_ID=role.Role_ID).with_entities(RoleSkills.Skill_ID).all()
+        skills = [skill.Skill_ID for skill in skills_data]
+        skill_names = []  # List to store skill names
+
+        for skill_id in skills:
+            skill = Skills.query.get(skill_id)  # Query the Skills table to get skill names
+            if skill:
+                skill_names.append(skill.Skill_Name)
+
+        role_data = role.json()
+
+        # Add Department_Name to role_data
+        department = Department.query.filter_by(Department_ID=role.Role_department_ID).first()
+        if department:
+            role_data['Department_Name'] = department.Department_Name
+
+        # Add Role_Name to role_data
+        role_info = Roles.query.filter_by(Role_ID=role.Role_ID).first()
+        if role_info:
+            role_data['Role_Name'] = role_info.Role_Name
+
+        role_data['role_skills'] = skill_names
+        roles_with_skills.append(role_data)
+
+    if len(roles_with_skills):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "roles": roles_with_skills
+                }
+            }
+        )
+    else:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "There are no roles."
+            }
+        ), 404
+
+
+
 #Create role listing
 @app.route("/api/createrole", methods=['POST'])
 def create_order():
@@ -609,7 +684,7 @@ def get_staff_applications(staff_id):
         role = RoleListing.query.filter_by(Role_Listing_ID=application.Role_Listing_ID).first()
         if role:
             #application_data['Role_ID'] = role.Role_ID
-            application_data['Description'] = role.Role_Desc
+            application_data['Role_Listing_Desc'] = role.Role_Listing_Desc
             #application_data['Department_ID'] = role.Role_department_ID
 
 

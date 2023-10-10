@@ -60,7 +60,7 @@ export default {
     },
     methods: {
         getApplications() {
-            fetch('http://localhost:5000/api/applications/staff/2')
+            fetch('http://localhost:5000/api/applications/staff/140004') // NEED TO USE CURRENT STAFF'S ID
                 .then((response) => {
                     return response.json();
                 })
