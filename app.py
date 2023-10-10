@@ -343,7 +343,7 @@ def get_all_filtered():
         rs_alias = aliased(RoleSkills)
 
         # Join RoleListing and RoleSkills using aliases and filter by skills
-        query = query.join(rl_alias, RoleListing.Role_ID == rs_alias.Role_ID)
+        query = query.join(rs_alias, RoleListing.Role_ID == rs_alias.Role_ID)
         query = query.filter(rs_alias.Skill_ID.in_(selected_skills))
     if selected_expiry_date:
         query = query.filter(RoleListing.Expiry_Date < selected_expiry_date)
