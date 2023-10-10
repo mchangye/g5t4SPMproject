@@ -121,6 +121,25 @@ class RoleListing(db.Model):
 
         return dto
 
+class roleListingSkillProficiency(db.Model):
+    __tablename__ = 'role_listing_skill_proficiency'
+
+    Role_Listing_ID = db.Column(db.Integer, primary_key=True)
+    Role_ID = db.Column(db.Integer, primary_key=True)
+    Skill_ID = db.Column(db.Integer, primary_key=True)
+    Proficienct_Listing = db.Column(db.Integer)
+
+
+    def json(self):
+        dto = {
+            'Role_Listing_ID': self.Role_Listing_ID,
+            'Role_ID': self.Role_ID,
+            'Skill_ID': self.Skill_ID,
+            'Proficienct_Listing': self.Proficienct_Listing
+        }
+
+        return dto
+
 
 class Skills(db.Model):
     __tablename__ = 'skills'
@@ -421,13 +440,34 @@ def create_order():
             }
         ), 500
     
+    role_skills = request.json.get('Skills_Required', None)
+    Proficienct_Listing = request.json.get('skill_pro', None)
+    all_role_skills = []
+    
+    for i in range(len(role_skills)):
+        print("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
+        print(role_skills[i])
+        role_skill = roleListingSkillProficiency(Role_Listing_ID=RoleList.Role_Listing_ID, Role_ID=Role_ID, Skill_ID=role_skills[i], Proficienct_Listing=Proficienct_Listing[i])
+        all_role_skills.append(role_skill)
+        try:
+            db.session.add(role_skill)
+            db.session.commit()
+        except Exception as e:
+            return jsonify(
+                {
+                    "code": 500,
+                    "message": "An error occurred while creating the role listing. " + str(e)
+                }
+            ), 500
+    
     print(json.dumps(RoleList.json(), default=str)) # convert a JSON object to a string and print
     print()
 
     return jsonify(
         {
             "code": 201,
-            "data": RoleList.json()
+            "data": RoleList.json(),
+            #"data2": all_role_skills
         }
     ), 201
 
