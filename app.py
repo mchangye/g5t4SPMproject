@@ -11,9 +11,9 @@ from sqlalchemy.orm import aliased
 app = Flask(__name__)
 
 # Configure MySQL database connection
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost:3306/sbrp' 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost:3306/sbrp' 
 # ^ For Windows
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@localhost:3306/sbrp'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@localhost:3306/sbrp'
 # ^ For Mac
 db = SQLAlchemy(app)
 CORS(app)
