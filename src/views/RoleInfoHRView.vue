@@ -10,7 +10,8 @@
 
         <div class="col">
           <button type="button" class="btn btn-primary me-2">Edit Details</button>
-          <button type="button" class="btn btn-primary">View Applicants</button>
+          <!-- View Applicants button no longer in use because applicants shown on this page -->
+          <!-- <button type="button" class="btn btn-primary">View Applicants</button> -->
         </div>  
       </div>
 
@@ -18,11 +19,38 @@
         <p><span class="fw-bold">Department:</span> {{ role.department_name }}</p>
         <p><span class="fw-bold">Expiry Date:</span> {{ role.Expiry_Date }}</p>
         <span class="fw-bold">Role Description:</span>
-        <p> {{ role.Role_Desc }} </p>
+        <p> {{ role.Role_Listing_Desc }} </p>
         <p><span class="fw-bold">Skills Required:</span> </p>
         <ul>
           <li v-for="skill in role.role_skills">{{ skill }}</li>
         </ul>
+        <p><span class="fw-bold">Applicants:</span></p>
+        <table id="applicantsTable" class="table table-striped" style="width:100%">
+        <thead>
+          <tr>
+            <th>Application ID</th>
+            <th>Staff ID</th>
+            <th>Staff Name</th>
+            <th>Email</th>
+            <th>Application Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="application in applicants">
+            <td>{{ application.Application_ID }}</td>
+            <td>
+              <router-link :to="'/profile/' + application.Staff_ID">{{ application.Staff_ID }}</router-link>
+            </td>
+            <td>{{ application.Staff_Name }}</td>
+            <td>{{ application.Email }}</td>
+            <td>{{ application.Time_Stamp }}</td>
+          </tr>
+        </tbody>
+
+      </table>
+        <!-- <ul>
+          <li v-for="application in applicants">{{ application.Staff_Name }}</li>
+        </ul> -->
       </span>
 
     </div>
@@ -34,14 +62,27 @@ export default {
   data() {
     return {
       role: null,
-      info: {}
+      applicants: [],
+      info: {},
+      dt: null,
     };
   },
   props: ['Role_Listing_ID'],
   mounted() {
+    this.dt = $(this.$refs.rolesTable).DataTable();
     this.fetchRoleData();
     this.getRoleName();
     this.getApplicants();
+  },
+  watch: {
+    applicants() {
+      if (this.dt) {
+        this.dt.destroy();
+      }
+      this.$nextTick(() => {
+        new DataTable('#applicantsTable')
+      });
+    },
   },
   methods: {
     fetchRoleData() {
@@ -82,7 +123,7 @@ export default {
           return response.json();
         })
         .then((data) => {
-          this.applicants = data.data;
+          this.applicants = data.data.applications;
 
           console.log("All Applicants for this role")
           console.log(data);
