@@ -10,9 +10,9 @@ import json
 app = Flask(__name__)
 
 # Configure MySQL database connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost:3306/sbrp' 
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost:3306/sbrp' 
 # ^ For Windows
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@localhost:3306/sbrp'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@localhost:3306/sbrp'
 # ^ For Mac
 db = SQLAlchemy(app)
 CORS(app)
@@ -631,6 +631,108 @@ def get_staff_applications(staff_id):
         ), 404
 
 
+# ...
+
+# Create a new route for applying a role
+@app.route("/api/apply-role", methods=['POST'])
+def apply_role():
+    try:
+        data = request.get_json()
+        staff_id = data.get("Staff_ID")
+        role_listing_id = data.get("Role_Listing_ID")
+
+        if not staff_id or not role_listing_id:
+            return jsonify(
+                {
+                    "code": 400,
+                    "message": "Staff_ID and Role_Listing_ID are required fields."
+                }
+            ), 400
+
+        # Check if the role listing exists
+        role_listing = RoleListing.query.get(role_listing_id)
+        if not role_listing:
+            return jsonify(
+                {
+                    "code": 404,
+                    "data": {
+                        "Role_Listing_ID": role_listing_id
+                    },
+                    "message": "Role listing not found."
+                }
+            ), 404
+
+        # Check if the role is open
+        if role_listing.Available != 1:
+            return jsonify(
+                {
+                    "code": 400,
+                    "data": {
+                        "Role_Listing_ID": role_listing_id
+                    },
+                    "message": "This role is not open for applications."
+                }
+            ), 400
+
+        # Check if the applicant already has 5 applications
+        existing_applications_count = Application.query.filter_by(Staff_ID=staff_id).count()
+        if existing_applications_count >= 5:
+            return jsonify(
+                {
+                    "code": 400,
+                    "data": {
+                        "Staff_ID": staff_id
+                    },
+                    "message": "You have reached the maximum limit of 5 role applications."
+                }
+            ), 400
+
+        # Check if there is at least 1 skill match between the applicant and the role
+        applicant_skills = set(
+            skill.Skill_ID for skill in Staff_Skill.query.filter_by(Staff_ID=staff_id).all()
+        )
+        role_skills = set(
+            skill.Skill_ID for skill in RoleSkills.query.filter_by(Role_ID=role_listing.Role_ID).all()
+        )
+
+        if not applicant_skills.intersection(role_skills):
+            return jsonify(
+                {
+                    "code": 400,
+                    "data": {
+                        "Staff_ID": staff_id,
+                        "Role_Listing_ID": role_listing_id
+                    },
+                    "message": "You do not have the required skills for this role."
+                }
+            ), 400
+
+        # Create a new application
+        new_application = Application(
+            Staff_ID=staff_id,
+            Role_Listing_ID=role_listing_id,
+            Apply=1,  # Assuming 1 means applied; adjust as needed
+            Time_Stamp=datetime.now()
+        )
+
+        db.session.add(new_application)
+        db.session.commit()
+
+        return jsonify(
+            {
+                "code": 201,
+                "data": new_application.json(),
+                "message": "Role applied successfully."
+            }
+        ), 201
+
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while applying the role. " + str(e)
+            }
+        ), 500
 
 
 # @app.route("/api/application/<staff_id>/<role_listing_id>/")
