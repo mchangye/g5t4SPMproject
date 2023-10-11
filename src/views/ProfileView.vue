@@ -1,15 +1,37 @@
 <template>
     <div class="ProfileInfo">
+        <img src="../assets/avatar-pic.jpg" class="rounded-circle" height="200" alt="" loading="lazy" />
         <h1>Profile</h1>
         <ul>
-            <li>{{ user.Access_Rights }}</li>
-            <li>{{ user.Country_ID }}</li>
-            <li>{{ user.Department_ID }}</li>
-            <li>{{ user.Email }}</li>
-            <li>{{ user.Staff_FName }}</li>
-            <li>{{ user.Staff_LName }}</li>
+            <li>Access Rights: {{ user.Access_Rights }}</li>
+            <li>Country: {{ user.Country_ID }}</li>
+            <li>Department: {{ user.Department_ID }}</li>
+            <li>Email: {{ user.Email }}</li>
+            <li>First Name: {{ user.Staff_FName }}</li>
+            <li>Last Name: {{ user.Staff_LName }}</li>
         </ul>
     </div>
+    <h2>My Skills</h2>
+
+    <table v-if="skills && skillNames">
+        <tr>
+            <th>Skill ID</th>
+            <th>Skill Name</th>
+        </tr>
+        <tr v-for="(skills, index) in skills" v-bind:key="index">
+            <td>{{ skills.Skill_ID }}</td>
+            <td>{{ skillNames[skills.Skill_ID] }}</td>
+        </tr>
+    </table>
+    
+    <ul v-if="skills && skillNames">
+        <li v-for="(skills, index) in skills" v-bind:key="index">
+            
+            Skill_ID: {{ skills.Skill_ID }} <br>
+            Skill_Name: {{ skillNames[skills.Skill_ID] }} <br>
+        </li>
+    
+    </ul>
 </template>
 
 <script>
@@ -54,7 +76,7 @@
                     this.skills = data;
                     console.log('Data from getStaffAllSkillIDAPI:' + this.skills);
                     this.skills.forEach(skill => {
-                        this.getSkillInfo(skill.Skill_ID);
+                        this.getSkillName(skill.Skill_ID);
                     });
                 })
                 .catch((error) => {
