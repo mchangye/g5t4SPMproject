@@ -4,17 +4,17 @@
     <form @submit.prevent="updateSkillProficiency">
       <div class="form-group">
         <label for="staffId">Staff ID:</label>
-        <input type="text" id="staffId" v-model="staffId" />
+        <input type="text" id="Staff_ID" v-model="staff_ID" />
       </div>
       <br>
       <div class="form-group">
-        <label for="skillId">Skill ID:</label>
-        <input type="text" id="skillId" v-model="skillId" />
+        <label for="Skill_ID">Skill ID:</label>
+        <input type="text" id="Skill_ID" v-model="skill_ID" />
       </div>
       <br>
       <div class="form-group">
-        <label for="proficiency">Proficiency:</label>
-        <select id="proficiency" v-model="proficiency">
+        <label for="Proficiency">Proficiency:</label>
+        <select id="Proficiency" v-model="Proficiency">
           <option value="1">Beginner</option>
           <option value="2">Intermediate</option>
           <option value="3">Advanced</option>
@@ -39,12 +39,12 @@ export default {
   methods: {
     updateSkillProficiency() {
       const data = {
-        Staff_ID: this.staffId,
-        Skill_ID: this.skillId,
-        Proficiency: this.proficiency,
+        Staff_ID: this.Staff_ID,
+        Skill_ID: this.Skill_ID,
+        Proficiency: this.Proficiency,
       };
 
-      fetch(`/api/update-skill-proficiency/${this.staffId}`, {
+      fetch(`/api/update-skill-proficiency/${this.Staff_ID}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
