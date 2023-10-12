@@ -7,11 +7,11 @@ import Navbar from './components/Navbar.vue'
 <template>
   <div>
     <!-- Include Navbar Component -->
-    <Navbar v-if="showNavbar()"/>
-    
+    <Navbar v-if="showNavbar()" />
+
     <div class="content">
       <!-- Place the router view here to render the current page -->
-      
+
       <router-view />
     </div>
 
@@ -20,18 +20,28 @@ import Navbar from './components/Navbar.vue'
 
 
 <script>
+import eventBus from '@/event-bus';
 
-  export default {
-    components: {
-      Navbar, // Register Sidebar component
+export default {
+  data() {
+    return {
+      staff_id: null,
+    };
+  },
+  components: {
+    Navbar, // Register Sidebar component
+  },
+
+  methods: {
+    showNavbar() {
+      return this.$route.path !== '/';
     },
-
-    methods: {
-      showNavbar() {
-        return this.$route.path !== '/';
-      },
-      }
-    }
+  },
+  created() {
+    // Use the event bus to access the staff_id
+    this.staff_id = eventBus.getStaffId();
+  }
+}
 
 </script>
 

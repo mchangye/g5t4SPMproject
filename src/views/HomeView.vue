@@ -2,31 +2,37 @@
   <main>
     <h1>This is the landing page.</h1> <br><br>
     <h2>The Roles Info page has not been added yet.</h2> <br><br>
-    I don't want the page to have half of it be navbar and half of it be function, it was just the preset. Can change to bootstrap as per usual. -Dex
+    I don't want the page to have half of it be navbar and half of it be function, it was just the preset. Can change to
+    bootstrap as per usual. -Dex
   </main>
 
   <div>
     <!-- test feasibility of user login page-->
-    <diV><img src="../assets/identify.png" height="200" alt="" loading="lazy" /></div>
-    <div id=logindeets><input id="userid" placeholder="insert user id" v-model="user_id_search">
-    <router-link :to="'/about/' + user_id_search" class="list-group-item list-group-item-action py-2 ripple">
-                        <button v-on:click="sendUserId">submit</button>
-                    </router-link> 
-                  </div>
-                    <!--:class="{ 'active-link': $route.path === '/about' }-->
+    <div><img src="../assets/identify.png" height="200" alt="" loading="lazy" /></div>
+    <div id=logindeets>
+      <input id="userid" placeholder="insert staff id" v-model="staff_id">
+      <router-link :to="'/browseroleshr'" class="list-group-item list-group-item-action py-2 ripple">
+        <button v-on:click="storeStaffID">submit</button>
+      </router-link>
+    </div>
+    <!--:class="{ 'active-link': $route.path === '/about' }-->
   </div>
 </template>
 
 <script>
+import eventBus from '@/event-bus';
+
 export default {
   data() {
     return {
-      user_id_search: null,
+      staff_id: null,
     };
   },
-  methods : {
-    sendUserId() {
-      console.log("value:", this.user_id_search)
+  methods: {
+    storeStaffID() {
+      // Set the staff_id using the event bus
+      eventBus.setStaffId(this.staff_id);
+      console.log("value:", this.staff_id)
     }
   }
 }

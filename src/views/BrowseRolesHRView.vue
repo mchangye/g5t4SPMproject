@@ -74,6 +74,8 @@
 </template>
   
 <script>
+import eventBus from '@/event-bus';
+
 export default {
   data() {
     return {
@@ -89,6 +91,11 @@ export default {
 
     this.initializeFilters();
 
+  },
+  created() {
+    // Access the staff_id from the event bus
+    this.staffId = eventBus.getStaffId();
+    console.log("current staff id:" + this.staffId)
   },
   watch: {
     roles() {
