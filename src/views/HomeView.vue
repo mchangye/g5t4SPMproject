@@ -7,10 +7,12 @@
 
   <div>
     <!-- test feasibility of user login page-->
-    <input id="userid" placeholder="insert user id" v-model="user_id_search">
+    <diV><img src="../assets/identify.png" height="200" alt="" loading="lazy" /></div>
+    <div id=logindeets><input id="userid" placeholder="insert user id" v-model="user_id_search">
     <router-link :to="'/about/' + user_id_search" class="list-group-item list-group-item-action py-2 ripple">
                         <button v-on:click="sendUserId">submit</button>
                     </router-link> 
+                  </div>
                     <!--:class="{ 'active-link': $route.path === '/about' }-->
   </div>
 </template>

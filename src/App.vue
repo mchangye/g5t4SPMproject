@@ -7,7 +7,7 @@ import Navbar from './components/Navbar.vue'
 <template>
   <div>
     <!-- Include Navbar Component -->
-    <Navbar />
+    <Navbar v-if="showNavbar()"/>
     
     <div class="content">
       <!-- Place the router view here to render the current page -->
@@ -25,7 +25,14 @@ import Navbar from './components/Navbar.vue'
     components: {
       Navbar, // Register Sidebar component
     },
-  };
+
+    methods: {
+      showNavbar() {
+        return this.$route.path !== '/';
+      },
+      }
+    }
+
 </script>
 
 

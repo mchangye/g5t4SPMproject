@@ -32,6 +32,7 @@
             <th>Staff ID</th>
             <th>Staff Name</th>
             <th>Email</th>
+            <th>RSM %</th>
             <th>Application Time</th>
           </tr>
         </thead>
@@ -43,6 +44,7 @@
             </td>
             <td>{{ application.Staff_Name }}</td>
             <td>{{ application.Email }}</td>
+            <td> Placeholder: RSM% </td>
             <td>{{ application.Time_Stamp }}</td>
           </tr>
         </tbody>

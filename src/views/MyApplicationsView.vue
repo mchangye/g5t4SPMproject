@@ -23,7 +23,7 @@
                             <router-link :to="'/role/' + application.Role_Listing_ID"> {{ application.Role_Name }} </router-link>
                         </td>
                         <td>{{ application.Department_Name }}</td>
-                        <td>{{ application.Description }}</td>
+                        <td>{{ application.Role_Listing_Description }}</td>
                         <td> TBC </td>
                         <td> TBC </td>
                         <td>{{ application.Time_Stamp }}</td>
