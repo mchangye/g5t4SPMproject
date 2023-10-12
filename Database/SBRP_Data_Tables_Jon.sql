@@ -223,13 +223,13 @@ ALTER TABLE staff_skill_temp
 ADD Proficiency int NOT NULL;
 select * from staff_skill_temp;
 
-UPDATE staff_skill_temp set Proficiency = 4 where staff_ID = 140001;
-UPDATE staff_skill_temp set Proficiency = 3 where Skill_name in (select Skill_ID from Skills where Skill_ID < 30);
-UPDATE staff_skill_temp set Proficiency = 2 where Skill_name in (select Skill_ID from Skills where Skill_ID > 55);
-UPDATE staff_skill_temp set Proficiency = 1 where Skill_name in (select Skill_ID from Skills where Skill_ID = 32);
-UPDATE staff_skill_temp set Proficiency = 1 where Skill_name in (select Skill_ID from Skills where Skill_ID = 31);
-UPDATE staff_skill_temp set Proficiency = 1 where Skill_name in (select Skill_ID from Skills where Skill_ID = 60);
-UPDATE staff_skill_temp set Proficiency = 1 where Skill_name in (select Skill_ID from Skills where Skill_ID = 20);
+UPDATE staff_skill_temp set Proficiency = 4 where Skill_name > 0;
+-- UPDATE staff_skill_temp set Proficiency = 3 where Skill_name in (select Skill_ID from Skills where Skill_ID < 30);
+-- UPDATE staff_skill_temp set Proficiency = 2 where Skill_name in (select Skill_ID from Skills where Skill_ID > 55);
+-- UPDATE staff_skill_temp set Proficiency = 1 where Skill_name in (select Skill_ID from Skills where Skill_ID = 32);
+-- UPDATE staff_skill_temp set Proficiency = 1 where Skill_name in (select Skill_ID from Skills where Skill_ID = 31);
+-- UPDATE staff_skill_temp set Proficiency = 1 where Skill_name in (select Skill_ID from Skills where Skill_ID = 60);
+-- UPDATE staff_skill_temp set Proficiency = 1 where Skill_name in (select Skill_ID from Skills where Skill_ID = 20);
 
 INSERT INTO Staff_Skill
 SELECT * FROM staff_skill_temp;
