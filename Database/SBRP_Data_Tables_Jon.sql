@@ -223,11 +223,21 @@ ALTER TABLE staff_skill_temp
 ADD Proficiency int NOT NULL;
 select * from staff_skill_temp;
 
+UPDATE staff_skill_temp set Proficiency = 4 where staff_ID = 140001;
+UPDATE staff_skill_temp set Proficiency = 3 where Skill_name in (select Skill_ID from Skills where Skill_ID < 30);
+UPDATE staff_skill_temp set Proficiency = 2 where Skill_name in (select Skill_ID from Skills where Skill_ID > 55);
+UPDATE staff_skill_temp set Proficiency = 1 where Skill_name in (select Skill_ID from Skills where Skill_ID = 32);
+UPDATE staff_skill_temp set Proficiency = 1 where Skill_name in (select Skill_ID from Skills where Skill_ID = 31);
+UPDATE staff_skill_temp set Proficiency = 1 where Skill_name in (select Skill_ID from Skills where Skill_ID = 60);
+UPDATE staff_skill_temp set Proficiency = 1 where Skill_name in (select Skill_ID from Skills where Skill_ID = 20);
+
 INSERT INTO Staff_Skill
 SELECT * FROM staff_skill_temp;
 drop table if exists staff_skill_temp;
 
--- select * from Staff_Skill;
+
+select * from Staff_Skill;
+
 
 -- ###### Role_Listing_Skill######
 CREATE TABLE Role_Listing_Skill_Proficiency ( -- HR will input a proficiency level for the skill for the role
@@ -247,54 +257,24 @@ INSERT INTO Role_Listing_Skill_Proficiency VALUES
 (1,1,12, 3),
 (1,1,14, 2),
 (1,1,15, 2),
-(1,1,20, 2),
-(1,1,21, 3),
-(1,1,25, 1),
-(1,1,51, 3),
-(1,1,53, 3),
-(1,1,54, 3),
-(1,1,61, 3),
-(1,1,72, 3),
+
 (2,2,20, 4),
 (2,2,21, 3),
 (2,2,24, 4),
 (2,2,53, 2),
 (2,2,70, 1),
-(2,2,72, 1),
-(2,2,79, 1),
+
 (3,5, 1, 4),
 (3,5, 12, 4),
 (3,5, 14, 2),
 (3,5, 20, 3),
-(3,5, 21, 1),
-(3,5, 25, 2),
-(3,5, 52, 1),
-(3,5, 53, 1),
-(3,5, 54, 4),
-(3,5, 56, 4),
 (3,5, 72, 4),
-(4,6,4,4),
-(4,6,5,4),
-(4,6,6,4),
-(4,6,13,3),
-(4,6,14,2),
-(4,6,17,1),
-(4,6,18,1),
-(4,6,20,1),
-(4,6,21,4),
-(4,6,22,3),
-(4,6,26,2),
+
 (4,6,52,4),
 (4,6,53,1),
 (4,6,54,2),
 (4,6,56,3),
-(4,6,66,2),
-(4,6,67,4),
-(4,6,68,3),
-(4,6,69,1),
-(4,6,72,1),
-(4,6,74,1),
-(4,6,81,4)
+(4,6,66,2)
 ;
 
 -- ###### APPLICATION ######
