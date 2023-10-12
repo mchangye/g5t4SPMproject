@@ -20,7 +20,8 @@
                     <tr v-for="application in applications" :key="application.Application_ID">
                         <td>{{ application.Application_ID }}</td>
                         <td>
-                            <router-link :to="'/role/' + application.Role_Listing_ID"> {{ application.Role_Name }} </router-link>
+                            <router-link :to="'/rolestaff/' + application.Role_Listing_ID"> {{ application.Role_Name }}
+                            </router-link>
                         </td>
                         <td>{{ application.Department_Name }}</td>
                         <td>{{ application.Role_Listing_Description }}</td>
@@ -37,6 +38,8 @@
 </template>
     
 <script>
+import eventBus from '@/event-bus';
+
 export default {
     data() {
         return {
@@ -48,6 +51,11 @@ export default {
         this.dt = $(this.$refs.applicationsTable).DataTable();
         this.getApplications();
     },
+    created() {
+        // Access the staff_id from the event bus
+        this.staffId = eventBus.getStaffId();
+        console.log("app page current staff id:" + this.staffId)
+    },
     watch: {
         applications() {
             if (this.dt) {
@@ -58,9 +66,10 @@ export default {
             });
         },
     },
+
     methods: {
         getApplications() {
-            fetch('http://localhost:5000/api/applications/staff/140004') // NEED TO USE CURRENT STAFF'S ID
+            fetch('http://localhost:5000/api/applications/staff/' + this.staffId) // NEED TO USE CURRENT STAFF'S ID
                 .then((response) => {
                     return response.json();
                 })

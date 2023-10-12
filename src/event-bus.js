@@ -1,16 +1,27 @@
-import { ref } from 'vue';
+import { reactive } from 'vue';
 
-// Create a ref to hold the staff_id
-const staffId = ref(null);
+const EventBus = reactive({
+  staffId: null, // Initialize staffId to null
 
-// Create an event bus
-const eventBus = {
-  setStaffId(id) {
-    staffId.value = id;
+  // Method to set staffId and store it in localStorage
+  setStaffId(staffId) {
+    this.staffId = staffId;
+    localStorage.setItem('staff_id', staffId);
   },
+
+  // Method to get staffId from localStorage
   getStaffId() {
-    return staffId.value;
+    if (!this.staffId) {
+      // If staffId is not in memory, retrieve it from localStorage
+      const storedStaffId = localStorage.getItem('staff_id');
+      if (storedStaffId) {
+        this.staffId = storedStaffId;
+      }
+    }
+    return this.staffId;
   },
-};
 
-export default eventBus;
+
+});
+
+export default EventBus;

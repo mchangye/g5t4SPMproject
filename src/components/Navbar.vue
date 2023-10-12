@@ -96,7 +96,7 @@
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                             <li><a class="dropdown-item" href="/profile">My profile</a></li>
                             <li><a class="dropdown-item" href="#">Settings</a></li>
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                            <li><a class="dropdown-item" href="/" @click="resetStaffId">Logout</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -108,6 +108,22 @@
 </template>
 
 
+<script>
+export default {
+    methods: {
+        resetStaffId() {
+            // Clear the staff_id in localStorage
+            localStorage.removeItem('staff_id');
+
+            // Also clear it from your component's data
+            this.staffId = null;
+
+        },
+    }
+
+};
+
+</script>
 
 
 
@@ -161,5 +177,4 @@ body {
     /* Change this to your preferred text color for active links */
     font-weight: bold;
     /* You can adjust the styling to your preference */
-}
-</style>
+}</style>
