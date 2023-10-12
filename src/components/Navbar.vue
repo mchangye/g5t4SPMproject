@@ -59,6 +59,7 @@
                 </button>
 
 
+                <span>Welcome, {{ this.staffId }}</span>
 
                 <!-- Search form 
                 <form class="d-none d-md-flex input-group w-auto my-auto">
@@ -70,7 +71,7 @@
 
                 <!-- Right links -->
                 <ul class="navbar-nav ms-auto d-flex flex-row">
-
+                    
                     <!-- Notification dropdown -->
                     <li class="nav-item dropdown">
                         <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#" id="navbarDropdownMenuLink"
@@ -109,7 +110,13 @@
 
 
 <script>
+import eventBus from '@/event-bus';
+
 export default {
+    created() {
+        // Access the staff_id from the event bus
+        this.staffId = eventBus.getStaffId();
+    },
     methods: {
         resetStaffId() {
             // Clear the staff_id in localStorage
