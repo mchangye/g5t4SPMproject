@@ -27,3 +27,4 @@ coverage
 *.sln
 *.sw?
 roles.py
+SBRP_Data_Tables_Jon.sql
