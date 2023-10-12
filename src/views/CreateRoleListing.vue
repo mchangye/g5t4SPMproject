@@ -8,22 +8,25 @@
           <h2>New Role Listing</h2>
         </div>
 
+        <label for="Role_ID">Role:</label><br>
+
+        <select v-model="Role_ID" required v-on:change="role_desc()">
+          <option v-for="role in get_roles" :value="role.Role_ID">{{ role.Role_Name }}</option>
+            <!-- Add more skills as needed -->
+        </select><br><br>
+
         <label for="role_description">Role Description:</label><br>
         <textarea id="role_description" name="role_description" rows="4" cols="50" required v-model="Role_Description"></textarea><br><br>
 
         <label for="skills_required">skills_required:</label><br>
 
         <select id="skills_required" name="skills_required[]" v-model="Skills_Required" multiple required>
-            <option value=1>1</option>
-            <option value=2>2</option>
-            <option value=3>3</option>
-            <option value=4>4</option>
-            <option value=5>5</option>
+            <option v-for="skill in get_skills" :value="skill.Skill_ID">{{ skill.Skill_Name }}</option>
             <!-- Add more skills as needed -->
         </select><br><br>
 
         <div v-for="i in Skills_Required">
-          The proficency level for skill {{ i }} is: <input v-bind:id=i type="number" name=""> <br>
+          The proficency level for skill {{ get_skills[i].Skill_Name }} is: <input v-bind:id=i type="number" name=""> <br>
         </div>
 
         <label for="Available">Available:</label><br>
@@ -40,29 +43,6 @@
             <option value=5>Japan</option>
             <option value=6>Hong Kong</option>
             <option value=7>India</option>
-            <!-- Add more skills as needed -->
-        </select><br><br>
-
-        <label for="Role_Function_ID">Role_Function_ID:</label><br>
-        <select v-model="Role_Function_ID" required>
-            <option value=1>IT</option>
-            <option value=2>Bp</option>
-            <option value=3>S</option>
-            <option value=4>M</option>
-            <option value=5>O</option>
-            <!-- Add more skills as needed -->
-        </select><br><br>
-
-        <label for="Role_ID">Role:</label><br>
-
-        <select v-model="Role_ID" required>
-          <option value=1>a</option>
-            <option value=2>ae</option>
-            <option value=3>cc</option>
-            <option value=4>cd</option>
-            <option value=5>c</option>
-            <option value=6>d</option>
-            <option value=7>ed</option>
             <!-- Add more skills as needed -->
         </select><br><br>
 
@@ -103,13 +83,33 @@ export default {
       Expiry_Date: '',
       Available: 0,
       Role_country_ID: 0,
-      Role_Function_ID: 0,
       Role_Department_ID: 0,
-      Role_ID: 0
+      Role_ID: 0,
+      get_roles: [],
+      get_skills: []
     };
   },
   props: ['Role_Listing_ID'],
   mounted() {
+    axios.get('http://localhost:5000/api/get-roles-info')
+      .then(response => {
+        this.get_roles = response.data;
+        console.log(this.get_roles);
+        console.log(this.get_roles[1].Role_Name)
+      })
+      .catch(error => {
+        console.log(error.message);
+      });
+
+    axios.get('http://localhost:5000/api/allskills')
+      .then(response => {
+          this.get_skills = response.data;
+          console.log(this.get_skills);
+        })
+        .catch(error => {
+          console.log(error.message);
+        });
+
   },
   methods: {
     postListing() {
@@ -120,7 +120,6 @@ export default {
       console.log(this.Expiry_Date);
       console.log(this.Available);
       console.log(this.Role_country_ID);
-      console.log(this.Role_Function_ID);
       console.log(this.Role_Department_ID);
       for (let i = 0; i < this.Skills_Required.length; i++) {
         console.log("Hi" + typeof(this.Skills_Required[i]))
@@ -132,7 +131,6 @@ export default {
           Expiry_Date: this.Expiry_Date,
           Role_Country_ID: this.Role_country_ID,
           Role_Listing_Desc: this.Role_Description,
-          Role_Function_ID: this.Role_Function_ID,
           Role_ID: this.Role_ID,
           Role_department_ID: this.Role_Department_ID,
           Skills_Required: this.Skills_Required,
@@ -144,6 +142,10 @@ export default {
           .catch( error => {
               console.log(error.message);
           });
+    },
+    role_desc() {
+      console.log(this.Role_ID)
+      this.Role_Description = this.get_roles[this.Role_ID - 1].Role_Desc
     }
   },
 

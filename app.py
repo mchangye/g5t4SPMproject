@@ -626,6 +626,7 @@ def get_roles_all():
         role_data.append({
             'Role_ID': role.Role_ID,
             'Role_Name': role.Role_Name,
+            "Role_Desc": role.Role_Desc
         })
 
     return jsonify(role_data)
@@ -861,6 +862,20 @@ def apply_role():
                 "message": "An error occurred while applying the role. " + str(e)
             }
         ), 500
+    
+#get all skills
+@app.route("/api/allskills")
+def get_skills_all():
+    skill_record = Skills.query.all()
+    skill_data = []
+    for skill in skill_record:
+        skill_data.append({
+            'Skill_ID': skill.Skill_ID,
+            'Skill_Name': skill.Skill_Name,
+            'Skill_Desc': skill.Skill_Desc
+        })
+
+    return jsonify(skill_data)
 
 
 # @app.route("/api/application/<staff_id>/<role_listing_id>/")
