@@ -877,6 +877,31 @@ def get_skills_all():
 
     return jsonify(skill_data)
 
+#get all countries
+@app.route("/api/allcountries")
+def get_countries_all():
+    country_record = Country.query.all()
+    country_data = []
+    for country in country_record:
+        country_data.append({
+            'Country_ID': country.Country_ID,
+            'Country_Name': country.Country_Name
+        })
+
+    return jsonify(country_data)
+
+#get all departments
+@app.route("/api/alldepartments")
+def get_departments_all():
+    department_record = Department.query.all()
+    department_data = []
+    for department in department_record:
+        department_data.append({
+            'Department_ID': department.Department_ID,
+            'Department_Name': department.Department_Name
+        })
+
+    return jsonify(department_data)
 
 # @app.route("/api/application/<staff_id>/<role_listing_id>/")
 # def apply(staff_id, role_listing_id):

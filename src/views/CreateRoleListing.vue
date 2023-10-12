@@ -18,7 +18,7 @@
         <label for="role_description">Role Description:</label><br>
         <textarea id="role_description" name="role_description" rows="4" cols="50" required v-model="Role_Description"></textarea><br><br>
 
-        <label for="skills_required">skills_required:</label><br>
+        <label for="skills_required">Skills Required:</label><br>
 
         <select id="skills_required" name="skills_required[]" v-model="Skills_Required" multiple required>
             <option v-for="skill in get_skills" :value="skill.Skill_ID">{{ skill.Skill_Name }}</option>
@@ -26,36 +26,24 @@
         </select><br><br>
 
         <div v-for="i in Skills_Required">
-          The proficency level for skill {{ get_skills[i].Skill_Name }} is: <input v-bind:id=i type="number" name=""> <br>
+          The proficency level for skill {{ get_skills[i-1].Skill_Name }} is: <input v-bind:id=i type="number" name=""> <br>
         </div>
 
         <label for="Available">Available:</label><br>
 
         <input type="number" name="" id="" v-model="Available">
 
-        <label for="Role_country_ID">Role_country_ID:</label><br>
+        <label for="Role_country_ID">Role Country:</label><br>
 
         <select v-model="Role_country_ID" required>
-            <option value=1>Sg</option>
-            <option value=2>My</option>
-            <option value=3>Id</option>
-            <option value=4>China</option>
-            <option value=5>Japan</option>
-            <option value=6>Hong Kong</option>
-            <option value=7>India</option>
+            <option v-for="country in get_countries" :value="country.Country_ID">{{ country.Country_Name }}</option>
             <!-- Add more skills as needed -->
         </select><br><br>
 
         <label for="Role_Department_ID">Role Department:</label><br>
 
         <select v-model="Role_Department_ID" required>
-          <option value=1>c</option>
-            <option value=2>t</option>
-            <option value=3>h</option>
-            <option value=4>a</option>
-            <option value=5>m</option>
-            <option value=6>f</option>
-            <option value=7>o</option>
+          <option v-for="department in get_departments" :value="department.Department_ID">{{ department.Department_Name }}</option>
             <!-- Add more skills as needed -->
         </select><br><br>
 
@@ -86,7 +74,9 @@ export default {
       Role_Department_ID: 0,
       Role_ID: 0,
       get_roles: [],
-      get_skills: []
+      get_skills: [],
+      get_countries: [],
+      get_departments: []
     };
   },
   props: ['Role_Listing_ID'],
@@ -105,6 +95,24 @@ export default {
       .then(response => {
           this.get_skills = response.data;
           console.log(this.get_skills);
+        })
+        .catch(error => {
+          console.log(error.message);
+        });
+
+    axios.get('http://localhost:5000/api/allcountries')
+      .then(response => {
+          this.get_countries = response.data;
+          console.log(this.get_countries);
+        })
+        .catch(error => {
+          console.log(error.message);
+        });
+
+    axios.get('http://localhost:5000/api/alldepartments')
+      .then(response => {
+          this.get_departments = response.data;
+          console.log(this.get_departments);
         })
         .catch(error => {
           console.log(error.message);
