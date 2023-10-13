@@ -70,7 +70,9 @@ import eventBus from '@/event-bus';
 import VueMultiselect from 'vue-multiselect'
 
 export default {
-  components: { VueMultiselect },
+  components: { 
+    VueMultiselect 
+  },
   data() {
     return {
       roles: [],
@@ -154,18 +156,6 @@ export default {
         });
     },
 
-    reloadComponent() {
-      // This method will be called when the route changes.
-      // Reset component state or perform any necessary actions.
-      this.dt.destroy();
-
-      if (this.skillsfilter) {
-        this.skillsfilter.multiselect('destroy');
-      }
-      if (this.deptfilter) {
-        this.deptfilter.multiselect('destroy');
-      }
-    },
   },
 };
 </script>

@@ -7,24 +7,14 @@
       <div class="filters-container mt-4 mb-4">
         <section class="box">
           <p class="fw-bold">Department</p>
-          <select id="department-filter" multiple="multiple">
-            <option value="department1">Department 1</option>
-            <option value="department2">Department 2</option>
-            <option value="marketing">Marketing</option>
-            <option value="operations">Operations</option>
-          </select>
+          <vue-multiselect v-model="selectedDepartments" :options="departments" :multiple="true" :close-on-select="false"
+            placeholder="Select Department(s)" label="text" track-by="value"></vue-multiselect>
         </section>
 
         <section class="box">
           <p class="fw-bold">Skills</p>
-          <select id="skill-filter" multiple="multiple">
-            <option value="skill1">Skill 1</option>
-            <option value="skill2">Skill 2</option>
-            <option value="cleaning">Cleaning</option>
-            <option value="stakeholder management">Stakeholder Management</option>
-            <option value="business management">Business Management</option>
-            <option value="brand management">Brand Management</option>
-          </select>
+          <vue-multiselect v-model="selectedSkills" :options="skills" :multiple="true" :close-on-select="false"
+            placeholder="Select Skill(s)" label="text" track-by="value"></vue-multiselect>
         </section>
 
         <section class="box">
@@ -77,73 +67,35 @@
 </template>
   
 <script>
+import eventBus from '@/event-bus';
+import VueMultiselect from 'vue-multiselect'
+
 export default {
+  components: { 
+    VueMultiselect 
+  },
   data() {
     return {
       roles: [],
       dt: null,
-      deptfilter: null,
-      skillsfilter: null
+      selectedDepartments: null,
+      selectedSkills: null,
+      departments: [],
+      skills: []
     };
   },
   mounted() {
     this.dt = $(this.$refs.rolesTable).DataTable();
     this.fetchRolesData();
-
-    //Department Filter Multiselect Dropdown
-    this.deptfilter = $('#department-filter').multiselect({
-      buttonText: function (options, select) {
-        if (options.length == 0) {
-          return 'Select Department(s)';
-        } else if (options.length > 3) {
-          return 'More than 3 departments selected!';
-        }
-        else {
-          var labels = [];
-          options.each(function () {
-            if ($(this).attr('label') !== undefined) {
-              labels.push($(this).attr('label'));
-            }
-            else {
-              labels.push($(this).html());
-            }
-          });
-          return labels.join(', ') + '';
-        }
-      },
-      includeSelectAllOption: true,
-      enableFiltering: true,
-      buttonWidth: '400px'
-    });
+    this.fetchDeptData();
+    this.fetchSkillsData();
 
 
-    //Skills Multiselect Dropdown
-    this.skillsfilter = $('#skill-filter').multiselect({
-      buttonText: function (options, select) {
-        if (options.length == 0) {
-          return 'Select Skill(s)';
-        } else if (options.length > 3) {
-          return 'More than 3 skills selected!';
-        }
-        else {
-          var labels = [];
-          options.each(function () {
-            if ($(this).attr('label') !== undefined) {
-              labels.push($(this).attr('label'));
-            }
-            else {
-              labels.push($(this).html());
-            }
-          });
-          return labels.join(', ') + '';
-        }
-      },
-      includeSelectAllOption: true,
-      enableFiltering: true,
-      buttonWidth: '400px'
-    });
-
-
+  },
+  created() {
+    // Access the staff_id from the event bus
+    this.staffId = eventBus.getStaffId();
+    console.log("current staff id:" + this.staffId)
   },
   watch: {
     roles() {
@@ -154,11 +106,6 @@ export default {
         new DataTable('#rolesTable')
       });
     },
-    // Add a watch on the route object and the "key" attribute.
-    '$route'() {
-      // Handle route changes or key changes here.
-      this.reloadComponent();
-    }
   },
   methods: {
     fetchRolesData() {
@@ -174,21 +121,46 @@ export default {
           console.error('Error:', error);
         });
     },
-    reloadComponent() {
-      // This method will be called when the route changes.
-      // Reset component state or perform any necessary actions.
-      this.dt.destroy();
-
-      if (this.skillsfilter) {
-        this.skillsfilter.multiselect('destroy');
-      }
-      if (this.deptfilter) {
-        this.deptfilter.multiselect('destroy');
-      }
+    fetchDeptData() {
+      fetch('http://localhost:5000/api/alldepartments') // Use the Flask route you defined
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          // Transform the data to the desired format
+          this.departments = data.map((dept) => ({
+            value: dept.Department_ID,
+            text: dept.Department_Name,
+          }));
+          console.log(this.departments);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
     },
+    fetchSkillsData() {
+      fetch('http://localhost:5000/api/allskills') // Use the Flask route you defined
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          // Transform the data to the desired format
+          this.skills = data.map((skill) => ({
+            value: skill.Skill_ID,
+            text: skill.Skill_Name,
+          }));
+          console.log(this.skills);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    },
+    
   },
 };
 </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
 
 <style scoped>
 div {
@@ -202,6 +174,7 @@ div {
   /* width: 50%; Set the width of each div (50% for two divs) */
   padding: 10px;
   /* Optional: Add padding for spacing */
+  width: 500px;
 }
 </style>
   
