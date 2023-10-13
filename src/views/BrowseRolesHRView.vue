@@ -7,23 +7,23 @@
       <div class="filters-container mt-4 mb-4">
         <section class="box">
           <p class="fw-bold">Department</p>
-          <select id="department-filter" multiple="multiple">
-            <option value="department1">Department 1</option>
-            <option value="department2">Department 2</option>
-            <option value="marketing">Marketing</option>
-            <option value="operations">Operations</option>
+          <select name="departments" id="department-filter" multiple="multiple">
+            <option value="1">Department 1</option>
+            <option value="2">Department 2</option>
+            <option value="3">Marketing</option>
+            <option value="4">Operations</option>
           </select>
         </section>
 
         <section class="box">
           <p class="fw-bold">Skills</p>
-          <select id="skill-filter" multiple="multiple">
-            <option value="skill1">Skill 1</option>
-            <option value="skill2">Skill 2</option>
-            <option value="cleaning">Cleaning</option>
-            <option value="stakeholder management">Stakeholder Management</option>
-            <option value="business management">Business Management</option>
-            <option value="brand management">Brand Management</option>
+          <select name="skills" id="skill-filter" multiple="multiple">
+            <option value="1">Skill 1</option>
+            <option value="2">Skill 2</option>
+            <option value="3">Cleaning</option>
+            <option value="4">Stakeholder Management</option>
+            <option value="5">Business Management</option>
+            <option value="6">Brand Management</option>
           </select>
         </section>
 
@@ -127,58 +127,8 @@ export default {
         });
     },
     initializeFilters() {
-      //Department Filter Multiselect Dropdown
-    this.deptfilter = $('#department-filter').multiselect({
-      buttonText: function (options, select) {
-        if (options.length == 0) {
-          return 'Select Department(s)';
-        } else if (options.length > 3) {
-          return 'More than 3 departments selected!';
-        }
-        else {
-          var labels = [];
-          options.each(function () {
-            if ($(this).attr('label') !== undefined) {
-              labels.push($(this).attr('label'));
-            }
-            else {
-              labels.push($(this).html());
-            }
-          });
-          return labels.join(', ') + '';
-        }
-      },
-      includeSelectAllOption: true,
-      enableFiltering: true,
-      buttonWidth: '400px'
-    });
-
-
-    //Skills Multiselect Dropdown
-    this.skillsfilter = $('#skill-filter').multiselect({
-      buttonText: function (options, select) {
-        if (options.length == 0) {
-          return 'Select Skill(s)';
-        } else if (options.length > 3) {
-          return 'More than 3 skills selected!';
-        }
-        else {
-          var labels = [];
-          options.each(function () {
-            if ($(this).attr('label') !== undefined) {
-              labels.push($(this).attr('label'));
-            }
-            else {
-              labels.push($(this).html());
-            }
-          });
-          return labels.join(', ') + '';
-        }
-      },
-      includeSelectAllOption: true,
-      enableFiltering: true,
-      buttonWidth: '400px'
-    });
+      new MultiSelectTag('department-filter')
+      new MultiSelectTag('skill-filter')
     },
     reloadComponent() {
       // This method will be called when the route changes.
@@ -208,6 +158,10 @@ div {
   /* width: 50%; Set the width of each div (50% for two divs) */
   padding: 10px;
   /* Optional: Add padding for spacing */
+  width: 500px;
 }
+
+
+
 </style>
   
