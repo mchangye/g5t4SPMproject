@@ -24,7 +24,7 @@
                             </router-link>
                         </td>
                         <td>{{ application.Department_Name }}</td>
-                        <td>{{ application.Role_Listing_Description }}</td>
+                        <td>{{ application.Role_Listing_Desc }}</td>
                         <td> TBC </td>
                         <td> TBC </td>
                         <td>{{ application.Time_Stamp }}</td>
