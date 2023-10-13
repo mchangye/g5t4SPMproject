@@ -19,11 +19,11 @@
 
         <section class="box">
           <p class="fw-bold">Expiry Date</p>
-          <input type="date" class="form-control" id="datepick">
+          <input ref="expiryDate" type="date" class="form-control" id="datepick">
         </section>
 
         <section class="box">
-          <button type="button" class="btn btn-primary">Filter</button>
+          <button type="button" class="btn btn-primary" @click="applyFilters">Filter</button>
         </section>
 
       </div>
@@ -78,10 +78,10 @@ export default {
     return {
       roles: [],
       dt: null,
-      selectedDepartments: null,
-      selectedSkills: null,
+      selectedDepartments: [],
+      selectedSkills: [],
       departments: [],
-      skills: []
+      skills: [],
     };
   },
   mounted() {
@@ -154,6 +154,63 @@ export default {
         .catch((error) => {
           console.error('Error:', error);
         });
+    },
+    applyFilters() {
+      const selectedDepartments = this.selectedDepartments.map((dept) => dept.value);
+      const selectedSkills = this.selectedSkills.map((skill) => skill.value);
+      const selectedExpiryDate = this.$refs.expiryDate.value;
+
+      // Convert the selected expiry date to ISO format
+      let selectedDateISO = null;
+      if (selectedExpiryDate) {
+        const selectedDate = new Date(selectedExpiryDate);
+        selectedDateISO = selectedDate.toISOString();
+      }
+
+      // Construct the query parameters
+      const params = new URLSearchParams();
+
+      // Include departments if there are selections
+      if (selectedDepartments.length > 0) {
+        selectedDepartments.forEach((dept) => {
+          params.append('departments', dept);
+        });
+      }
+
+      // Include skills if there are selections
+      if (selectedSkills.length > 0) {
+        selectedSkills.forEach((skill) => {
+          params.append('skills', skill);
+        });
+      }
+
+      // Include the expiry_date if a date is selected
+      if (selectedDateISO) {
+        params.append('expiry_date', selectedDateISO);
+      }
+
+
+      // Make the API request
+      fetch(`http://localhost:5000/api/rolesFiltered?${params.toString()}`)
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          if (data.message && data.message === "There are no roles.") {
+            this.roles = []; // Set roles to an empty array
+
+          } else {
+            this.roles = data.data.roles;
+          }
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+
+      console.log("Selected Departments:", selectedDepartments)
+      console.log("Seleceted Skills:", selectedSkills)
+      console.log("Seleceted Expiry:", selectedDateISO)
     },
     
   },
