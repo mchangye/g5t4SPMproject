@@ -5,26 +5,17 @@
       <h2>Browse Roles (HR)</h2>
 
       <div class="filters-container mt-4 mb-4">
+
         <section class="box">
           <p class="fw-bold">Department</p>
-          <select name="departments" id="department-filter" multiple="multiple">
-            <option value="1">Department 1</option>
-            <option value="2">Department 2</option>
-            <option value="3">Marketing</option>
-            <option value="4">Operations</option>
-          </select>
+          <vue-multiselect v-model="selectedDepartments" :options="departments" :multiple="true" :close-on-select="false"
+            placeholder="Select Department(s)" label="text" track-by="value"></vue-multiselect>
         </section>
 
         <section class="box">
           <p class="fw-bold">Skills</p>
-          <select name="skills" id="skill-filter" multiple="multiple">
-            <option value="1">Skill 1</option>
-            <option value="2">Skill 2</option>
-            <option value="3">Cleaning</option>
-            <option value="4">Stakeholder Management</option>
-            <option value="5">Business Management</option>
-            <option value="6">Brand Management</option>
-          </select>
+          <vue-multiselect v-model="selectedSkills" :options="skills" :multiple="true" :close-on-select="false"
+            placeholder="Select Skill(s)" label="text" track-by="value"></vue-multiselect>
         </section>
 
         <section class="box">
@@ -35,6 +26,7 @@
         <section class="box">
           <button type="button" class="btn btn-primary">Filter</button>
         </section>
+
 
       </div>
 
@@ -75,21 +67,26 @@
   
 <script>
 import eventBus from '@/event-bus';
+import VueMultiselect from 'vue-multiselect'
 
 export default {
+  components: { VueMultiselect },
   data() {
     return {
       roles: [],
       dt: null,
-      deptfilter: null,
-      skillsfilter: null
+      selectedDepartments: null,
+      selectedSkills: null,
+      departments: [],
+      skills: []
     };
   },
   mounted() {
     this.dt = $(this.$refs.rolesTable).DataTable();
     this.fetchRolesData();
+    this.fetchDeptData();
+    this.fetchSkillsData();
 
-    this.initializeFilters();
 
   },
   created() {
@@ -106,11 +103,7 @@ export default {
         new DataTable('#rolesTable')
       });
     },
-    // Add a watch on the route object and the "key" attribute.
-    '$route'() {
-      // Handle route changes or key changes here.
-      this.reloadComponent();
-    }
+
   },
   methods: {
     fetchRolesData() {
@@ -126,10 +119,41 @@ export default {
           console.error('Error:', error);
         });
     },
-    initializeFilters() {
-      new MultiSelectTag('department-filter')
-      new MultiSelectTag('skill-filter')
+    fetchDeptData() {
+      fetch('http://localhost:5000/api/alldepartments') // Use the Flask route you defined
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          // Transform the data to the desired format
+          this.departments = data.map((dept) => ({
+            value: dept.Department_ID,
+            text: dept.Department_Name,
+          }));
+          console.log(this.departments);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
     },
+    fetchSkillsData() {
+      fetch('http://localhost:5000/api/allskills') // Use the Flask route you defined
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          // Transform the data to the desired format
+          this.skills = data.map((skill) => ({
+            value: skill.Skill_ID,
+            text: skill.Skill_Name,
+          }));
+          console.log(this.skills);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    },
+
     reloadComponent() {
       // This method will be called when the route changes.
       // Reset component state or perform any necessary actions.
@@ -146,6 +170,8 @@ export default {
 };
 </script>
 
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
+
 <style scoped>
 div {
   margin: auto auto;
@@ -160,8 +186,5 @@ div {
   /* Optional: Add padding for spacing */
   width: 500px;
 }
-
-
-
 </style>
   
