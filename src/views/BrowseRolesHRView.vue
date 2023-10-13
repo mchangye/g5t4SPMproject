@@ -24,7 +24,7 @@
         </section>
 
         <section class="box">
-          <button type="button" class="btn btn-primary">Filter</button>
+          <button type="button" class="btn btn-primary" @click="applyFilters">Filter</button>
         </section>
 
 
@@ -70,15 +70,15 @@ import eventBus from '@/event-bus';
 import VueMultiselect from 'vue-multiselect'
 
 export default {
-  components: { 
-    VueMultiselect 
+  components: {
+    VueMultiselect
   },
   data() {
     return {
       roles: [],
       dt: null,
-      selectedDepartments: null,
-      selectedSkills: null,
+      selectedDepartments: [],
+      selectedSkills: [],
       departments: [],
       skills: []
     };
@@ -154,6 +154,49 @@ export default {
         .catch((error) => {
           console.error('Error:', error);
         });
+    },
+    applyFilters() {
+      const selectedDepartments = this.selectedDepartments.map((dept) => dept.value);
+      const selectedSkills = this.selectedSkills.map((skill) => skill.value);
+
+      // Construct the query parameters
+      const params = new URLSearchParams();
+
+      // Include departments if there are selections
+      if (selectedDepartments.length > 0) {
+        selectedDepartments.forEach((dept) => {
+          params.append('departments', dept);
+        });
+      }
+
+      // Include skills if there are selections
+      if (selectedSkills.length > 0) {
+        selectedSkills.forEach((skill) => {
+          params.append('skills', skill);
+        });
+      }
+
+
+      // Make the API request
+      fetch(`http://localhost:5000/api/rolesFiltered?${params.toString()}`)
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          if (data.message && data.message === "There are no roles.") {
+            this.roles = []; // Set roles to an empty array
+            
+          } else {
+            this.roles = data.data.roles;
+          }
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+
+      console.log("Selected Departments:", selectedDepartments)
+      console.log("Seleceted Skills:", selectedSkills)
     },
 
   },
