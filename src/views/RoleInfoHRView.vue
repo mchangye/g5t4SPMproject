@@ -1,3 +1,4 @@
+<!-- AKA Browse Roles (HR) in App -->
 <template>
   <!--Main layout-->
   <main class="pt-3">
@@ -24,7 +25,7 @@
         <ul>
           <li v-for="skill in role.role_skills">{{ skill }}</li>
         </ul>
-        <p><span class="fw-bold">Applicants:</span></p>
+        <p><span class="fw-bold">Applicants: </span>{{ applicantCount }}</p>
         <table id="applicantsTable" class="table table-striped" style="width:100%">
         <thead>
           <tr>
@@ -67,6 +68,7 @@ export default {
       applicants: [],
       info: {},
       dt: null,
+      applicantCount: 0,
     };
   },
   props: ['Role_Listing_ID'],
@@ -126,6 +128,7 @@ export default {
         })
         .then((data) => {
           this.applicants = data.data.applications;
+          this.applicantCount = this.applicants.length;
 
           console.log("All Applicants for this role")
           console.log(data);
