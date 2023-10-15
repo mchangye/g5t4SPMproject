@@ -25,7 +25,7 @@
         </ul>
         <p><span class="fw-bold">Applicants: </span>{{ applicantCount }}</p>
 
-        <h1>{{ roleSkillMatchPercentage }}</h1>
+        <!-- <h1>{{ roleSkillMatchPercentage }}</h1> -->
 
         <table id="applicantsTable" class="table table-striped" style="width:100%">
         <thead>
@@ -71,14 +71,18 @@ export default {
       dt: null,
       applicantCount: 0,
       roleSkillMatchPercentage: [],
+      // roleSkillMatchCalculated: false,
     };
   },
   props: ['Role_Listing_ID'],
   async mounted() {
     this.dt = $(this.$refs.rolesTable).DataTable();
-    await this.fetchRoleData();
-    this.getRoleName();
-    this.getApplicants();
+
+    await Promise.all([
+      this.fetchRoleData(),
+      this.getRoleName(),
+      this.getApplicants(),
+    ]);
     this.getRoleSkillMatchPercentage();
   },
   watch: {
@@ -92,80 +96,61 @@ export default {
     },
   },
   methods: {
-    fetchRoleData() {
-      fetch('http://localhost:5000/api/roles/' + this.Role_Listing_ID)
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          this.role = data.data;
-
-          // Set Role_ID to a data property for later use
-          this.Role_ID = data.data.Role_ID;
-
-          // console.log("role id for current role listing id:" + this.Role_ID)
-          // console.log(data);
-
-          this.getRoleName(); // Call getRoleName after setting Role_ID
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
+    async fetchRoleData() {
+      const response = await fetch('http://localhost:5000/api/roles/' + this.Role_Listing_ID);
+      const data = await response.json();
+      this.role = data.data;
+      // Set Role_ID to a data property for later use
+      this.Role_ID = data.data.Role_ID;
+      // console.log("role id for current role listing id:" + this.Role_ID)
+      // console.log(data);
     },
-    getRoleName() {
-      fetch('http://localhost:5000/api/get-roles-info/' + this.Role_ID) // use the Role_ID of current Role_Listing_ID
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          this.info = data;
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
+    async getRoleName() {
+      const response = await fetch('http://localhost:5000/api/get-roles-info/' + this.Role_ID);
+      // use the Role_ID of current Role_Listing_ID
+      const data = await response.json();
+      this.info = data;
     },
-    getApplicants(){
-      fetch('http://localhost:5000/api/applications/rolelisting/' + this.Role_Listing_ID)
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
+    async getApplicants(){
+      try {
+        const response = await fetch('http://localhost:5000/api/applications/rolelisting/' + this.Role_Listing_ID);
+        if (response.status === 200) {
+          const data = await response.json();
           this.applicants = data.data.applications;
           this.applicantCount = this.applicants.length;
-
           // console.log("All Applicants for this role")
           // console.log(data);
-          this.getRoleSkillMatchPercentage();
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
+        } else {
+          console.error ('Error fetching applicants:', response.status); 
+        }
+      }catch (error) {
+        console.error('Error fetching applicants:', error);
+      }
     },
 
     async getRoleSkillMatchPercentage() {
-  if (this.applicants && this.applicants.length > 0) {
-    this.roleSkillMatchPercentage = []; // Initialize the array
+      if (this.applicants && this.applicants.length > 0) {
+        this.roleSkillMatchPercentage = [];
+        for (const application of this.applicants) {
+          const roleID = this.Role_ID;
+          const staffID = application.Staff_ID;
 
-    for (const application of this.applicants) {
-      const roleID = this.Role_ID;
-      const staffID = application.Staff_ID;
-
-      try {
-        const response = await fetch('http://localhost:5000/api/calc_rsm/' + roleID + '/' + staffID);
-        if (response.status === 200) {
-          const data = await response.json();
-          this.roleSkillMatchPercentage.push(data.role_skill_match_percentage);
-        } else {
-          console.error('Error with RSM%:', response.status);
-          this.roleSkillMatchPercentage.push(0); // Handle the error
+          try {
+            const response = await fetch('http://localhost:5000/api/calc_rsm/' + roleID + '/' + staffID);
+            if (response.status === 200) {
+              const data = await response.json();
+              this.roleSkillMatchPercentage.push(data.role_skill_match_percentage);
+            } else {
+              console.error('Error with RSM%:', response.status);
+              this.roleSkillMatchPercentage.push(0); // Handle the error
+            }
+          } catch (error) {
+            console.error('Error with RSM%:', error);
+            this.roleSkillMatchPercentage.push(0); // Handle the error
+          }
         }
-      } catch (error) {
-        console.error('Error with RSM%:', error);
-        this.roleSkillMatchPercentage.push(0); // Handle the error
       }
     }
-  }
-}
   },
 };
 </script>
