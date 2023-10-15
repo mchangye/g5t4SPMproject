@@ -904,6 +904,8 @@ def get_departments_all():
 
     return jsonify(department_data)
 
+
+
 # @app.route("/api/application/<staff_id>/<role_listing_id>/")
 # def apply(staff_id, role_listing_id):
 #       TO FIX -> FK ERROR in the RoleListingId of Application object, NOT SURE IF NEED TO USE RELATIONSHIPs thingy
@@ -911,8 +913,28 @@ def get_departments_all():
 #     db.session.add(newApplication)
 #     db.session.commit()
 
+# get role skill match %, returns a STRING of the #. not integer!
+@app.route("/api/calc_rsm/<int:role_listing_id>/<int:staff_id>/")
+def calculate_role_skill_match_percentage(role_listing_id, staff_id):
+    # Get skills from role listing id
+    role_skills_wanted = [skill.Skill_ID for skill in RoleSkills.query.filter_by(Role_ID=role_listing_id).all()]
+    # Get skills from staff id
+    applicant_skills = [skill.Skill_ID for skill in Staff_Skill.query.filter_by(Staff_ID=staff_id).all()]
+    # # Convert both skill lists to sets for efficient intersection calculation
+    role_skills_set = set(role_skills_wanted)
+    applicant_skills_set = set(applicant_skills)
+    # Calculate the number of matching skills (intersection of sets)
+    num_matching_skills = len(role_skills_set.intersection(applicant_skills_set))
+    # # Calculate the percentage match
+    if num_matching_skills > 0:
+        role_skill_match_percentage = (num_matching_skills / len(role_skills_set)) * 100
+    else:
+        role_skill_match_percentage = 0
 
-
+    result = {
+            "role_skill_match_percentage": int(role_skill_match_percentage)
+        }
+    return jsonify(result)
 
 
 if __name__ == '__main__':

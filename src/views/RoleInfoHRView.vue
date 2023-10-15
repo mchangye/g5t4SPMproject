@@ -11,8 +11,6 @@
 
         <div class="col">
           <button type="button" class="btn btn-primary me-2">Edit Details</button>
-          <!-- View Applicants button no longer in use because applicants shown on this page -->
-          <!-- <button type="button" class="btn btn-primary">View Applicants</button> -->
         </div>  
       </div>
 
@@ -26,6 +24,9 @@
           <li v-for="skill in role.role_skills">{{ skill }}</li>
         </ul>
         <p><span class="fw-bold">Applicants: </span>{{ applicantCount }}</p>
+
+        <h1>{{ roleSkillMatchPercentage }}</h1>
+
         <table id="applicantsTable" class="table table-striped" style="width:100%">
         <thead>
           <tr>
@@ -45,7 +46,7 @@
             </td>
             <td>{{ application.Staff_Name }}</td>
             <td>{{ application.Email }}</td>
-            <td> Placeholder: RSM% </td>
+            <td>{{ roleSkillMatchPercentage[applicants.indexOf(application)] }}</td>
             <td>{{ application.Time_Stamp }}</td>
           </tr>
         </tbody>
@@ -69,14 +70,16 @@ export default {
       info: {},
       dt: null,
       applicantCount: 0,
+      roleSkillMatchPercentage: [],
     };
   },
   props: ['Role_Listing_ID'],
-  mounted() {
+  async mounted() {
     this.dt = $(this.$refs.rolesTable).DataTable();
-    this.fetchRoleData();
+    await this.fetchRoleData();
     this.getRoleName();
     this.getApplicants();
+    this.getRoleSkillMatchPercentage();
   },
   watch: {
     applicants() {
@@ -100,8 +103,8 @@ export default {
           // Set Role_ID to a data property for later use
           this.Role_ID = data.data.Role_ID;
 
-          console.log("role id for current role listing id:" + this.Role_ID)
-          console.log(data);
+          // console.log("role id for current role listing id:" + this.Role_ID)
+          // console.log(data);
 
           this.getRoleName(); // Call getRoleName after setting Role_ID
         })
@@ -130,16 +133,40 @@ export default {
           this.applicants = data.data.applications;
           this.applicantCount = this.applicants.length;
 
-          console.log("All Applicants for this role")
-          console.log(data);
-
+          // console.log("All Applicants for this role")
+          // console.log(data);
+          this.getRoleSkillMatchPercentage();
         })
         .catch((error) => {
           console.error('Error:', error);
         });
-    }
-  },
+    },
 
+    async getRoleSkillMatchPercentage() {
+  if (this.applicants && this.applicants.length > 0) {
+    this.roleSkillMatchPercentage = []; // Initialize the array
+
+    for (const application of this.applicants) {
+      const roleID = this.Role_ID;
+      const staffID = application.Staff_ID;
+
+      try {
+        const response = await fetch('http://localhost:5000/api/calc_rsm/' + roleID + '/' + staffID);
+        if (response.status === 200) {
+          const data = await response.json();
+          this.roleSkillMatchPercentage.push(data.role_skill_match_percentage);
+        } else {
+          console.error('Error with RSM%:', response.status);
+          this.roleSkillMatchPercentage.push(0); // Handle the error
+        }
+      } catch (error) {
+        console.error('Error with RSM%:', error);
+        this.roleSkillMatchPercentage.push(0); // Handle the error
+      }
+    }
+  }
+}
+  },
 };
 </script>
 

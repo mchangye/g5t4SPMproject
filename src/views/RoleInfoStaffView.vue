@@ -1,5 +1,3 @@
-<!-- IDK WHY ROLE INFO FOR STAFF VIEW DOESNT WORK WHEN ITS THE SAME CODE AS THE HR ONE!??!?!? -->
-
 <template>
   <!--Main layout-->
   <main class="pt-3">
