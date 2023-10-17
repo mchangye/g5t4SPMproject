@@ -3,13 +3,13 @@
     <h2>Update Skill Proficiency</h2>
     <form @submit.prevent="updateSkillProficiency">
       <div class="form-group">
-        <label for="staffId">Staff ID:</label>
-        <input type="text" id="Staff_ID" v-model="staff_ID" />
+        <label for="Staff_ID">Staff ID:</label>
+        <input type="text" id="Staff_ID" v-model="Staff_ID" />
       </div>
       <br>
       <div class="form-group">
         <label for="Skill_ID">Skill ID:</label>
-        <input type="text" id="Skill_ID" v-model="skill_ID" />
+        <input type="text" id="Skill_ID" v-model="Skill_ID" />
       </div>
       <br>
       <div class="form-group">
@@ -31,9 +31,9 @@
 export default {
   data() {
     return {
-      staffId: "",
-      skillId: "",
-      proficiency: "",
+      Staff_ID: "",
+      Skill_ID: "",
+      Proficiency: "",
     };
   },
   methods: {

@@ -38,6 +38,9 @@
                     <router-link to="/updateskill" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/updateskill' }" v-if="isManagement">
                         <i class="fas fa-chart-line fa-fw me-3"></i>Update Skill (Staff)
                     </router-link>
+                    <router-link to="/applyrole" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/applyrole' }" v-if="isManagement">
+                        <i class="fas fa-chart-line fa-fw me-3"></i>Apply Role (Staff)
+                    </router-link>
                     <RouterLink to="/profile"><button class="btn btn-primary">Profile</button></RouterLink>
                     <button class="btn btn-primary">Notifications</button>
                 </div>
