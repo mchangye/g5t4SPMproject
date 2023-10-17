@@ -10,20 +10,17 @@
             <div class="position-sticky">
                 <div class="list-group list-group-flush mx-3 mt-4">
                     <!-- This Browseroles is for Staff -->
-                    <router-link to="/browserolesstaff" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/browserolesstaff' }">
+                    <router-link to="/browserolesstaff" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/browserolesstaff' }" v-if="isStaff">
                         <img src="../assets/browse.png" height="20" class="me-3">Browse Roles (Staff)
                     </router-link>
                     <!-- This Browseroles is for HR -->
-                    <router-link to="/browseroleshr" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/browseroleshr' }">
+                    <router-link to="/browseroleshr" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/browseroleshr' }" v-if="isManagement">
                         <img src="../assets/browse.png" height="20" class="me-3">Browse Roles (HR)
                     </router-link>
-                    <router-link to="/newrole" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/newrole' }">
+                    <router-link to="/newrole" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/newrole' }" v-if="isManagement">
                         <i class="fas fa-chart-line fa-fw me-3"></i>Create New Role
                     </router-link>
-                    <router-link to="/applicants" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/applicants' }">
-                        <i class="fas fa-chart-line fa-fw me-3"></i>Applicants
-                    </router-link>
-                    <router-link to="/myapplications" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/myapplications' }">
+                    <router-link to="/myapplications" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/myapplications' }" v-if="isStaff">
                         <i class="fas fa-chart-line fa-fw me-3"></i>My Applications
                     </router-link>
                     <router-link to="/" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/' }">
@@ -38,7 +35,7 @@
                     <router-link to="/rolesinfo" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/rolesinfo' }">
                         <i class="fas fa-chart-line fa-fw me-3"></i>Test Role Info
                     </router-link>
-                    <router-link to="/updateskill" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/updateskill' }">
+                    <router-link to="/updateskill" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/updateskill' }" v-if="isManagement">
                         <i class="fas fa-chart-line fa-fw me-3"></i>Update Skill (Staff)
                     </router-link>
                     <RouterLink to="/profile"><button class="btn btn-primary">Profile</button></RouterLink>
@@ -113,9 +110,17 @@
 import eventBus from '@/event-bus';
 
 export default {
+    data() {
+        return {
+            userAccessLevel: '',
+            isManagement: false,
+            isStaff: false
+        };
+    },
     created() {
         // Access the staff_id from the event bus
         this.staffId = eventBus.getStaffId();
+        this.getAccessLevel();
     },
     methods: {
         resetStaffId() {
@@ -126,7 +131,25 @@ export default {
             this.staffId = null;
 
         },
-    }
+        getAccessLevel() {
+            fetch(`http://localhost:5000/api/get-staff-info/` + this.staffId)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Network response failed');
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    this.userAccessLevel = data.Access_ID;
+                    this.isManagement = ["Manager", "HR", "Admin"].includes(data.Access_ID);
+                    this.isStaff = ["User"].includes(data.Access_ID);
+                })
+                .catch((error) => {
+                    console.error('There was a problem with the getStaffInfoAPI fetch operation:', error);
+                });
+        },
+    },
+
 
 };
 

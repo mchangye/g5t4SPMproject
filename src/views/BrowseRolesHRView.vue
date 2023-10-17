@@ -211,6 +211,7 @@ export default {
       console.log("Selected Departments:", selectedDepartments)
       console.log("Seleceted Skills:", selectedSkills)
       console.log("Seleceted Expiry:", selectedDateISO)
+      console.log("the params:", params.toString())
     },
 
   },
