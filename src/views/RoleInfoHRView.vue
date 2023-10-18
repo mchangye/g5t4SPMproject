@@ -100,14 +100,11 @@ export default {
       const response = await fetch('http://localhost:5000/api/roles/' + this.Role_Listing_ID);
       const data = await response.json();
       this.role = data.data;
-      // Set Role_ID to a data property for later use
       this.Role_ID = data.data.Role_ID;
-      // console.log("role id for current role listing id:" + this.Role_ID)
-      // console.log(data);
     },
     async getRoleName() {
+      await this.fetchRoleData();
       const response = await fetch('http://localhost:5000/api/get-roles-info/' + this.Role_ID);
-      // use the Role_ID of current Role_Listing_ID
       const data = await response.json();
       this.info = data;
     },
@@ -118,8 +115,6 @@ export default {
           const data = await response.json();
           this.applicants = data.data.applications;
           this.applicantCount = this.applicants.length;
-          // console.log("All Applicants for this role")
-          // console.log(data);
         } else {
           console.error ('Error fetching applicants:', response.status); 
         }
