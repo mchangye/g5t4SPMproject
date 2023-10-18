@@ -9,7 +9,7 @@
         
 
         <div class="col">
-          <button type="button" class="btn btn-primary me-2">Apply</button>
+          <button @click="submitApplication" type="button" class="btn btn-primary me-2">Apply</button>
         </div>  
       </div>
 
@@ -31,12 +31,19 @@
 </template>
   
 <script>
+import eventBus from '@/event-bus';
+
 export default {
   data() {
     return {
       role: null,
       info: {}
     };
+  },
+  created() {
+    // Access the staff_id from the event bus
+    this.staffId = eventBus.getStaffId();
+    console.log("current staff id:" + this.staffId)
   },
   props: ['Role_Listing_ID'],
   mounted() {
@@ -80,6 +87,34 @@ export default {
           console.error('Error:', error);
         });
     },
+    submitApplication() {
+        const formData = {
+          Staff_ID: this.staffId,
+          Role_Listing_ID: this.Role_Listing_ID,
+        };
+  
+        fetch("http://localhost:5173/api/apply-role", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error("Failed to apply for the role");
+            }
+          })
+          .then((data) => {
+            console.log("Role applied successfully:", data);
+            
+          })
+          .catch((error) => {
+            console.error("Error applying for the role:", error);
+          });
+      }
   },
 
 };
