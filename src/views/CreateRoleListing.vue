@@ -2,7 +2,7 @@
 <template>
   <!--Main layout-->
   <main class="pt-3">
-    <div class="container-flex">
+    <div class="container ms-1">
       <div class="row role-header mb-5">
         <div class="col">
           <h2>New Role Listing</h2>
@@ -20,13 +20,19 @@
 
         <label for="skills_required">Skills Required:</label><br>
 
-        <select id="skills_required" name="skills_required[]" v-model="Skills_Required" multiple required>
-            <option v-for="skill in get_skills" :value="skill.Skill_ID">{{ skill.Skill_Name }}</option>
+        <!-- <select id="skills_required" name="skills_required[]" v-model="Skills_Required" multiple required>
+            <option v-for="skill in get_skills" :value="skill.Skill_ID">{{ skill.Skill_Name }}</option> -->
             <!-- Add more skills as needed -->
-        </select><br><br>
+        <!-- </select><br><br> -->
+
+        <section class="box">
+          <p class="fw-bold">Skills</p>
+          <vue-multiselect v-model="Skills_Required" :options="get_skills" :multiple="true" :close-on-select="false" v-on:click="printout()"
+            placeholder="Select Skill(s)" label="Skill_Name" track-by="Skill_ID"></vue-multiselect>
+        </section>
 
         <div v-for="i in Skills_Required">
-          The proficency level for skill {{ get_skills[i-1].Skill_Name }} is: <input v-bind:id=i type="number" name=""> <br>
+          The proficency level for skill {{ get_skills[i.Skill_ID - 1].Skill_Name }} is: <input v-bind:id=i.Skill_ID type="number" name=""> <br>
         </div>
 
         <label for="Available">Available:</label><br>
@@ -62,7 +68,11 @@
 </template>
 <script>
 import axios from 'axios';
+import VueMultiselect from 'vue-multiselect'
 export default {
+  components: {
+    VueMultiselect
+  },
   data() {
     return {
       Name: '',
@@ -131,7 +141,7 @@ export default {
       console.log(this.Role_Department_ID);
       for (let i = 0; i < this.Skills_Required.length; i++) {
         console.log("Hi" + typeof(this.Skills_Required[i]))
-        skill_pro.push(document.getElementById(this.Skills_Required[i]).value)
+        skill_pro.push(document.getElementById(this.Skills_Required[i].Skill_ID).value)
       }
       console.log(skill_pro)
       axios.post('http://localhost:5000/api/createrole', {
@@ -154,9 +164,30 @@ export default {
     role_desc() {
       console.log(this.Role_ID)
       this.Role_Description = this.get_roles[this.Role_ID - 1].Role_Desc
+    },
+    printout() {
+      console.log(this.Skills_Required)
     }
   },
 
 };
 </script>
 
+
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
+
+<style scoped>
+div {
+  margin: auto auto;
+
+}
+
+.box {
+  display: inline-block;
+  /* Display divs side by side */
+  /* width: 50%; Set the width of each div (50% for two divs) */
+  padding: 10px;
+  /* Optional: Add padding for spacing */
+  width: 500px;
+}
+</style>

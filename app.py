@@ -447,8 +447,8 @@ def create_order():
     
     for i in range(len(role_skills)):
         print("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
-        print(role_skills[i])
-        role_skill = roleListingSkillProficiency(Role_Listing_ID=RoleList.Role_Listing_ID, Role_ID=Role_ID, Skill_ID=role_skills[i], Proficienct_Listing=Proficienct_Listing[i])
+        print(role_skills[i]['Skill_ID'])
+        role_skill = roleListingSkillProficiency(Role_Listing_ID=RoleList.Role_Listing_ID, Role_ID=Role_ID, Skill_ID=role_skills[i]['Skill_ID'], Proficienct_Listing=Proficienct_Listing[i])
         all_role_skills.append(role_skill)
         try:
             db.session.add(role_skill)
