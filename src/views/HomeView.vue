@@ -11,9 +11,9 @@
     <div><img src="../assets/identify.png" height="200" alt="" loading="lazy" /></div>
     <div id=logindeets>
       <input id="userid" placeholder="insert staff id" v-model="staff_id">
-      <router-link :to="'/browseroleshr'" class="list-group-item list-group-item-action py-2 ripple">
+
         <button v-on:click="storeStaffID">submit</button>
-      </router-link>
+
     </div>
     <!--:class="{ 'active-link': $route.path === '/about' }-->
   </div>
@@ -26,6 +26,8 @@ export default {
   data() {
     return {
       staff_id: null,
+      isManagement: false,
+      isStaff: false
     };
   },
   methods: {
@@ -33,7 +35,42 @@ export default {
       // Set the staff_id using the event bus
       eventBus.setStaffId(this.staff_id);
       console.log("value:", this.staff_id)
+
+      this.getAccessLevel();
+    },
+    getAccessLevel() {
+      fetch(`http://localhost:5000/api/get-staff-info/` + this.staff_id)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response failed');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          this.userAccessLevel = data.Access_ID;
+          this.isManagement = ["Manager", "HR", "Admin"].includes(data.Access_ID);
+          this.isStaff = ["User"].includes(data.Access_ID);
+
+          // Determine the route based on the access level
+          let route = this.isManagement ? '/browseroleshr' : '/browserolesstaff';
+
+          // Use Vue Router to navigate the user
+          this.$router.push(route);
+        })
+        .catch((error) => {
+          console.error('There was a problem with the getStaffInfoAPI fetch operation:', error);
+        });
     }
+  },
+  computed: {
+    getRoleBasedRoute() {
+      // Replace these conditions with your actual logic
+      if (this.isManagement) {
+        return '/browseroleshr';
+      } else {
+        return '/browserolesstaff';
+      }
+    },
   }
 }
 </script>
