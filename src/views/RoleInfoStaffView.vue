@@ -17,7 +17,8 @@
         <p><span class="fw-bold">Department:</span> {{ role.department_name }}</p>
         <p><span class="fw-bold">Expiry Date:</span> {{ role.Expiry_Date }}</p>
         <span class="fw-bold">Role Description:</span>
-        <p> {{ role.Role_Desc }} </p>
+        <p> {{ role.Role_Listing_Desc }} </p>
+        <!-- INSERT NUMBER OF AVAILABLE SLOTS FOR THE ROLE HERE -->
         <p><span class="fw-bold">Skills Required:</span> </p>
         <ul>
           <li v-for="skill in role.role_skills">{{ skill }}</li>

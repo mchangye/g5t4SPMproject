@@ -18,6 +18,7 @@
         </section>
 
         <section class="box">
+          <!-- TO DO: REMOVE LISTING IF EXPIRY DATE PASSED -->
           <p class="fw-bold">Expiry Date</p>
           <input ref="expiryDate" type="date" class="form-control" id="datepick">
         </section>
