@@ -3,8 +3,7 @@
     <h2>Update Skill Proficiency</h2>
     <form @submit.prevent="updateSkillProficiency">
       <div class="form-group">
-        <label for="Staff_ID">Staff ID:</label>
-        <input type="text" id="Staff_ID" v-model="Staff_ID" />
+        <label for="Staff_ID">Staff ID: {{staffId}}</label>
       </div>
       <br>
       <div class="form-group">
@@ -28,6 +27,8 @@
 </template>
 
 <script>
+import eventBus from '@/event-bus';
+import axios from 'axios';
 export default {
   data() {
     return {
@@ -36,35 +37,37 @@ export default {
       Proficiency: "",
     };
   },
+  created() {
+    // Access the staff_id from the event bus
+    this.staffId = eventBus.getStaffId();
+    console.log("current staff id:" + this.staffId)
+  },
   methods: {
     updateSkillProficiency() {
+      console.log(this.staffId)
       const data = {
         Staff_ID: this.Staff_ID,
         Skill_ID: this.Skill_ID,
         Proficiency: this.Proficiency,
       };
-
-      fetch(`/api/update-skill-proficiency/${this.Staff_ID}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+      console.log(this.Skill_ID)
+      console.log(this.Proficiency)
+      axios.put('http://localhost:5000/api/update-skill-proficiency/'+ this.staffId,{
+          Staff_ID: this.staffId,
+          Skill_ID: this.Skill_ID,
+          Proficiency:this.Proficiency
       })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response failed");
-          }
-          return response.json();
-        })
-        .then((responseJson) => {
-          // Handle success, e.g., show a success message
-          console.log("Skill proficiency updated successfully!");
-        })
-        .catch((error) => {
-          // Handle error, e.g., show an error message
-          console.error("Error updating skill proficiency:", error);
-        });
+          .then(response => {
+              console.log(response.data);
+              alert("Skill Update is successful")
+
+          })
+          .catch( error => {
+              // console.log(error.response.data.message);
+              // alert(error.response.data.message);
+              console.log(error);
+              // alert(error.response.data.message);
+          });
     },
   },
 };

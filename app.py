@@ -20,6 +20,7 @@ CORS(app)
 
 
 class Staff(db.Model):
+    __tablename__ = 'staff'
     Staff_ID = db.Column(db.Integer, primary_key=True)
     Staff_FName = db.Column(db.String(50), nullable=False)
     Staff_LName = db.Column(db.String(50), nullable=False)
@@ -33,11 +34,6 @@ class Staff(db.Model):
 #     Skill_ID = db.Column(db.Integer, primary_key=True)
 #     Skill_Name = db.Column(db.String(50), nullable=False)
 
-class Staff_Skill(db.Model):
-    __tablename__ = 'staff_skill'
-    Staff_ID = db.Column(db.Integer, db.ForeignKey('Staff.Staff_ID'), primary_key=True)
-    Skill_ID = db.Column(db.Integer, db.ForeignKey('Skills.Skill_ID'), primary_key=True)
-    Proficiency = db.Column(db.Integer, nullable=False)
     
 
 class Roles(db.Model): # testing skills table
@@ -158,6 +154,13 @@ class Skills(db.Model):
 
         return dto
 
+class Staff_Skill(db.Model):
+    __tablename__ = 'staff_skill'
+    Staff_ID = db.Column(db.Integer, primary_key=True)
+    Skill_ID = db.Column(db.Integer, db.ForeignKey('skills.Skill_ID'), primary_key=True)
+    Proficiency = db.Column(db.Integer, nullable=False)
+ 
+    skills = db.relationship('Skills', primaryjoin='Staff_Skill.Skill_ID == Skills.Skill_ID', backref='staff_skill')
 
 class RoleSkills(db.Model):
     __tablename__ = 'role_skill'
@@ -178,11 +181,14 @@ class Application(db.Model):
     __tablename__ = 'application'
 
     Application_ID = db.Column(db.Integer, primary_key=True)
-    Staff_ID = db.Column(db.Integer, db.ForeignKey('Staff.Staff_ID'), nullable=False)
-    Role_Listing_ID = db.Column(db.Integer, db.ForeignKey('RoleListing.Role_Listing_ID'), nullable=False)
+    Staff_ID = db.Column(db.Integer, db.ForeignKey('staff.Staff_ID'), nullable=False)
+    Role_Listing_ID = db.Column(db.Integer, db.ForeignKey('role_listing.Role_Listing_ID'), nullable=False)
     Apply = db.Column(db.SmallInteger(), nullable=False)
     Time_Stamp = db.Column(db.DateTime(), nullable=False)
     # created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+ 
+    staff = db.relationship('Staff', primaryjoin='Application.Staff_ID == Staff.Staff_ID', backref='application')
+    role_listing = db.relationship('RoleListing', primaryjoin='Application.Role_Listing_ID == RoleListing.Role_Listing_ID', backref='application')
 
     def json(self):
         dto = {
@@ -583,36 +589,38 @@ def get_skill_info(skill_id):
     return jsonify(skill_data)
 
 #Update Skill Proficiency
-@app.route('/api/update-skill-proficiency/<staff_id>', methods=['PUT'])
-def update_skill_proficiency(Staff_ID, Skill_ID):
+@app.route('/api/update-skill-proficiency/<int:staff_id>', methods=['PUT'])
+def update_skill_proficiency(staff_id):
+    staff_id = request.json.get('Staff_ID', None)
+    skill_id = request.json.get('Skill_ID', None)
+    proficiency = request.json.get('Proficiency', None)
     try: 
-        staffskill = Staff_Skill.query.filter_by(Staff_ID=Staff_ID, Skill_ID=Skill_ID).first()
+        staffskill = Staff_Skill.query.filter_by(Staff_ID=staff_id, Skill_ID=skill_id).first()
         if not staffskill:
             return jsonify(
                 {
                     "code": 404,
                     "data": {
-                        "Staff_ID": Staff_ID,
-                        "Skill_ID": Skill_ID
+                        "Staff_ID": staff_id,
+                        "Skill_ID": skill_id
                     },
                     "message": "Skill not found."
                 }
             ), 404
-        data = request.get_json()
-        if "Staff_ID" in data:
-            staffskill.Staff_ID = data['Staff_ID']
-        if "Skill_ID" in data:
-            staffskill.Skill_ID = data['Skill_ID']
-        if "Proficiency" in data:
-            staffskill.Proficiency = data['Proficiency']
+        if staff_id != None:
+            staffskill.Staff_ID == staff_id
+        if skill_id != None:
+            staffskill.Skill_ID = skill_id
+        if proficiency != None:
+            staffskill.Proficiency = proficiency
         db.session.commit()
     except Exception as e:
         return jsonify(
             {
                 "code": 500,
                 "data": {
-                    "Staff_ID": Staff_ID,
-                    "Skill_ID": Skill_ID
+                    "Staff_ID": staff_id,
+                    "Skill_ID": skill_id
                 },
                 "message": "An error occurred while updating your skill. " + str(e)
             }
@@ -766,77 +774,32 @@ def get_staff_applications(staff_id):
 # Create a new route for applying a role
 @app.route("/api/apply-role", methods=['POST'])
 def apply_role():
+    staff_id = request.json.get('Staff_ID', None)
+    role_listing_id = request.json.get('Role_Listing_ID', None)
+
     try:
-        data = request.get_json()
-        staff_id = data.get("Staff_ID")
-        role_listing_id = data.get("Role_Listing_ID")
-
-        if not staff_id or not role_listing_id:
+        # Check if the user has already applied for the role
+        existing_application = Application.query.filter_by(
+            Staff_ID=staff_id,
+            Role_Listing_ID=role_listing_id
+        ).first()
+        if existing_application:
             return jsonify(
                 {
                     "code": 400,
-                    "message": "Staff_ID and Role_Listing_ID are required fields."
+                    "message": "You have already applied for this role."
                 }
             ), 400
-
-        # Check if the role listing exists
-        role_listing = RoleListing.query.get(role_listing_id)
-        if not role_listing:
+        # Check if the user has reached the maximum limit of applications
+        max_applications = 4  # Adjust as needed
+        user_applications = Application.query.filter_by(Staff_ID=staff_id).count()
+        if user_applications >= max_applications:
             return jsonify(
                 {
-                    "code": 404,
-                    "data": {
-                        "Role_Listing_ID": role_listing_id
-                    },
-                    "message": "Role listing not found."
+                    "code": 401,
+                    "message": "You have reached the maximum limit of 4 applications."
                 }
-            ), 404
-
-        # Check if the role is open
-        if role_listing.Available != 1:
-            return jsonify(
-                {
-                    "code": 400,
-                    "data": {
-                        "Role_Listing_ID": role_listing_id
-                    },
-                    "message": "This role is not open for applications."
-                }
-            ), 400
-
-        # Check if the applicant already has 5 applications
-        existing_applications_count = Application.query.filter_by(Staff_ID=staff_id).count()
-        if existing_applications_count >= 5:
-            return jsonify(
-                {
-                    "code": 400,
-                    "data": {
-                        "Staff_ID": staff_id
-                    },
-                    "message": "You have reached the maximum limit of 5 role applications."
-                }
-            ), 400
-
-        # Check if there is at least 1 skill match between the applicant and the role
-        applicant_skills = set(
-            skill.Skill_ID for skill in Staff_Skill.query.filter_by(Staff_ID=staff_id).all()
-        )
-        role_skills = set(
-            skill.Skill_ID for skill in RoleSkills.query.filter_by(Role_ID=role_listing.Role_ID).all()
-        )
-
-        if not applicant_skills.intersection(role_skills):
-            return jsonify(
-                {
-                    "code": 400,
-                    "data": {
-                        "Staff_ID": staff_id,
-                        "Role_Listing_ID": role_listing_id
-                    },
-                    "message": "You do not have the required skills for this role."
-                }
-            ), 400
-
+            ), 401
         # Create a new application
         new_application = Application(
             Staff_ID=staff_id,
@@ -844,25 +807,25 @@ def apply_role():
             Apply=1,  # Assuming 1 means applied; adjust as needed
             Time_Stamp=datetime.now()
         )
-
+        
         db.session.add(new_application)
         db.session.commit()
-
-        return jsonify(
-            {
-                "code": 201,
-                "data": new_application.json(),
-                "message": "Role applied successfully."
-            }
-        ), 201
 
     except Exception as e:
         return jsonify(
             {
                 "code": 500,
-                "message": "An error occurred while applying the role. " + str(e)
+                "message": "An error occurred while applying for the role. " + str(e)
             }
         ), 500
+
+    return jsonify(
+        {
+            "code": 201,
+            "data": new_application.json(),
+            "message": "Role applied successfully."
+        }
+    ), 201
     
 #get all skills
 @app.route("/api/allskills")

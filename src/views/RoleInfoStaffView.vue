@@ -32,7 +32,7 @@
   
 <script>
 import eventBus from '@/event-bus';
-
+import axios from 'axios';
 export default {
   data() {
     return {
@@ -88,35 +88,28 @@ export default {
         });
     },
     submitApplication() {
-        const formData = {
-          Staff_ID: this.staffId,
-          Role_Listing_ID: this.Role_Listing_ID,
-        };
-  
-        fetch("http://localhost:5173/api/apply-role", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        })
-          .then((response) => {
-            if (response.ok) {
-              return response.json();
-            } else {
-              throw new Error("Failed to apply for the role");
-            }
+      console.log(this.staffId)
+      console.log(this.Role_Listing_ID)
+      
+      axios.post('http://localhost:5000/api/apply-role',{
+        Staff_ID: this.staffId,
+        Role_Listing_ID: this.Role_Listing_ID,
+      })
+          .then(response => {
+              console.log(response.data);
+              alert("Role application is successful")
+
           })
-          .then((data) => {
-            console.log("Role applied successfully:", data);
-            
-          })
-          .catch((error) => {
-            console.error("Error applying for the role:", error);
+          .catch( error => {
+              console.log(error.response.data.message);
+              alert(error.response.data.message);
           });
       }
+      // applied(){
+      //   axios.post("http://localhost:5000/api/applications/staff/<int:staff_id>/")
+        // :disabled=false
+      // }
   },
-
 };
 </script>
 
