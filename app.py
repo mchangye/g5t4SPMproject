@@ -248,7 +248,7 @@ def get_all():
     roles_with_skills = []
 
     for role in roleList:
-        skills_data = RoleSkills.query.filter_by(Role_ID=role.Role_ID).with_entities(RoleSkills.Skill_ID).all()
+        skills_data = roleListingSkillProficiency.query.filter_by(Role_Listing_ID=role.Role_Listing_ID).with_entities(roleListingSkillProficiency.Skill_ID).all()
         skills = [skill.Skill_ID for skill in skills_data]
         skill_names = []  # List to store skill names
 
@@ -379,7 +379,7 @@ def get_all_filtered():
     roles_with_skills = []
 
     for role in roleList:
-        skills_data = RoleSkills.query.filter_by(Role_ID=role.Role_ID).with_entities(RoleSkills.Skill_ID).all()
+        skills_data = roleListingSkillProficiency.query.filter_by(Role_Listing_ID=role.Role_Listing_ID).with_entities(roleListingSkillProficiency.Skill_ID).all()
         skills = [skill.Skill_ID for skill in skills_data]
         skill_names = []  # List to store skill names
 
