@@ -33,18 +33,22 @@
     <h2>My Skills</h2>
 
     <div class="mt-4 mb-4 mx-auto">
-    <table class="table table-bordered" v-if="skills && skillNames">
+    <table class="table table-bordered" style="width: 800px" v-if="skills && skillNames">
         <thead class="table-primary thead-light">
             <tr>
                 <th class="fw-bold">Skill ID</th>
                 <th class="fw-bold">Skill Name</th>
+                <th class="fw-bold">Skill Proficiency</th>
             </tr>
         </thead>
+        <tbody>
         <tr class="my-4 py-4" v-for="(skills, index) in skills" v-bind:key="index">
-            <td class="my-4 py-4">{{ skills.Skill_ID }}</td>
-            <td class="my-4 py-4"> {{ skillNames[skills.Skill_ID] }}</td>
+            <td class="col-sm-4 my-4 py-4">{{ skills.Skill_ID }}</td>
+            <td class="col-sm-4 my-4 py-4"> {{ skillNames[skills.Skill_ID] }}</td>
+            <td class="col-sm-4 my-4 py-4"> {{ skills.Proficiency }}</td>
             <!--add skill proficiency values-->
         </tr>
+        </tbody>
     </table>
     </div>
 
