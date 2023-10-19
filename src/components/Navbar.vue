@@ -18,31 +18,37 @@
                         <img src="../assets/browse.png" height="20" class="me-3">Browse Roles (HR)
                     </router-link>
                     <router-link to="/newrole" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/newrole' }" v-if="isManagement">
-                        <i class="fas fa-chart-line fa-fw me-3"></i>Create New Role
+                        <img src="../assets/createrole.png" height="20" class="me-3">Create New Role
                     </router-link>
                     <router-link to="/myapplications" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/myapplications' }" v-if="isStaff">
-                        <i class="fas fa-chart-line fa-fw me-3"></i>My Applications
+                        <img src="../assets/applications.png" height="20" class="me-3">My Applications
                     </router-link>
-                    <router-link to="/" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/' }">
+                    <!-- <router-link to="/" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/' }">
                         <i class="fas fa-chart-line fa-fw me-3"></i>Test Landing
-                    </router-link>
+                    </router-link> -->
                     <!-- <router-link to="/about" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/about' }">
                         <i class="fas fa-chart-line fa-fw me-3"></i>Test About
                     </router-link> -->
-                    <router-link to="/staffinfo" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/staffinfo' }">
+                    <!-- <router-link to="/staffinfo" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/staffinfo' }">
                         <i class="fas fa-chart-line fa-fw me-3"></i>Test Staff Info
                     </router-link>
                     <router-link to="/rolesinfo" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/rolesinfo' }">
                         <i class="fas fa-chart-line fa-fw me-3"></i>Test Role Info
-                    </router-link>
-                    <router-link to="/updateskill" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/updateskill' }" v-if="isManagement">
+                    </router-link> -->
+                    <!-- <router-link to="/updateskill" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/updateskill' }" v-if="isManagement">
                         <i class="fas fa-chart-line fa-fw me-3"></i>Update Skill (Staff)
-                    </router-link>
-                    <router-link to="/applyrole" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/applyrole' }" v-if="isManagement">
+                    </router-link> -->
+
+                    <!-- Uncomment the below Apply Role if we decide that HR can apply for roles -->
+                    <!-- <router-link to="/applyrole" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/applyrole' }" v-if="isManagement">
                         <i class="fas fa-chart-line fa-fw me-3"></i>Apply Role (Staff)
+                    </router-link> -->
+                    
+                    <router-link :to="'/profile/'+this.staffId" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === `/profile/${this.staffId}` }">
+                        <img src="../assets/profile.png" height="20" class="me-3">My Profile
                     </router-link>
-                    <RouterLink :to="'/profile/' + this.staffId"><button class="btn btn-primary">Profile</button></RouterLink>
-                    <button class="btn btn-primary">Notifications</button>
+                    <!-- <RouterLink :to="'/profile/' + this.staffId"><button class="btn btn-primary">Profile</button></RouterLink> -->
+                    <!-- <button class="btn btn-primary">Notifications</button> -->
                 </div>
             </div>
         </nav>
@@ -73,7 +79,7 @@
                 <ul class="navbar-nav ms-auto d-flex flex-row">
                     
                     <!-- Notification dropdown -->
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                         <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#" id="navbarDropdownMenuLink"
                             role="button" data-mdb-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-bell"></i>
@@ -86,7 +92,7 @@
                                 <a class="dropdown-item" href="#">Something else here</a>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
 
                     <!-- Avatar -->
                     <li class="nav-item dropdown">
@@ -96,7 +102,8 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                             <li><a class="dropdown-item" :href="'/profile/' + this.staffId">My profile</a></li>
-                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <!-- KIV Settings to remove if we have none -->
+                            <!-- <li><a class="dropdown-item" href="#">Settings</a></li> -->
                             <li><a class="dropdown-item" href="/" @click="resetStaffId">Logout</a></li>
                         </ul>
                     </li>
