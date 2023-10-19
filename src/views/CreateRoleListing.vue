@@ -55,6 +55,7 @@
                 v-model="Skills_Required"
                 :options="get_skills"
                 :multiple="true"
+                :max="8"
                 :close-on-select="false"
                 placeholder="Select Skill(s)"
                 label="Skill_Name"
@@ -70,11 +71,14 @@
             <div v-for="(i, index) in Skills_Required">
               <p :id='index + "t"' class="fw-bold mb-0 mt-3">The proficency level for skill
               {{ get_skills[i.Skill_ID - 1].Skill_Name }} is:</p>
-              <input min="1" max="5" v-bind:id="i.Skill_ID" type="number" name="" /> <br />
+              <input min="1" max="4" v-bind:id="i.Skill_ID" type="number" name="" /> <br />
             </div>
             <br><br>
             <div v-if="required_check == 1">
             <p style="color: red;">Please enter all the skills' proficency level</p>
+          </div>
+          <div v-if="required_check == 2">
+            <p style="color: red;">Skills' proficency level should not be more than 4 or less than 1</p>
           </div>
           </div>
         </div>
@@ -85,6 +89,9 @@
             <input min="1" type="number" name="" id="" v-model="Available" />
             <div v-if="available_check == 1">
             <p style="color: red;">Please enter the available position</p>
+          </div>
+          <div v-if="available_check == 2">
+            <p style="color: red;">Available position should not be less than 1</p>
           </div>
           </div>
 
@@ -317,8 +324,15 @@ export default {
         this.available_check = 1;
       }
       else {
-        document.getElementById('available').style = "";
-        this.available_check = 0;
+        if (this.Available < 0) {
+          document.getElementById('available').style = "color: red";
+          check = 1;
+          this.available_check = 2;
+        }
+        else {
+          document.getElementById('available').style = "";
+          this.available_check = 0;
+        }
       }
 
       if (this.Role_country_ID == 0) {
@@ -348,7 +362,15 @@ export default {
           this.required_check = 1;
         }
         else {
-          document.getElementById(i + "t").style = "";
+          if (skill_pro[i] > 4 || skill_pro[i] < 1) {
+            document.getElementById(i + "t").style = "color: red";
+            check = 1;
+            this.required_check = 2;
+          }
+          else {
+            document.getElementById(i + "t").style = "";
+          }
+          
         }
       }
 
@@ -372,6 +394,10 @@ export default {
 
           if (response.data.code == 201) {
             alert("Role Listing Created");
+            window.location.href = "./browseroleshr";
+          }
+          else {
+            alert("Role Listing Creation Failed, please contact admin");
           }
           
         })
