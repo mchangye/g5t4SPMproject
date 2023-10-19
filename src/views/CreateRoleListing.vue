@@ -69,29 +69,29 @@
 
           <div class="col">
             <div v-for="(i, index) in Skills_Required">
-              <p :id='index + "t"' class="fw-bold mb-0 mt-3">The proficency level for skill
+              <p :id='index + "t"' class="fw-bold mb-0 mt-3">The proficiency level for skill
               {{ get_skills[i.Skill_ID - 1].Skill_Name }} is:</p>
               <input min="1" max="4" v-bind:id="i.Skill_ID" type="number" name="" /> <br />
             </div>
             <br><br>
             <div v-if="required_check == 1">
-            <p style="color: red;">Please enter all the skills' proficency level</p>
+            <p style="color: red;">Please enter all the skills' proficiency level</p>
           </div>
           <div v-if="required_check == 2">
-            <p style="color: red;">Skills' proficency level should not be more than 4 or less than 1</p>
+            <p style="color: red;">Skills' proficiency level should be between 1 and 4</p>
           </div>
           </div>
         </div>
 
         <div class="row">
           <div class="col">
-            <label for="Available"><p id="available" class="fw-bold mb-0 mt-3">Available position</p></label><br />
+            <label for="Available"><p id="available" class="fw-bold mb-0 mt-3">Available position(s)</p></label><br />
             <input min="1" type="number" name="" id="" v-model="Available" />
             <div v-if="available_check == 1">
-            <p style="color: red;">Please enter the available position</p>
+            <p style="color: red;">Please enter the number of available positions</p>
           </div>
           <div v-if="available_check == 2">
-            <p style="color: red;">Available position should not be less than 1</p>
+            <p style="color: red;">Available number of available positions should not be less than 1</p>
           </div>
           </div>
 
