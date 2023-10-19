@@ -56,7 +56,7 @@
               </ul>
             </td>
             <td>TBC NEXT SPRINT</td>
-            <td>{{ role.Expiry_Date }}</td>
+            <td>{{ formatExpiryDate(role.Expiry_Date) }}</td>
           </tr>
         </tbody>
 
@@ -213,7 +213,17 @@ export default {
       console.log("Seleceted Expiry:", selectedDateISO)
       console.log("the params:", params.toString())
     },
-
+    formatExpiryDate(dateString) {
+      if (!dateString) return'';
+      const options = {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: '2-digit',
+      };
+      const formattedDate = new Date(dateString).toLocaleDateString('en-US',options);
+      return formattedDate;
+    }
   },
 };
 </script>

@@ -1,5 +1,4 @@
 <template>
-  <!--Main layout-->
   <main class="pt-3">
     <div class="container-flex">
       <h2>Browse Roles (Staff)</h2>
@@ -18,7 +17,6 @@
         </section>
 
         <section class="box">
-          <!-- TO DO: REMOVE LISTING IF EXPIRY DATE PASSED -->
           <p class="fw-bold">Expiry Date</p>
           <input ref="expiryDate" type="date" class="form-control" id="datepick">
         </section>
@@ -37,7 +35,6 @@
             <th>Department</th>
             <th>Description</th>
             <th>Skills</th>
-            <!-- <th>Applicants</th> -->
             <th>Role Skill Match Percentage</th>
             <th>Expiry Date</th>
           </tr>
@@ -55,10 +52,8 @@
                 <li v-for="skill in role.role_skills">{{ skill }}</li>
               </ul>
             </td>
-            <!-- <td>TBC NEXT SPRINT</td> -->
-            <!-- For the percentage (Skill  Match) below, link up with <unassigned> to do SCRUM-29 Role Skill Match Percentage -->
             <td>Placeholder 69% (need to do! SCRUM-29)</td>
-            <td>{{ role.Expiry_Date }}</td>
+            <td>{{ formatExpiryDate(role.Expiry_Date) }}</td>
           </tr>
         </tbody>
 
@@ -110,12 +105,17 @@ export default {
   },
   methods: {
     fetchRolesData() {
-      fetch('http://localhost:5000/api/roles') // Use the Flask route you defined
+      fetch('http://localhost:5000/api/roles')
         .then((response) => {
           return response.json();
         })
         .then((data) => {
-          this.roles = data.data.roles;
+          // Only fetches Roles that have not expired
+          const currentDate = new Date();
+          this.roles = data.data.roles.filter((role) => {
+            const expiryDate = new Date(role.Expiry_Date);
+            return expiryDate > currentDate;
+          });
           console.log(data)
         })
         .catch((error) => {
@@ -123,7 +123,7 @@ export default {
         });
     },
     fetchDeptData() {
-      fetch('http://localhost:5000/api/alldepartments') // Use the Flask route you defined
+      fetch('http://localhost:5000/api/alldepartments')
         .then((response) => {
           return response.json();
         })
@@ -140,7 +140,7 @@ export default {
         });
     },
     fetchSkillsData() {
-      fetch('http://localhost:5000/api/allskills') // Use the Flask route you defined
+      fetch('http://localhost:5000/api/allskills')
         .then((response) => {
           return response.json();
         })
@@ -213,7 +213,17 @@ export default {
       console.log("Seleceted Skills:", selectedSkills)
       console.log("Seleceted Expiry:", selectedDateISO)
     },
-    
+    formatExpiryDate(dateString) {
+      if (!dateString) return'';
+      const options = {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: '2-digit',
+      };
+      const formattedDate = new Date(dateString).toLocaleDateString('en-US',options);
+      return formattedDate;
+    }
   },
 };
 </script>

@@ -15,7 +15,7 @@
 
       <span v-if="role">
         <p><span class="fw-bold">Department:</span> {{ role.department_name }}</p>
-        <p><span class="fw-bold">Expiry Date:</span> {{ role.Expiry_Date }}</p>
+        <p><span class="fw-bold">Expiry Date:</span> {{ formatExpiryDate(role.Expiry_Date) }}</p>
         <span class="fw-bold">Role Description:</span>
         <p> {{ role.Role_Listing_Desc }} </p>
         <!-- INSERT NUMBER OF AVAILABLE SLOTS FOR THE ROLE HERE -->
@@ -104,6 +104,17 @@ export default {
               console.log(error.response.data.message);
               alert(error.response.data.message);
           });
+      },
+      formatExpiryDate(dateString) {
+        if (!dateString) return'';
+        const options = {
+          weekday: 'short',
+          year: 'numeric',
+          month: 'short',
+          day: '2-digit',
+        };
+        const formattedDate = new Date(dateString).toLocaleDateString('en-US',options);
+        return formattedDate;
       }
       // applied(){
       //   axios.post("http://localhost:5000/api/applications/staff/<int:staff_id>/")

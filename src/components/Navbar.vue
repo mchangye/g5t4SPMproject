@@ -26,9 +26,9 @@
                     <router-link to="/" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/' }">
                         <i class="fas fa-chart-line fa-fw me-3"></i>Test Landing
                     </router-link>
-                    <router-link to="/about" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/about' }">
+                    <!-- <router-link to="/about" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/about' }">
                         <i class="fas fa-chart-line fa-fw me-3"></i>Test About
-                    </router-link>
+                    </router-link> -->
                     <router-link to="/staffinfo" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/staffinfo' }">
                         <i class="fas fa-chart-line fa-fw me-3"></i>Test Staff Info
                     </router-link>
