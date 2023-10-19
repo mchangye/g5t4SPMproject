@@ -17,6 +17,9 @@
 
 
 <script>
+import axios from 'axios';
+import eventBus from '@/event-bus';
+
   export default {
     data() {
       return {
@@ -26,33 +29,17 @@
     },
     methods: {
       submitApplication() {
-        const formData = {
-          Staff_ID: this.staffId,
-          Role_Listing_ID: this.roleListingId,
-        };
-  
-        fetch("http://localhost:5173/api/apply-role", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        })
-          .then((response) => {
-            if (response.ok) {
-              return response.json();
-            } else {
-              throw new Error("Failed to apply for the role");
-            }
+      console.log(this.staffId)
+      console.log(this.roleListingId)
+      axios.post('http://localhost:5000/api/apply-role',{
+        Staff_ID: this.staffId,
+        Role_Listing_ID: this.roleListingId,
+      })
+          .then(response => {
+              console.log(response.data);
           })
-          .then((data) => {
-            console.log("Role applied successfully:", data);
-            // Reset the form fields if needed
-            this.staffId = "";
-            this.roleListingId = "";
-          })
-          .catch((error) => {
-            console.error("Error applying for the role:", error);
+          .catch( error => {
+              console.log(error.message);
           });
       },
     },
