@@ -59,12 +59,13 @@
                 skillNames: {},
             };
         },
+        props: ['user_id'],
         mounted() {
             this.getUserInfo();
         },
     methods: {
         getUserInfo() {
-            fetch(`http://localhost:5000/api/get-staff-info/140004`)
+            fetch(`http://localhost:5000/api/get-staff-info/` + this.user_id)
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error('Network response failed');
@@ -81,7 +82,7 @@
                 });
         },
         getUserSkills() {
-            fetch(`http://localhost:5000/api/get-staff-all-skill-id/140004`)
+            fetch(`http://localhost:5000/api/get-staff-all-skill-id/`+ this.user_id)
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error('Network response failed');

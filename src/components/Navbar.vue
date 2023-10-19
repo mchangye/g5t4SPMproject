@@ -41,7 +41,7 @@
                     <router-link to="/applyrole" class="list-group-item list-group-item-action py-2 ripple" :class="{ 'active-link': $route.path === '/applyrole' }" v-if="isManagement">
                         <i class="fas fa-chart-line fa-fw me-3"></i>Apply Role (Staff)
                     </router-link>
-                    <RouterLink to="/profile"><button class="btn btn-primary">Profile</button></RouterLink>
+                    <RouterLink :to="'/profile/' + this.staffId"><button class="btn btn-primary">Profile</button></RouterLink>
                     <button class="btn btn-primary">Notifications</button>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                 </button>
 
 
-                <span>Welcome, {{ this.staffId }}</span>
+                <span>Welcome, {{ this.userFirstName }} {{ this.userLastName }}</span>
 
                 <!-- Search form 
                 <form class="d-none d-md-flex input-group w-auto my-auto">
@@ -95,7 +95,7 @@
                             <img src="../assets/avatar-pic.jpg" class="rounded-circle" height="50" alt="" loading="lazy" />
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="/profile">My profile</a></li>
+                            <li><a class="dropdown-item" :href="'/profile/' + this.staffId">My profile</a></li>
                             <li><a class="dropdown-item" href="#">Settings</a></li>
                             <li><a class="dropdown-item" href="/" @click="resetStaffId">Logout</a></li>
                         </ul>
@@ -117,7 +117,9 @@ export default {
         return {
             userAccessLevel: '',
             isManagement: false,
-            isStaff: false
+            isStaff: false,
+            userFirstName: '',
+            userLastName: '',
         };
     },
     created() {
@@ -143,6 +145,8 @@ export default {
                     return response.json();
                 })
                 .then((data) => {
+                    this.userFirstName = data.Staff_FName;
+                    this.userLastName = data.Staff_LName;
                     this.userAccessLevel = data.Access_ID;
                     this.isManagement = ["Manager", "HR", "Admin"].includes(data.Access_ID);
                     this.isStaff = ["User"].includes(data.Access_ID);

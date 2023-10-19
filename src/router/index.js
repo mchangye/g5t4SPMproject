@@ -57,9 +57,10 @@ const router = createRouter({
       props: true
     },
     {
-      path: '/profile/',
+      path: '/profile/:user_id',
       name: 'profile',
-      component: () => import('../views/ProfileView.vue')
+      component: () => import('../views/ProfileView.vue'),
+      props: true
     },
     {
       path: '/myapplications/',
