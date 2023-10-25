@@ -52,7 +52,7 @@
                 <li v-for="skill in role.role_skills">{{ skill }}</li>
               </ul>
             </td>
-            <td>Placeholder 69% (need to do! SCRUM-29)</td>
+            <td>{{ role.role_skill_match_percentage }}</td>
             <td>{{ formatExpiryDate(role.Expiry_Date) }}</td>
           </tr>
         </tbody>
@@ -85,8 +85,8 @@ export default {
     this.fetchRolesData();
     this.fetchDeptData();
     this.fetchSkillsData();
-
-
+    this.getRoleSkillMatchPercentageForRoles();
+    // this.getRoleSkillMatchPercentage(1);
   },
   created() {
     // Access the staff_id from the event bus
@@ -104,23 +104,38 @@ export default {
     },
   },
   methods: {
-    fetchRolesData() {
-      fetch('http://localhost:5000/api/roles')
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          // Only fetches Roles that have not expired
-          const currentDate = new Date();
-          this.roles = data.data.roles.filter((role) => {
-            const expiryDate = new Date(role.Expiry_Date);
-            return expiryDate > currentDate;
-          });
-          console.log(data)
-        })
-        .catch((error) => {
-          console.error('Error:', error);
+    // fetchRolesData() {
+    //   fetch('http://localhost:5000/api/roles')
+    //     .then((response) => {
+    //       return response.json();
+    //     })
+    //     .then((data) => {
+    //       // Only fetches Roles that have not expired
+    //       const currentDate = new Date();
+    //       this.roles = data.data.roles.filter((role) => {
+    //         const expiryDate = new Date(role.Expiry_Date);
+    //         return expiryDate > currentDate;
+    //       });
+    //       // console.log("Role Listings fetched: (fetchRolesData)",data)
+    //     })
+    //     .catch((error) => {
+    //       console.error('Error:', error);
+    //     });
+    // 
+    async fetchRolesData() {
+      try {
+        const response = await fetch('http://localhost:5000/api/roles');
+        const data = await response.json();
+        const currentDate = new Date();
+        this.roles = data.data.roles.filter((role) => {
+          const expiryDate = new Date(role.Expiry_Date);
+          return expiryDate > currentDate;
         });
+        console.log("Role Listings fetched: (fetchRolesData)",data)
+        await this.getRoleSkillMatchPercentageForRoles();
+      } catch (error) {
+        console.error('Error fetching roles:', error);
+    }
     },
     fetchDeptData() {
       fetch('http://localhost:5000/api/alldepartments')
@@ -133,7 +148,7 @@ export default {
             value: dept.Department_ID,
             text: dept.Department_Name,
           }));
-          console.log(this.departments);
+          // console.log(this.departments);
         })
         .catch((error) => {
           console.error('Error:', error);
@@ -150,7 +165,7 @@ export default {
             value: skill.Skill_ID,
             text: skill.Skill_Name,
           }));
-          console.log(this.skills);
+          // console.log(this.skills);
         })
         .catch((error) => {
           console.error('Error:', error);
@@ -203,15 +218,16 @@ export default {
           } else {
             this.roles = data.data.roles;
           }
-          console.log(data);
+          // console.log(data);
         })
         .catch((error) => {
           console.error('Error:', error);
         });
 
-      console.log("Selected Departments:", selectedDepartments)
-      console.log("Seleceted Skills:", selectedSkills)
-      console.log("Seleceted Expiry:", selectedDateISO)
+      // console.log("Selected Departments:", selectedDepartments)
+      // console.log("Seleceted Skills:", selectedSkills)
+      // console.log("Seleceted Expiry:", selectedDateISO)
+      
     },
     formatExpiryDate(dateString) {
       if (!dateString) return'';
@@ -223,6 +239,25 @@ export default {
       };
       const formattedDate = new Date(dateString).toLocaleDateString('en-US',options);
       return formattedDate;
+    },
+    // GET RSM WORKS FOR NORMAL PAGE, NOT YET IMPLEMENTED FOR FILTERS. PROBABLY WITH HOW FILTERS ARE NOT ASYNC.
+    async getRoleSkillMatchPercentage(roleID) {
+      try {
+        // console.log("roleID", roleID);
+        // console.log("staffId", this.staffId);
+        const response = await fetch('http://localhost:5000/api/calc_rsm/' + roleID + '/' + this.staffId);
+        const data = await response.json();
+        // console.log(data.role_skill_match_percentage);
+        return data.role_skill_match_percentage;
+      } catch (error) {
+        console.error('Error fetching RSM%:', error);
+      }
+    },
+    async getRoleSkillMatchPercentageForRoles() {
+      for (const role of this.roles) {
+        role.role_skill_match_percentage = await this.getRoleSkillMatchPercentage(role.Role_ID);
+        console.log(`Role ${role.Role_Name}, ID ${role.Role_ID} - RSM%: ${role.role_skill_match_percentage}`)
+      }
     }
   },
 };
