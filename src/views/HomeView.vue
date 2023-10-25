@@ -1,14 +1,14 @@
 <template>
   <main>
-    <h1>This is the landing page.</h1> <br><br>
-    <h2>The Roles Info page has not been added yet.</h2> <br><br>
-    I don't want the page to have half of it be navbar and half of it be function, it was just the preset. Can change to
-    bootstrap as per usual. -Dex
+    <h1>This is the login page.</h1> <br><br>
+    <!-- <h2>The Roles Info page has not been added yet.</h2> <br><br> -->
+    <!-- I don't want the page to have half of it be navbar and half of it be function, it was just the preset. Can change to
+    bootstrap as per usual. -Dex -->
   </main>
 
   <div>
     <!-- test feasibility of user login page-->
-    <div><img src="../assets/identify.png" height="200" alt="" loading="lazy" /></div>
+    <!-- <div><img src="../assets/identify.png" height="200" alt="" loading="lazy" /></div> -->
     <div id=logindeets>
       <input id="userid" placeholder="insert staff id" v-model="staff_id">
 
