@@ -1,21 +1,19 @@
+
+
 <template>
-  <main>
-    <h1>This is the login page.</h1> <br><br>
-    <!-- <h2>The Roles Info page has not been added yet.</h2> <br><br> -->
-    <!-- I don't want the page to have half of it be navbar and half of it be function, it was just the preset. Can change to
-    bootstrap as per usual. -Dex -->
-  </main>
+  <div class="background">
+    <div style="border: 1px solid #cecece; border-radius: 10px; padding: 20px; padding-top:40px; padding-bottom: 50px; width: 400px; text-align: center; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2); background-color: white;">
 
-  <div>
-    <!-- test feasibility of user login page-->
-    <!-- <div><img src="../assets/identify.png" height="200" alt="" loading="lazy" /></div> -->
-    <div id=logindeets>
-      <input id="userid" placeholder="insert staff id" v-model="staff_id">
+      <h1>Welcome</h1>
+      <img src="../assets/sbrplogo.png" height="200" alt="" loading="lazy" />
 
-        <button v-on:click="storeStaffID">submit</button>
+      <div id=logindeets style="display: flex; flex-direction: column; align-items: center;">
+        <input class="form-control" type="text" id="userid" placeholder="Insert Staff ID" v-model="staff_id" style="width: 220px; text-align: center; margin: 20px; margin-bottom: 10px;">
+        <button type="button" class="btn btn-primary" v-on:click="storeStaffID" style="width: 220px;">submit</button>
+      </div>
 
+      
     </div>
-    <!--:class="{ 'active-link': $route.path === '/about' }-->
   </div>
 </template>
 
@@ -51,10 +49,8 @@ export default {
           this.isManagement = ["Manager", "HR", "Admin"].includes(data.Access_ID);
           this.isStaff = ["User"].includes(data.Access_ID);
 
-          // Determine the route based on the access level
           let route = this.isManagement ? '/browseroleshr' : '/browserolesstaff';
 
-          // Use Vue Router to navigate the user
           this.$router.push(route);
         })
         .catch((error) => {
@@ -64,7 +60,6 @@ export default {
   },
   computed: {
     getRoleBasedRoute() {
-      // Replace these conditions with your actual logic
       if (this.isManagement) {
         return '/browseroleshr';
       } else {
@@ -74,47 +69,10 @@ export default {
   }
 }
 </script>
-<!-- 
-<script>
-export default {
-  data() {
-    return {
-      flaskData: '',
-    };
-  },
-  mounted() {
-    this.fetchData();
-  },
-  methods: {
-    fetchData() {
-      fetch('')
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Network response failed');
-      }
-      return response.text();
-    })
-    .then((data) => {
-      this.flaskData = data;
-    })
-    .catch((error) => {
-      console.error('There was a problem with the fetch operation:', error);
-    });
-    }
-  },
-};
-</script> -->
 
-
-
-<!-- 
-
-<script setup>
-import TheWelcome from '../components/TheWelcome.vue'
-</script>
-
-<template>
-  <main>
-    <TheWelcome />
-  </main>
-</template> -->
+<!-- <style>
+.background {
+  background-image: url(../assets/loginbg.jpg);
+  background-size: cover;
+}
+</style> -->
