@@ -357,6 +357,7 @@ def find_by_listingID(listingID):
 def get_all_filtered():
     selected_departments = request.args.getlist('departments')
     selected_skills = request.args.getlist('skills')
+    selected_countries = request.args.getlist('countries')
     selected_expiry_date = request.args.get('expiry_date')
 
 
@@ -374,6 +375,9 @@ def get_all_filtered():
         # Join RoleListing and RoleSkills using aliases and filter by skills
         query = query.join(rs_alias, RoleListing.Role_ID == rs_alias.Role_ID)
         query = query.filter(rs_alias.Skill_ID.in_(selected_skills))
+
+    if selected_countries:
+        query = query.filter(RoleListing.Role_Country_ID.in_(selected_countries))
 
     if selected_expiry_date:
         query = query.filter(RoleListing.Expiry_Date <= selected_expiry_date)

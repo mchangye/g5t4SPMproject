@@ -84,7 +84,7 @@ export default {
       dt: null,
       selectedDepartments: [],
       selectedSkills: [],
-      selectCountries: [],
+      selectedCountries: [],
       departments: [],
       skills: [],
       countries: []
@@ -202,6 +202,7 @@ export default {
     applyFilters() {
       const selectedDepartments = this.selectedDepartments.map((dept) => dept.value);
       const selectedSkills = this.selectedSkills.map((skill) => skill.value);
+      const selectedCountries = this.selectedCountries.map((country) => country.value);
       const selectedExpiryDate = this.$refs.expiryDate.value;
 
       // Convert the selected expiry date to ISO format
@@ -225,6 +226,13 @@ export default {
       if (selectedSkills.length > 0) {
         selectedSkills.forEach((skill) => {
           params.append('skills', skill);
+        });
+      }
+
+      // Include countries if there are selections
+      if (selectedCountries.length > 0) {
+        selectedCountries.forEach((country) => {
+          params.append('countries', country);
         });
       }
 
