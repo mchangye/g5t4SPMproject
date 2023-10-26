@@ -269,6 +269,10 @@ def get_all():
         if role_info:
             role_data['Role_Name'] = role_info.Role_Name
 
+        # Add Country to role_data
+        country_info = Country.query.filter_by(Country_ID=role.Role_Country_ID).first()
+        if country_info:
+            role_data['Country'] = country_info.Country_Name
         
 
         role_data['role_skills'] = skill_names
@@ -399,6 +403,11 @@ def get_all_filtered():
         role_info = Roles.query.filter_by(Role_ID=role.Role_ID).first()
         if role_info:
             role_data['Role_Name'] = role_info.Role_Name
+
+        # Add Country to role_data
+        country_info = Country.query.filter_by(Country_ID=role.Role_Country_ID).first()
+        if country_info:
+            role_data['Country'] = country_info.Country_Name
 
         role_data['role_skills'] = skill_names
         roles_with_skills.append(role_data)

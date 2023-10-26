@@ -17,6 +17,12 @@
         </section>
 
         <section class="box">
+          <p class="fw-bold">Countries</p>
+          <vue-multiselect v-model="selectedCountries" :options="countries" :multiple="true" :close-on-select="false"
+            placeholder="Select Country(s)" label="text" track-by="value"></vue-multiselect>
+        </section>
+
+        <section class="box">
           <p class="fw-bold">Expiry Date</p>
           <input ref="expiryDate" type="date" class="form-control" id="datepick">
         </section>
@@ -33,6 +39,7 @@
             <th>Role Listing ID</th>
             <th>Role Name</th>
             <th>Department</th>
+            <th>Country</th>
             <th>Description</th>
             <th>Skills</th>
             <th>Role Skill Match Percentage</th>
@@ -46,6 +53,7 @@
               <router-link :to="'/rolestaff/' + role.Role_Listing_ID">{{ role.Role_Name }}</router-link>
             </td>
             <td>{{ role.Department_Name }}</td>
+            <td>{{ role.Country }}</td>
             <td>{{ role.Role_Listing_Desc }}</td>
             <td>
               <ul>
@@ -76,8 +84,10 @@ export default {
       dt: null,
       selectedDepartments: [],
       selectedSkills: [],
+      selectCountries: [],
       departments: [],
       skills: [],
+      countries: []
     };
   },
   mounted() {
@@ -85,6 +95,7 @@ export default {
     this.fetchRolesData();
     this.fetchDeptData();
     this.fetchSkillsData();
+    this.fetchCountriesData();
     this.getRoleSkillMatchPercentageForRoles();
     // this.getRoleSkillMatchPercentage(1);
   },
@@ -166,6 +177,23 @@ export default {
             text: skill.Skill_Name,
           }));
           // console.log(this.skills);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    },
+    fetchCountriesData() {
+      fetch('http://localhost:5000/api/allcountries') // Use the Flask route you defined
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          // Transform the data to the desired format
+          this.countries = data.map((country) => ({
+            value: country.Country_ID,
+            text: country.Country_Name,
+          }));
+          console.log(this.countries);
         })
         .catch((error) => {
           console.error('Error:', error);
