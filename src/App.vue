@@ -5,7 +5,7 @@ import Navbar from './components/Navbar.vue'
 </script>
 
 <template>
-  <div>
+  <div class="wholepage">
     <!-- Include Navbar Component -->
     <Navbar v-if="showNavbar()" />
 

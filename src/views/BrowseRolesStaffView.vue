@@ -310,10 +310,9 @@ div {
 .box {
   display: inline-block;
   /* Display divs side by side */
-  /* width: 50%; Set the width of each div (50% for two divs) */
-  padding: 10px;
+  padding: 5px;
   /* Optional: Add padding for spacing */
-  width: 500px;
+  width: 50%;
 }
 </style>
   

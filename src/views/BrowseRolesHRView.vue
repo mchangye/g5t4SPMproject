@@ -1,6 +1,6 @@
 <template>
   <!--Main layout-->
-  <main class="pt-3">
+  <main class="pt-3 centered-content">
     <div class="container-flex">
       <h2>Browse Roles (HR)</h2>
 
@@ -29,7 +29,7 @@
           <input ref="expiryDate" type="date" class="form-control" id="datepick">
         </section>
 
-        <section class="box">
+        <section class="box mt-3">
           <button type="button" class="btn btn-primary" @click="applyFilters">Filter</button>
         </section>
 
@@ -269,16 +269,14 @@ export default {
 <style scoped>
 div {
   margin: auto auto;
-
 }
 
 .box {
   display: inline-block;
   /* Display divs side by side */
-  /* width: 50%; Set the width of each div (50% for two divs) */
-  padding: 10px;
+  padding: 5px;
   /* Optional: Add padding for spacing */
-  width: 500px;
+  width: 50%;
 }
 </style>
   

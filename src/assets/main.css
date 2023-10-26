@@ -14,7 +14,11 @@ a,
 
 /* Main Content */
 div.content {
-  width: 1440px;
+  /* width: 100%; */
+  /* width: 100%; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 
@@ -29,22 +33,30 @@ div.content {
 @media (max-width: 990px) {
   main {
     margin-top: 125px;
-
   }
-
 }
 
 
 @media (min-width: 990px) {
   #app {
-    margin-top: 100px;
+    margin-top: 70px;
     margin-bottom: 5px;
-    margin-left: 250px;
+    margin-left: 240px;
     padding: 2rem;
+    display: grid;
   }
-
 }
 
+@media (min-width:600px) {
+  #app {
+    margin-top: 70px;
+    margin-bottom: 5px;
+    margin-left: 240px;
+    padding: 2rem;
+    display: grid;
+  }
+}
+/* 
 @media (min-width: 600px) {
   
 
@@ -53,4 +65,4 @@ div.content {
     grid-template-columns: 0.5fr 1.5fr;
     padding: 0 2rem;
   }
-}
+} */

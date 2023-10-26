@@ -2,7 +2,7 @@
 
 <template>
   <div class="background">
-    <div style="border: 1px solid #cecece; border-radius: 10px; padding: 20px; padding-top:40px; padding-bottom: 50px; width: 400px; text-align: center; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2); background-color: white;">
+    <div class="login-box">
 
       <h1>Welcome</h1>
       <img src="../assets/sbrplogo.png" height="200" alt="" loading="lazy" />
@@ -70,9 +70,25 @@ export default {
 }
 </script>
 
-<!-- <style>
+<style>
 .background {
-  background-image: url(../assets/loginbg.jpg);
-  background-size: cover;
+  margin-right: 230px;
+  margin-top: -40px;
 }
-</style> -->
+.login-box {
+  /* position: absolute; */
+  height: 100%;
+  width: 100%;
+  border: 1px solid #cecece;
+  border-radius: 10px;
+  padding: 20px;
+  padding-top:40px;
+  padding-bottom: 50px;
+  margin-right: 50px;
+  /* width: 400px; */
+  text-align: center;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  overflow-y: hidden;
+}
+</style>
