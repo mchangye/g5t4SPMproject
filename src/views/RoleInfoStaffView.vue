@@ -1,5 +1,4 @@
 <template>
-  <!--Main layout-->
   <main class="pt-3">
     <div class="container-flex">
       <div class="row role-header mb-5">
@@ -15,13 +14,14 @@
           <div class="col">
             <p><span class="fw-bold">Department:</span> {{ role.department_name }}</p>
             <p><span class="fw-bold">Expiry Date:</span> {{ formatExpiryDate(role.Expiry_Date) }}</p>
-            <span class="fw-bold">Role Description:</span>
-            <p> {{ role.Role_Listing_Desc }} </p>
-            <!-- INSERT NUMBER OF AVAILABLE SLOTS FOR THE ROLE HERE -->
           </div>
           <div class="col">
-            <p><span class="fw-bold">RSM%:</span> </p>
+            <p><span class="fw-bold">RSM%:</span> {{ RSMPercentage }} </p>
           </div>
+        </div>
+        <div class="row">
+          <span class="fw-bold">Role Description:</span>
+            <p> {{ role.Role_Listing_Desc }} </p>
         </div>
         <div class="row">
           <div class="col">
@@ -32,10 +32,6 @@
             <p><span class="fw-bold">Skills you are missing:</span> </p>
             <li v-for="missingSkill in missingSkills">{{ missingSkill }}</li>
           </div>
-        </div>
-        <br>
-        <div class="row">
-          <p><span class="fw-bold">Skills match:</span> Placeholder for which skills match OR skill match percentage.</p>
         </div>
       </div>
     </div>
@@ -53,6 +49,7 @@ export default {
       skills: [],
       skillNames: {},
       missingSkills: [],
+      RSMPercentage: null,
     };
   },
   created() {
@@ -62,10 +59,11 @@ export default {
   },
   props: ['Role_Listing_ID'],
   async mounted() {
+    await this.fetchRoleData();
     this.getRoleName();
-    this.fetchRoleData();
     this.getUserSkills();
     this.findMissingSkills();
+    this.calculateMatchPercentage();
   },
   methods: {
     async fetchRoleData() {
@@ -73,7 +71,6 @@ export default {
         console.error('Role_Listing_ID is not defined or valid');
         return;
       }
-
       try {
         const response = await fetch('http://localhost:5000/api/roles/' + this.Role_Listing_ID);
         const data = await response.json();
@@ -132,27 +129,47 @@ export default {
       }
     },
     async findMissingSkills() {
-  console.log('findMissingSkills initialized');
-  if (this.role && this.role.role_skills && this.skills) {
-    const roleSkills = this.role.role_skills;
-    const staffSkills = this.skills.map(skill => this.skillNames[skill.Skill_ID]); // Get skill names from skill IDs using this.skillNames
-    console.log('Role Skills:', roleSkills);
-    console.log('Staff Skills:', staffSkills);
+      console.log('findMissingSkills initialized');
+      if (this.role && this.role.role_skills && this.skills) {
+        const roleSkills = this.role.role_skills;
+        const staffSkills = this.skills.map(skill => this.skillNames[skill.Skill_ID]); // Get skill names from skill IDs using this.skillNames
+        console.log('Role Skills:', roleSkills);
+        console.log('Staff Skills:', staffSkills);
 
-    // Use filter to find the skills that the user doesn't have
-    const missingSkills = roleSkills.filter(roleSkill => !staffSkills.includes(roleSkill));
+        // Use filter to find the skills that the user doesn't have
+        const missingSkills = roleSkills.filter(roleSkill => !staffSkills.includes(roleSkill));
 
-    // Update your data property with missing skills
-    this.missingSkills = missingSkills;
-    console.log('findMissingSkills missingSkills', missingSkills);
-  }
-}
-,
-
+        // Update your data property with missing skills
+        this.missingSkills = missingSkills;
+        console.log('findMissingSkills missingSkills', missingSkills);
+      }
+    },
+    async getRoleSkillMatchPercentage() {
+      try {
+        console.log('testtesttestroleID',this.Role_ID);
+        console.log('testtestteststaffID',this.staffId);
+        const response = await fetch('http://localhost:5000/api/calc_rsm/' + this.Role_ID + '/' + this.staffId);
+        const data = await response.json();
+        console.log('testtesttestroleID',this.Role_ID);
+        console.log('testtestteststaffID',this.staffId);
+        console.log(data.role_skill_match_percentage);
+        return data.role_skill_match_percentage;
+      } catch (error) {
+        console.error('Error fetching RSM%:', error);
+      }
+    },
+    async calculateMatchPercentage() {
+      try {
+        const percentage = await this.getRoleSkillMatchPercentage();
+        this.RSMPercentage = percentage;
+        console.log('RSMPercentage:', this.RSMPercentage);
+      } catch (error) {
+        console.error('Error calculating RSM percentage:', error);
+      }
+    },
     async submitApplication() {
       console.log(this.staffId)
       console.log(this.Role_Listing_ID)
-      
       try {
         const response = await axios.post('http://localhost:5000/api/apply-role', {
           Staff_ID: this.staffId,
