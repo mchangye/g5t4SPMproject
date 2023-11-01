@@ -45,7 +45,7 @@
             <th>Country</th>
             <th>Description</th>
             <th>Skills</th>
-            <th>Applicants</th>
+            <!-- <th>Applicants</th> -->
             <th>Expiry Date</th>
           </tr>
         </thead>
@@ -63,7 +63,7 @@
                 <li v-for="skill in role.role_skills">{{ skill }}</li>
               </ul>
             </td>
-            <td>TBC NEXT SPRINT</td>
+            <!-- <td>TBC NEXT SPRINT</td> -->
             <td>{{ formatExpiryDate(role.Expiry_Date) }}</td>
           </tr>
         </tbody>
