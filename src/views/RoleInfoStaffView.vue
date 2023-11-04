@@ -6,7 +6,7 @@
           <h2>{{ info.Role_Name }}</h2>
         </div>
         <div class="col">
-          <button @click="submitApplication" type="button" class="btn btn-primary me-2">Apply</button>
+          <button @click="submitApplication" :disabled="clicked" type="button" class="btn btn-primary me-2">Apply</button>
         </div>  
       </div>
       <div v-if="role">
@@ -44,6 +44,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      clicked: false,
       role: null,
       info: {},
       skills: [],
@@ -177,9 +178,11 @@ export default {
         });
         console.log(response.data);
         alert("Role application is successful");
+        this.clicked = true
       } catch (error) {
         console.log(error.response.data.message);
         alert(error.response.data.message);
+        this.clicked = true
       }
     },
     formatExpiryDate(dateString) {
