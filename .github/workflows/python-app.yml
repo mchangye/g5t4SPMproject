@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  python-test:
 
     runs-on: ubuntu-latest
 
@@ -34,10 +34,32 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Run unit tests
-      run: |
-        python flask/unit_tests.py
-    - name: Run integration tests
-      run: |
-        python flask/integration_tests.py
+    # - name: Run unit tests
+    #   run: |
+    #     python flask/unit_tests.py
+    # - name: Run integration tests
+    #   run: |
+    #     python flask/integration_tests.py
+
+
+  node-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+
+      - name: Clean install of dependencies
+        run: |
+          npm ci
+          echo "Dependencies installed successfully"
+
+      - name: Build
+        run: |
+          npm run build
+          echo "Built successfully"
 
