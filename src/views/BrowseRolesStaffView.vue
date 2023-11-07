@@ -23,6 +23,11 @@
         </section>
 
         <section class="box">
+          <p class="fw-bold">Role Skill Match Percentage</p>
+          <input type="number" class="form-control" placeholder="Filter above the RSM% specified"/>
+        </section>
+
+        <section class="box">
           <p class="fw-bold">Expiry Date</p>
           <input ref="expiryDate" type="date" class="form-control" id="datepick">
         </section>
@@ -60,7 +65,7 @@
                 <li v-for="skill in role.role_skills">{{ skill }}</li>
               </ul>
             </td>
-            <td>{{ role.role_skill_match_percentage }}</td>
+            <td>{{ roleSkillMatchPercentages[role.Role_ID] }}</td>
             <td>{{ formatExpiryDate(role.Expiry_Date) }}</td>
           </tr>
         </tbody>
@@ -87,7 +92,8 @@ export default {
       selectedCountries: [],
       departments: [],
       skills: [],
-      countries: []
+      countries: [],
+      roleSkillMatchPercentages: {},
     };
   },
   mounted() {
@@ -241,6 +247,10 @@ export default {
         params.append('expiry_date', selectedDateISO);
       }
 
+      if (this.roleSkillMatchPercentageFilter !== null) {
+        params.append('rsm_percentage', this.roleSkillMatchPercentageFilter);
+      }
+
 
       // Make the API request
       fetch(`http://localhost:5000/api/rolesFiltered?${params.toString()}`)
@@ -254,7 +264,10 @@ export default {
           } else {
             this.roles = data.data.roles;
           }
-          // console.log(data);
+          this.getRoleSkillMatchPercentageForRoles();
+          
+          console.log("Filtered Roles:", this.roles);
+          console.log("Role Skill Match Percentages:", this.roleSkillMatchPercentages);
         })
         .catch((error) => {
           console.error('Error:', error);
@@ -290,11 +303,20 @@ export default {
       }
     },
     async getRoleSkillMatchPercentageForRoles() {
+      console.log("Inside getRoleSkillMatchPercentageForRoles");
       for (const role of this.roles) {
-        role.role_skill_match_percentage = await this.getRoleSkillMatchPercentage(role.Role_ID);
-        console.log(`Role ${role.Role_Name}, ID ${role.Role_ID} - RSM%: ${role.role_skill_match_percentage}`)
+        if (role.Role_ID) {
+          if (!this.roleSkillMatchPercentages[role.Role_ID]) {
+            const percentage = await this.getRoleSkillMatchPercentage(role.Role_ID);
+            console.log(`Role ${role.Role_Name}, ID ${role.Role_ID} - RSM%: ${percentage}`)
+            this.roleSkillMatchPercentages[role.Role_ID] = percentage;
+          }
+        }
+        role.role_skill_match_percentage = this.roleSkillMatchPercentages[role.Role_ID];
+        // console.log(`Role ${role.Role_Name}, ID ${role.Role_ID} - RSM%: ${role.role_skill_match_percentage}`)
+        console.log(this.roleSkillMatchPercentages);
       }
-    }
+    },
   },
 };
 </script>
