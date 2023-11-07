@@ -746,9 +746,9 @@ def get_staff_applications(staff_id):
         # # Add Role Listing Details to application_data
         role = RoleListing.query.filter_by(Role_Listing_ID=application.Role_Listing_ID).first()
         if role:
-            #application_data['Role_ID'] = role.Role_ID
+            application_data['Role_ID'] = role.Role_ID
             application_data['Role_Listing_Desc'] = role.Role_Listing_Desc
-            #application_data['Department_ID'] = role.Role_department_ID
+            application_data['Department_ID'] = role.Role_department_ID
 
 
         # # Add Department_Name to application_data

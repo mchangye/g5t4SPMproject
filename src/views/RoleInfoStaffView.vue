@@ -147,12 +147,9 @@ export default {
     },
     async getRoleSkillMatchPercentage() {
       try {
-        console.log('testtesttestroleID',this.Role_ID);
-        console.log('testtestteststaffID',this.staffId);
         const response = await fetch('http://localhost:5000/api/calc_rsm/' + this.Role_ID + '/' + this.staffId);
         const data = await response.json();
-        console.log('testtesttestroleID',this.Role_ID);
-        console.log('testtestteststaffID',this.staffId);
+        console.log('roleID:',this.Role_ID, ', staffID:', this.staffId);
         console.log(data.role_skill_match_percentage);
         return data.role_skill_match_percentage;
       } catch (error) {

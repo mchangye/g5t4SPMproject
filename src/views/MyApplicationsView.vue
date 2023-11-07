@@ -25,7 +25,7 @@
                         </td>
                         <td>{{ application.Department_Name }}</td>
                         <td>{{ application.Role_Listing_Desc }}</td>
-                        <td> TBC </td>
+                        <td> {{ application.role_skill_match_percentage }} </td>
                         <td> TBC </td>
                         <td>{{ application.Time_Stamp }}</td>
                     </tr>
@@ -44,7 +44,8 @@ export default {
     data() {
         return {
             applications: [],
-            dt: null
+            dt: null,
+            staffId: null,
         };
     },
     mounted() {
@@ -73,8 +74,10 @@ export default {
                 .then((response) => {
                     return response.json();
                 })
-                .then((data) => {
+                .then(async (data) => {
                     this.applications = data.data.applications;
+
+                    await this.getRoleSkillMatchPercentageForApplications();
 
                     console.log("All applications for this staff")
                     console.log(data);
@@ -83,12 +86,28 @@ export default {
                 .catch((error) => {
                     console.error('Error:', error);
                 });
-        }
+        },
+        async getRoleSkillMatchPercentage(roleID) {
+            try {
+                const response = await fetch('http://localhost:5000/api/calc_rsm/' + roleID + '/' + this.staffId);
+                const data = await response.json();
+                return data.role_skill_match_percentage;
+            } catch(error) {
+                console.error('Error fetching RSM%:', error);
+            }
+        },
+        async getRoleSkillMatchPercentageForApplications() {
+            console.log('Applications:', this.applications);
+            for (const application of this.applications) {
+                application.role_skill_match_percentage = await this.getRoleSkillMatchPercentage(application.Role_ID);
+                console.log(`Application ID ${application.Application_ID} - Role ID ${application.Role_ID} - RSM%: ${application.role_skill_match_percentage}`);
+            }
+        },
     },
 
 };
 </script>
-  
+
 <style scoped>
 div {
     margin: auto auto;
