@@ -322,95 +322,94 @@ class TestFilterDepartment(unittest.TestCase):
         self.assertEqual(response_data, expected)
 
 
-class TestApplicants(unittest.TestCase):
-    def setUp(self):
-        # Create a test client
-        self.app = app.test_client()
-        self.app.testing = True
-
-    def test_get_applicants(self):
-        response = self.app.get("/api/applications/rolelisting/1")
-        expected = {
-            "code": 200,
-            "data": {
-                "applications": [
-                    {
-                        "Application_ID": 3,
-                        "Apply": 1,
-                        "Email": "Mary.Teo@allinone.com.sg",
-                        "Role_Listing_ID": 1,
-                        "Staff_ID": 140004,
-                        "Staff_Name": "Mary",
-                        "Time_Stamp": "Tue, 10 Oct 2023 18:42:25 GMT",
-                    },
-                    {
-                        "Application_ID": 6,
-                        "Apply": 1,
-                        "Email": "Phuong.Dinh@allinone.com.sg",
-                        "Role_Listing_ID": 1,
-                        "Staff_ID": 151410,
-                        "Staff_Name": "Phuong",
-                        "Time_Stamp": "Tue, 10 Oct 2023 18:42:25 GMT",
-                    },
-                    {
-                        "Application_ID": 7,
-                        "Apply": 1,
-                        "Email": "Phuong.Dinh@allinone.com.sg",
-                        "Role_Listing_ID": 1,
-                        "Staff_ID": 151410,
-                        "Staff_Name": "Phuong",
-                        "Time_Stamp": "Tue, 10 Oct 2023 18:42:25 GMT",
-                    },
-                    {
-                        "Application_ID": 9,
-                        "Apply": 1,
-                        "Email": "Soma.San@allinone.com.sg",
-                        "Role_Listing_ID": 1,
-                        "Staff_ID": 151533,
-                        "Staff_Name": "Soma",
-                        "Time_Stamp": "Tue, 10 Oct 2023 18:42:25 GMT",
-                    },
-                    {
-                        "Application_ID": 10,
-                        "Apply": 1,
-                        "Email": "Siv.Savuth@allinone.com.vn",
-                        "Role_Listing_ID": 1,
-                        "Staff_ID": 151534,
-                        "Staff_Name": "Siv",
-                        "Time_Stamp": "Tue, 10 Oct 2023 18:42:25 GMT",
-                    },
-                ]
-            },
-        }
-
-        response_data = response.get_json()  # Extract the JSON data from the response
-        self.assertEqual(response_data, expected)
-
-    # Applicants for non-existing rolelisting
-    def test_get_applicant_invalid_role(self):
-        response = self.app.get("/api/applications/rolelisting/9999")
-        expected = {
-            "code": 404,
-            "message": "No applications found for Role_Listing_ID 9999.",
-        }
-
-        response_data = response.get_json()  # Extract the JSON data from the response
-        self.assertEqual(response_data, expected)
-
-
-# class TestCalcRSM(unittest.TestCase):
-# def setUp(self):
+# class TestApplicants(unittest.TestCase):
+#     def setUp(self):
 #         # Create a test client
 #         self.app = app.test_client()
 #         self.app.testing = True
 
-#     def test_rsm_staff_rolelisting(self):
-#         response = self.app.get("/api/calc_rsm/1/140004")
-#         expected = {"role_skill_match_percentage": 23}
+#     def test_get_applicants(self):
+#         response = self.app.get("/api/applications/rolelisting/1")
+#         expected = {
+#             "code": 200,
+#             "data": {
+#                 "applications": [
+#                     {
+#                         "Application_ID": 3,
+#                         "Apply": 1,
+#                         "Email": "Mary.Teo@allinone.com.sg",
+#                         "Role_Listing_ID": 1,
+#                         "Staff_ID": 140004,
+#                         "Staff_Name": "Mary",
+#                         "Time_Stamp": "Tue, 10 Oct 2023 18:42:25 GMT",
+#                     },
+#                     {
+#                         "Application_ID": 6,
+#                         "Apply": 1,
+#                         "Email": "Phuong.Dinh@allinone.com.sg",
+#                         "Role_Listing_ID": 1,
+#                         "Staff_ID": 151410,
+#                         "Staff_Name": "Phuong",
+#                         "Time_Stamp": "Tue, 10 Oct 2023 18:42:25 GMT",
+#                     },
+#                     {
+#                         "Application_ID": 7,
+#                         "Apply": 1,
+#                         "Email": "Phuong.Dinh@allinone.com.sg",
+#                         "Role_Listing_ID": 1,
+#                         "Staff_ID": 151410,
+#                         "Staff_Name": "Phuong",
+#                         "Time_Stamp": "Tue, 10 Oct 2023 18:42:25 GMT",
+#                     },
+#                     {
+#                         "Application_ID": 9,
+#                         "Apply": 1,
+#                         "Email": "Soma.San@allinone.com.sg",
+#                         "Role_Listing_ID": 1,
+#                         "Staff_ID": 151533,
+#                         "Staff_Name": "Soma",
+#                         "Time_Stamp": "Tue, 10 Oct 2023 18:42:25 GMT",
+#                     },
+#                     {
+#                         "Application_ID": 10,
+#                         "Apply": 1,
+#                         "Email": "Siv.Savuth@allinone.com.vn",
+#                         "Role_Listing_ID": 1,
+#                         "Staff_ID": 151534,
+#                         "Staff_Name": "Siv",
+#                         "Time_Stamp": "Tue, 10 Oct 2023 18:42:25 GMT",
+#                     },
+#                 ]
+#             },
+#         }
 
 #         response_data = response.get_json()  # Extract the JSON data from the response
-#         print(response_data)
 #         self.assertEqual(response_data, expected)
+
+#     # Applicants for non-existing rolelisting
+#     def test_get_applicant_invalid_role(self):
+#         response = self.app.get("/api/applications/rolelisting/9999")
+#         expected = {
+#             "code": 404,
+#             "message": "No applications found for Role_Listing_ID 9999.",
+#         }
+
+#         response_data = response.get_json()  # Extract the JSON data from the response
+#         self.assertEqual(response_data, expected)
+
+
+class TestCalcRSM(unittest.TestCase):
+    def setUp(self):
+            # Create a test client
+            self.app = app.test_client()
+            self.app.testing = True
+
+    def test_rsm_staff_rolelisting(self):
+        response = self.app.get("/api/calc_rsm/1/140004/")
+        expected = {"role_skill_match_percentage": 23}
+        print(response)
+        response_data = response.get_json()  # Extract the JSON data from the response
+        self.assertEqual(response_data, expected)
 
 
 if __name__ == "__main__":
