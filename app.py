@@ -121,9 +121,12 @@ class roleListingSkillProficiency(db.Model):
     __tablename__ = 'role_listing_skill_proficiency'
 
     Role_Listing_ID = db.Column(db.Integer, primary_key=True)
-    Role_ID = db.Column(db.Integer, primary_key=True)
-    Skill_ID = db.Column(db.Integer, primary_key=True)
+    Role_ID = db.Column(db.Integer, db.ForeignKey('roles.Role_ID'), primary_key=True)
+    Skill_ID = db.Column(db.Integer, db.ForeignKey('skills.Skill_ID'), primary_key=True)
     Proficienct_Listing = db.Column(db.Integer)
+
+    department = db.relationship('Roles', primaryjoin='roleListingSkillProficiency.Role_ID == Roles.Role_ID', backref='role_listing_skill_proficiency')
+    Country = db.relationship('Skills', primaryjoin='roleListingSkillProficiency.Skill_ID == Skills.Skill_ID', backref='role_listing_skill_proficiency')
 
 
     def json(self):
@@ -302,11 +305,24 @@ def find_by_listingID(listingID):
 
     role = RoleListing.query.filter_by(Role_Listing_ID=listingID).first()
     skills_data = RoleSkills.query.filter_by(Role_ID=role.Role_ID).with_entities(RoleSkills.Skill_ID).all()
+    skills_data_pro = roleListingSkillProficiency.query.filter_by(Role_Listing_ID=listingID).all()
 
+    # for skill in skills_proficiency_data:
+    #     print(skill)
+    # print('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
+
+    return_skills_pro = []
     skills = [skill.Skill_ID for skill in skills_data]
+
+    skills_ID_pro = [skill.Skill_ID  for skill in skills_data_pro]
+    skills_pro = [skill.Proficienct_Listing for skill in skills_data_pro]
+
+    for i in range(len(skills_ID_pro)):
+        return_skills_pro.append({'Skill_ID': skills_ID_pro[i], 'Proficienct_Listing': skills_pro[i]})
+
     skill_names = []  # List to store skill names
 
-    for skill_id in skills:
+    for skill_id in skills_ID_pro:
         skill = Skills.query.get(skill_id)  # Query the Skills table to get skill names
         if skill:
             skill_names.append(skill.Skill_Name)
@@ -332,7 +348,8 @@ def find_by_listingID(listingID):
             'Available': role.Available,
             'Expiry_Date': role.Expiry_Date,
             'role_skills': skill_names,
-            'department_name': department_name
+            'department_name': department_name,
+            'skills_proficiency': return_skills_pro
         }
 
         return jsonify(
@@ -602,40 +619,44 @@ def get_skill_info(skill_id):
     return jsonify(skill_data)
 
 #Update Skill Proficiency
-@app.route('/api/update-skill-proficiency/<int:staff_id>', methods=['PUT'])
-def update_skill_proficiency(staff_id):
-    staff_id = request.json.get('Staff_ID', None)
+@app.route('/api/update-skill-proficiency/<int:role_listing_id>', methods=['PUT'])
+def update_skill_proficiency(role_listing_id):
     skill_id = request.json.get('Skill_ID', None)
-    proficiency = request.json.get('Proficiency', None)
     try: 
-        staffskill = Staff_Skill.query.filter_by(Staff_ID=staff_id, Skill_ID=skill_id).first()
+        staffskill = roleListingSkillProficiency.query.filter_by(Role_Listing_ID=role_listing_id, Skill_ID=skill_id).first()
         if not staffskill:
             return jsonify(
                 {
                     "code": 404,
                     "data": {
-                        "Staff_ID": staff_id,
+                        "Role_Listing_ID": role_listing_id,
                         "Skill_ID": skill_id
                     },
                     "message": "Skill not found."
                 }
             ), 404
-        if staff_id != None:
-            staffskill.Staff_ID == staff_id
-        if skill_id != None:
-            staffskill.Skill_ID = skill_id
-        if proficiency != None:
-            staffskill.Proficiency = proficiency
+        data = request.get_json()
+        if 'Skill_ID' in data:
+            staffskill.Skill_ID = data['Skill_ID']
+        if 'Proficiency' in data:
+            staffskill.Proficienct_Listing = data['Proficiency']
+
         db.session.commit()
+        return jsonify(
+                {
+                    "code": 200,
+                    "data": staffskill.json()
+                }
+            ), 200
     except Exception as e:
         return jsonify(
             {
                 "code": 500,
                 "data": {
-                    "Staff_ID": staff_id,
+                    "Role_Listing_ID": role_listing_id,
                     "Skill_ID": skill_id
                 },
-                "message": "An error occurred while updating your skill. " + str(e)
+                "message": "An error occurred while updating. " + str(e)
             }
         ), 500
 

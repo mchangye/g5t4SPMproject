@@ -81,6 +81,12 @@ const router = createRouter({
       path: '/newrole/',
       name: 'newrole',
       component: () => import('../views/CreateRoleListing.vue')
+    },
+    {
+      path: '/updaterolelisting/:Role_Listing_ID',
+      name: 'updaterolelisting',
+      component: () => import('../views/UpdateRoleListing.vue'),
+      props: true
     }
   ]
 })
