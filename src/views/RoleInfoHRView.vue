@@ -10,7 +10,7 @@
         
 
         <div class="col">
-          <button type="button" class="btn btn-primary me-2">Edit Details</button>
+          <router-link :to="'/updaterolelisting/' + Role_Listing_ID"  custom v-slot="{ navigate }"><button type="button" class="btn btn-primary me-2" @click="navigate" role="link">Edit Details</button></router-link>
         </div>  
       </div>
 

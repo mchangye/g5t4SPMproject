@@ -55,6 +55,21 @@ class TestRoleListing(unittest.TestCase):
                     "Sales Strategy",
                     "Stakeholder Management",
                 ],
+                "skills_proficiency": [
+                    {"Proficienct_Listing": 3, "Skill_ID": 1},
+                    {"Proficienct_Listing": 3, "Skill_ID": 10},
+                    {"Proficienct_Listing": 3, "Skill_ID": 12},
+                    {"Proficienct_Listing": 2, "Skill_ID": 14},
+                    {"Proficienct_Listing": 2, "Skill_ID": 15},
+                    {"Proficienct_Listing": 2, "Skill_ID": 20},
+                    {"Proficienct_Listing": 3, "Skill_ID": 21},
+                    {"Proficienct_Listing": 1, "Skill_ID": 25},
+                    {"Proficienct_Listing": 3, "Skill_ID": 51},
+                    {"Proficienct_Listing": 3, "Skill_ID": 53},
+                    {"Proficienct_Listing": 3, "Skill_ID": 54},
+                    {"Proficienct_Listing": 3, "Skill_ID": 61},
+                    {"Proficienct_Listing": 3, "Skill_ID": 72},
+                ],
             },
         }
 
@@ -236,14 +251,12 @@ class TestFilterSkills(unittest.TestCase):
         response_data = response.get_json()  # Extract the JSON data from the response
         self.assertEqual(response_data, expected)
 
-
     def test_filtered_skill_invalid(self):
         response = self.app.get("/api/rolesFiltered?skills=-1")
         expected = {"code": 404, "message": "There are no roles."}
 
         response_data = response.get_json()  # Extract the JSON data from the response
         self.assertEqual(response_data, expected)
-
 
 
 class TestFilterDepartment(unittest.TestCase):
@@ -385,11 +398,8 @@ class TestApplicants(unittest.TestCase):
         self.assertEqual(response_data, expected)
 
 
-
-
-
 # class TestCalcRSM(unittest.TestCase):
-#     def setUp(self):
+# def setUp(self):
 #         # Create a test client
 #         self.app = app.test_client()
 #         self.app.testing = True
