@@ -58,24 +58,23 @@ class TestYourAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
          #error 500
 
-    # def test_create_role(self):
-    #      data = {
-    #           'Role_Listing_ID': '80',
-    #         'Role_ID': '90',
-    #         'Role_Listing_Desc': 'test',
-    #         'Role_department_ID': '55',
-    #         'Role_Country_ID': '68',
-    #         'Available': '1',
-    #         'Expiry_Date': '2028-12-12',
-    #         'role_skills': [
-    #             {'Skill_ID': 1},
-    #             {'Skill_ID': 2}
-    #         ],
-    #         'Proficienct_Listing': [1, 2]
-    #      }
-
-        # response = self.app.post("/api/createrole", json=data)
-         #self.assertEqual(response.status_code, 201)
+    def test_create_role(self):
+        data = {
+            'Role_Listing_ID': '80',
+             'Role_ID': '90',
+             'Role_Listing_Desc': 'test',
+             'Role_department_ID': '55',
+             'Role_Country_ID': '68',
+             'Available': '1',
+         'Expiry_Date': '2028-12-12',
+             'Skills_Required': [
+                 {'Skill_Desc': "slay", 'Skill_ID': 89, "Skill_Name": "slay"},
+                 {'Skill_Desc': "sewey", 'Skill_ID': 99, "Skill_Name": "sewey"}
+             ],
+             'skill_pro': ["1", "2"]
+        }
+        response = self.app.post("/api/createrole", json=data)
+        self.assertEqual(response.status_code, 201)
          #error 415
 
     def test_get_staff_all_skill_id(self):
@@ -94,7 +93,7 @@ class TestYourAPI(unittest.TestCase):
          #}
          #response = self.app.put("/api/update-skill-proficiency/140004", json=data)
          #self.assertEqual(response.status_code, 200)
-         #error 415
+         #out of sprint
 
     def test_get_role_info(self):
          response = self.app.get("/api/get-roles-info/")
@@ -120,9 +119,13 @@ class TestYourAPI(unittest.TestCase):
          response = self.app.get("/api/applications/staff/140004/")
          self.assertEqual(response.status_code, 200)
 
-    #def test_apply_role(self):
-        #response = self.app.post("/api/apply-role")
-        #self.assertEqual(response.status_code, 200)
+    def test_apply_role(self):
+        data = {
+            "Staff_ID": "140025",
+            "Role_Listing_ID": "3",
+        }
+        response = self.app.post("/api/apply-role", json=data)
+        self.assertEqual(response.status_code, 201)
         #error415
 
     def test_get_all_skills(self):
