@@ -26,7 +26,7 @@
                         <td>{{ application.Department_Name }}</td>
                         <td>{{ application.Role_Listing_Desc }}</td>
                         <td> {{ application.role_skill_match_percentage }} </td>
-                        <td> TBC </td>
+                        <td> Pending </td>
                         <td>{{ application.Time_Stamp }}</td>
                     </tr>
                 </tbody>
