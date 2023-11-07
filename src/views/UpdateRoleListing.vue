@@ -237,6 +237,8 @@ export default {
       department_check: 0,
       date_check: 0,
       id: this.Role_Listing_ID,
+      keep_orginal_skills: [],
+      check_finish: 0,
     };
   },
   props: ["Role_Listing_ID"],
@@ -313,6 +315,8 @@ export default {
             }
           }
         }
+
+        this.keep_orginal_skills = response1.data.data.skills_proficiency;
 
         console.log(this.Skills_Required);
         //this.Skills_Required = response1.data.data.role_skills;
@@ -493,17 +497,17 @@ export default {
           console.log(response.data);
 
           if (response.data.code == 200) {
-            for (let i = 0; i < skill_pro.length; i++) {
+
+            for (let i = 0; i < this.keep_orginal_skills.length; i++) {
+              console.log(this.keep_orginal_skills[i].Skill_ID)
               axios
-                .put(
-                  "http://localhost:5000/api/update-skill-proficiency/" +
-                    this.id,
+                .delete(
+                  "http://localhost:5000/api/delete-skill-proficiency/" + this.id,
                   {
-                    Staff_ID: this.id,
-                    Skill_ID: this.Skills_Required[i].Skill_ID,
-                    Proficiency: skill_pro[i],
-                  }
-                )
+                    data: {
+                      Skill_ID: this.keep_orginal_skills[i].Skill_ID,
+                      },
+                  })
                 .then((response) => {
                   console.log(response.data);
 
@@ -514,15 +518,49 @@ export default {
                 })
                 .catch((error) => {
                   console.log(error.message);
+                  err_check = 1;
                 });
             }
+            let loop_check = 0;
+            for (let i = 0; i < skill_pro.length; i++) {
+              axios.post(
+                "http://localhost:5000/api/add-skill-proficiency/" + this.id,
+                {
+                  Skill_ID: this.Skills_Required[i].Skill_ID,
+                  Role_ID: this.Role_ID,
+                  Proficiency: skill_pro[i],
+                }
+              )
+                .then((response) => {
+                  console.log(response.data);
+                  if (response.data.code == 200) {
+                    this.check_finish += 1;
+                    console.log(this.check_finish)
+                    console.log(skill_pro.length)
+                    if (this.check_finish == skill_pro.length) {
+                      if (err_check == 0) {
+                        alert("Update Success!");
+                        window.location.href = "../browseroleshr";
+                      } else {
+                        alert("Role Listing Update Failed, please contact admin");
+                      }
+                    }
 
-            if (err_check == 0) {
-              alert("Update Success!");
-              window.location.href = "../browseroleshr";
-            } else {
-              alert("Role Listing Update Failed, please contact admin");
+                  } else {
+                    err_check = 1;
+                  }
+                })
+                .catch((error) => {
+                  console.log(error.message);
+                  if (loop_check == 0) {
+                  alert("Role Listing Update Failed, please contact admin");
+                  loop_check = 1;
+                  }
+                });
+                
             }
+
+            
           }
         })
         .catch((error) => {

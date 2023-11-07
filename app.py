@@ -558,6 +558,7 @@ def update_order(Role_Listing_ID):
             }
         ), 500
 
+
 #To check whether it can connect
 @app.route('/api/landing')
 def get_landing_message():
@@ -659,6 +660,73 @@ def update_skill_proficiency(role_listing_id):
                 "message": "An error occurred while updating. " + str(e)
             }
         ), 500
+
+#delete skill proficiency
+@app.route('/api/delete-skill-proficiency/<int:role_listing_id>', methods=['DELETE'])
+def delete_skill_proficiency(role_listing_id):
+    skill_id = request.json.get('Skill_ID', None)
+    print(skill_id)
+    try: 
+        staffskill = roleListingSkillProficiency.query.filter_by(Role_Listing_ID=role_listing_id, Skill_ID=skill_id).first()
+        if not staffskill:
+            return jsonify(
+                {
+                    "code": 404,
+                    "data": {
+                        "Role_Listing_ID": role_listing_id,
+                        "Skill_ID": skill_id
+                    },
+                    "message": "Skill not found."
+                }
+            ), 404
+        db.session.delete(staffskill)
+        db.session.commit()
+        return jsonify(
+                {
+                    "code": 200,
+                    "data": staffskill.json()
+                }
+            ), 200
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "Role_Listing_ID": role_listing_id,
+                    "Skill_ID": skill_id
+                },
+                "message": "An error occurred while deleting. " + str(e)
+            }
+        ), 500
+
+#add skill proficiency
+@app.route('/api/add-skill-proficiency/<int:role_listing_id>', methods=['POST'])
+def add_skill_proficiency(role_listing_id):
+    skill_id = request.json.get('Skill_ID', None)
+    role_id = request.json.get('Role_ID', None)
+    Proficiency_Listing = request.json.get('Proficiency', None)
+    try: 
+        staffskill = roleListingSkillProficiency(Role_Listing_ID=role_listing_id, Role_ID=role_id, Skill_ID=skill_id, Proficienct_Listing=Proficiency_Listing)
+        db.session.add(staffskill)
+        db.session.commit()
+        return jsonify(
+                {
+                    "code": 200,
+                    "data": staffskill.json()
+                }
+            ), 200
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "Role_Listing_ID": role_listing_id,
+                    "Skill_ID": skill_id
+                },
+                "message": "An error occurred while adding. " + str(e)
+            }
+        ), 500
+
 
 #GET ALL ROLE NAMES
 @app.route('/api/get-roles-info/')
