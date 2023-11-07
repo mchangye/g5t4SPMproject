@@ -668,8 +668,8 @@ def get_roles_data(role_id):
 def get_dept_data(dept_id):
     dept_record = Department.query.get(dept_id)
     role_data = {
-        'Department_ID': dept_record.Role_ID if dept_record else None,
-        'Role_Name': dept_record.Role_Name if dept_record else None,
+        'Department_ID': dept_record.Department_ID if dept_record else None,
+        'Role_Name': dept_record.Department_Name if dept_record else None,
     }
     return jsonify(role_data)
 
