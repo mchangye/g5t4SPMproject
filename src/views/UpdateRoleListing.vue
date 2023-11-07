@@ -519,7 +519,7 @@ export default {
 
             if (err_check == 0) {
               alert("Update Success!");
-              window.location.href = "./browseroleshr";
+              window.location.href = "../browseroleshr";
             } else {
               alert("Role Listing Update Failed, please contact admin");
             }
