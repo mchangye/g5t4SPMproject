@@ -12,7 +12,7 @@
                         <th>Department ID</th>
                         <th>Description</th>
                         <th>Role Skill Match</th>
-                        <th>Status</th>
+                        <!-- <th>Status</th> -->
                         <th>Applied Date</th>
                     </tr>
                 </thead>
@@ -26,7 +26,7 @@
                         <td>{{ application.Department_Name }}</td>
                         <td>{{ application.Role_Listing_Desc }}</td>
                         <td> {{ application.role_skill_match_percentage }} </td>
-                        <td> Pending </td>
+                        <!-- <td> Pending </td> -->
                         <td>{{ application.Time_Stamp }}</td>
                     </tr>
                 </tbody>
