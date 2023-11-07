@@ -22,10 +22,10 @@
             placeholder="Select Country(s)" label="text" track-by="value"></vue-multiselect>
         </section>
 
-        <section class="box">
+        <!-- <section class="box">
           <p class="fw-bold">Role Skill Match Percentage</p>
           <input type="number" class="form-control" placeholder="Filter above the RSM% specified"/>
-        </section>
+        </section> -->
 
         <section class="box">
           <p class="fw-bold">Expiry Date</p>
@@ -246,11 +246,6 @@ export default {
       if (selectedDateISO) {
         params.append('expiry_date', selectedDateISO);
       }
-
-      if (this.roleSkillMatchPercentageFilter !== null) {
-        params.append('rsm_percentage', this.roleSkillMatchPercentageFilter);
-      }
-
 
       // Make the API request
       fetch(`http://localhost:5000/api/rolesFiltered?${params.toString()}`)
