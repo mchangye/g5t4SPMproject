@@ -28,7 +28,7 @@
 | --------------------- | ---------------- | ------------------------------------------------------------- |
 | Jon Tiong Jun Wei     | jon.tiong.2021   | [@LinkedIn](https://sg.linkedin.com/in/jon-tiong)             |
 | Chang Yu Ern Matthew  | yechang.2021     | [@LinkedIn](https://www.linkedin.com/in/mchangye/)            |
-| Chen Jing             | jing.chen.2021   | [@LinkedIn]() |
+| Chen Jing             | jing.chen.2021   | [@LinkedIn](https://www.linkedin.com/in/chen-jing-32b666263)  |
 | Dexter Ong Qing Yang  | dexter.ong.2021  | [@LinkedIn](https://sg.linkedin.com/in/dexter-ongqy)          |
 | Tay Wei Sern          | weisern.tay.2021 | [@LinkedIn](https://sg.linkedin.com/in/tay-wei-sern)          |
 | Leroy Tham Jun Han    | leroy.tham.2021  | [@LinkedIn](https://sg.linkedin.com/in/leroy-tham-971881214)  |
@@ -100,7 +100,7 @@
 
 ### Front End Development (Core Libraries)
 
-> Front End was developed on Node with VUE-CLI. 
+> Front End was developed on Node with create-vue. 
 
 | Library    | Description             | Link                                   |
 | ---------- | ----------------------- | -------------------------------------- |
