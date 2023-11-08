@@ -27,7 +27,7 @@
 | Members               | School Email     | LinkedIn                                                      |
 | --------------------- | ---------------- | ------------------------------------------------------------- |
 | Jon Tiong Jun Wei     | jon.tiong.2021   | [@LinkedIn](https://sg.linkedin.com/in/jon-tiong)             |
-| Chang Yu Ern Matthew  | yechang.2021     | [@LinkedIn]()               |
+| Chang Yu Ern Matthew  | yechang.2021     | [@LinkedIn](https://www.linkedin.com/in/mchangye/)            |
 | Chen Jing             | jing.chen.2021   | [@LinkedIn]() |
 | Dexter Ong Qing Yang  | dexter.ong.2021  | [@LinkedIn](https://sg.linkedin.com/in/dexter-ongqy)          |
 | Tay Wei Sern          | weisern.tay.2021 | [@LinkedIn](https://sg.linkedin.com/in/tay-wei-sern)          |
@@ -96,7 +96,7 @@
 
 ## Technologies Used
 
-[Go To Top](#is212-g5-54-software-project-management-project:-skill-based-role-portal)
+[Go To Top](#is212-g5-t4-software-project-management-project-skill-based-role-portal)
 
 ### Front End Development (Core Libraries)
 
@@ -133,7 +133,7 @@
 
 ## How to Install and Run Our Web Application (for Developers) ##
 
-[Go To Top](#is212-g5-54-software-project-management-project:-skill-based-role-portal)
+[Go To Top](#is212-g5-t4-software-project-management-project-skill-based-role-portal)
 
 ### Project Setup
 
@@ -200,4 +200,4 @@ Computer
 
 We chose this aspect ratio as we commonly expect the staff using SBRP to be on their office laptops.
 
-[Go To Top](#is212-g5-54-software-project-management-project:-skill-based-role-portal)
+[Go To Top](#is212-g5-t4-software-project-management-project-skill-based-role-portal)
