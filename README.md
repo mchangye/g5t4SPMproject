@@ -122,6 +122,7 @@
 | Library          | Description                      | Link                                                                       |
 | ---------------- | -------------------------------- | -------------------------------------------------------------------------- |
 | Flask-SQLAlchemy | Relational databases with Python | [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/3.1.x/) |
+| phpMyAdmin       | Database                         | [phpMyAdmin](https://www.phpmyadmin.net/)                                  |
 
 ### Version Control
 
@@ -157,6 +158,14 @@ cd g5t4spmproject
 npm i
 
 # If there are any other missing libraries, install them according to the instructions given by the terminal.
+```
+
+##### Back End (phpMyAdmin)
+
+```
+# Access phpMyAdmin
+# Ensure the Sample_Data folder contains 6 .csvs
+# Import the 'SBRP_Data_Tables_Jon.sql' file
 ```
 
 ### Running the Development Server
