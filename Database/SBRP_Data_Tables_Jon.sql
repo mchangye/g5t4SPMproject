@@ -192,7 +192,9 @@ INSERT INTO Role_Listing VALUES
 (1,1,'The account manager acts as a ....',5,3,1, "2023-12-31"),
 (2,2,'Admin executive will xxxxx',5,5,1, "2023-11-30"),
 (3,5, 'Consultant will be xxxx',5,1,1, '2023-12-25'),
-(4,6, 'The developer in this team will be involved in ....',9,1,1, '2023-10-05')
+(4,6, 'The developer in this team will be involved in ....',9,1,1, '2023-10-05'),
+(5,3, 'The developer in this team will be involved in ....',9,1,1, '2023-12-25'),
+(6,5, 'The developer in this team will be involved in ....',9,1,1, '2023-12-26')
 ;
 
 -- ###### Staff Skill######
